@@ -9,7 +9,7 @@ html {
     border-radius: 0 !important
 }
 .landing-slider-item img {
-    height: 230px;
+    height: 400px;
     object-fit: contain;
     margin: auto
 }

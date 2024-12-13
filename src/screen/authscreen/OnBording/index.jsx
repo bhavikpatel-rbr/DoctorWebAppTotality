@@ -16,17 +16,20 @@ const OnBordingScreen = () => {
         slidesToScroll: 1,
     };
     return (
-        <div className="landing text-center">
+        <div className="landing text-center"
+        
+        >
             <Slider {...settings} className="landing-slider  ">
                 <div className="landing-slider-item">
                     <div className="card bg-transparent border-0 pt-5 mt-5">
                         <img src={doctorImage1}alt="" className="rounded-0 card-img-top landing-img" />
                         <div className="card-body p-4">
                             <h3 className="card-title mb-2 lh-base">
-                                Schedule <span className="fw-bold text-primary">appointments</span><br /> with expert Homoeopathy doctors!
+                                Schedule <span className="fw-bold text-primary">appointments</span> with expert Homoeopathy doctors!
                             </h3>
                             <p className="card-text text-muted">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, molestiae quisquam.
+                                Easily book appointments with top homoeopathy doctors who can help you with a range of health issues.<br />
+                                 Our experts are ready to provide personalized treatment plans.
                             </p>
                         </div>
                     </div>
@@ -36,10 +39,10 @@ const OnBordingScreen = () => {
                         <img src={doctorImage2} alt="" className="rounded-0 card-img-top landing-img" />
                         <div className="card-body p-4">
                             <h3 className="card-title mb-2 lh-base">
-                                Find the best <span className="fw-bold text-info">Doctors</span><br /> in your vicinity
+                                Find the best <span className="fw-bold text-info">Doctors</span> in your vicinity
                             </h3>
                             <p className="card-text text-muted">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, molestiae quisquam.
+                                Discover highly qualified and experienced doctors near you.<br /> Get the best medical advice and treatment without the hassle of long wait times.
                             </p>
                         </div>
                     </div>
@@ -49,10 +52,10 @@ const OnBordingScreen = () => {
                         <img src={doctorImage3} alt="" className="rounded-0 card-img-top landing-img" />
                         <div className="card-body p-4">
                             <h3 className="card-title mb-2 lh-base">
-                                Book <span className="fw-bold">face-to-face</span><br /> Appointment!
+                                Book <span className="fw-bold">face-to-face</span> Appointment!
                             </h3>
                             <p className="card-text text-muted">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, molestiae quisquam.
+                                Schedule in-person consultations with ease. <br />Our platform allows you to book face-to-face appointments with trusted homoeopathy professionals at your convenience.
                             </p>
                         </div>
                     </div>

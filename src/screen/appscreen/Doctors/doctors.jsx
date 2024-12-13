@@ -11,26 +11,24 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { doctorEditData } from '../../../reduxtool/editstate/editSlice';
 
-const rowsPerPage = 5;
+const rowsPerPage = 8;
 const DoctorList = () => {
-  const users = useSelector(appSelector)
-  const router = useNavigate()
+  const users = useSelector(appSelector);
+  const router = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const dispatch = useDispatch()
+  const [searchQuery, setSearchQuery] = useState('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(allDoctorsUsersAction())
-  }, [dispatch])
+    dispatch(allDoctorsUsersAction());
+  }, [dispatch]);
 
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = users?.doctorList?.slice(indexOfFirstRow, indexOfLastRow);
-  const [searchQuery, setSearchQuery] = useState('');
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
 
-  const totalPages = Math.ceil(users?.doctorList?.length / rowsPerPage);
-
-  const filteredDoctors = currentRows?.filter(doctor =>
+  const filteredDoctors = users?.doctorList?.filter((doctor) =>
     `${doctor.firstname} ${doctor.lastname}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
     doctor.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
     doctor.specialization.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -38,6 +36,14 @@ const DoctorList = () => {
     doctor.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
     doctor.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = filteredDoctors?.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(filteredDoctors?.length / rowsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="content">
@@ -69,16 +75,16 @@ const DoctorList = () => {
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
                           <form>
-                          <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Search here"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <a className="btn">
-                      <img src={searchnormal} alt="Search" />
-                    </a>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Search here"
+                              value={searchQuery}
+                              onChange={handleSearchChange}
+                            />
+                            <a className="btn">
+                              <img src={searchnormal} alt="Search" />
+                            </a>
                           </form>
                         </div>
                         <div className="add-group">
@@ -97,59 +103,59 @@ const DoctorList = () => {
                   </div>
                 </div>
               </div>
-<div className="table-responsive-container">
-              <div className="table-responsive">
-                <table className="table border-0 custom-table comman-table datatable mb-0">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Department</th>
-                      <th>Experience</th>
-                      <th>Specialization</th>
-                      <th>Degree</th>
-                      <th>Mobile</th>
-                      <th>Email</th>
-                      <th>Joining Date</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredDoctors?.map(doctor => (
-                      <tr key={doctor?.id}>
-                        <td className="profile-image">
-                          <a href="profile.html">{doctor?.firstname}&nbsp;{doctor?.lastname}</a>
-                        </td>
-                        <td>{doctor?.department}</td>
-                        <td>{doctor?.years_of_experience}</td>
-                        <td>{doctor?.specialization}</td>
-                        <td>{doctor?.education}</td>
-                        <td><a href="javascript:;">{doctor?.phone}</a></td>
-                        <td><a href={`mailto:${doctor?.email}`}>{doctor?.email}</a></td>
-                        <td>{doctor?.created_at}</td>
-                        <td className="text-end">
-                          <button
-                            className="btn btn-sm btn-danger me-2"
-                            style={{ backgroundColor: '#2e37a4', borderColor: '#2e37a4' }}
-                            onClick={() => {
-                              router('/editdoctor')
-                              dispatch(doctorEditData(doctor))
-                            }}
-                          >
-                            <FaPen />
-                          </button>
-                          <button
-                            className="btn btn-sm btn-danger "
-                            style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
-                            onClick={() => console.log('Delete', doctor?.id)}
-                          >
-                            <FaTrash />
-                          </button>
-                        </td>
+              <div className="table-responsive-container">
+                <div className="table-responsive">
+                  <table className="table border-0 custom-table comman-table datatable mb-0">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Experience</th>
+                        <th>Specialization</th>
+                        <th>Degree</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Joining Date</th>
+                        <th>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {currentRows?.map((doctor) => (
+                        <tr key={doctor?.id}>
+                          <td className="profile-image">
+                            <a href="profile.html">{doctor?.firstname}&nbsp;{doctor?.lastname}</a>
+                          </td>
+                          <td>{doctor?.department}</td>
+                          <td>{doctor?.years_of_experience}</td>
+                          <td>{doctor?.specialization}</td>
+                          <td>{doctor?.education}</td>
+                          <td><a href="javascript:;">{doctor?.phone}</a></td>
+                          <td><a href={`mailto:${doctor?.email}`}>{doctor?.email}</a></td>
+                          <td>{doctor?.created_at}</td>
+                          <td className="text-end">
+                            <button
+                              className="btn btn-sm btn-danger me-2"
+                              style={{ backgroundColor: '#2e37a4', borderColor: '#2e37a4' }}
+                              onClick={() => {
+                                router('/editdoctor');
+                                dispatch(doctorEditData(doctor));
+                              }}
+                            >
+                              <FaPen />
+                            </button>
+                            {/* <button
+                              className="btn btn-sm btn-danger "
+                              style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
+                              onClick={() => console.log('Delete', doctor?.id)}
+                            >
+                              <FaTrash />
+                            </button> */}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <nav>
                 <ul className="pagination justify-content-center" style={{ marginTop: '20px' }}>

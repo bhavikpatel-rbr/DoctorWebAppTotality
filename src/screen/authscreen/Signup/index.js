@@ -35,10 +35,10 @@ const SignUp = () => {
         username: values.username,
         email: values.email,
         phone: values.phone,
-        password: values.password,
-        group_id: 2,
+        password: values.password,    
+        group_id: 6,
       })
-    );
+    );        
   };
 
   return (

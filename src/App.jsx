@@ -14,12 +14,12 @@ function App() {
   const { token } = useSelector(authSelector)
   const users = useSelector(appSelector)
   const dispatch = useDispatch()
-  useEffect(() => {
-    if (token) {
-      dispatch(getAllUserAction())
-      dispatch(allPatientsUsersAction())
-    }
-  }, [token])
+  // useEffect(() => {
+  //   if (token) {
+  //     dispatch(getAllUserAction())
+  //     dispatch(allPatientsUsersAction())
+  //   }
+  // }, [token])
 
   return (
     <>

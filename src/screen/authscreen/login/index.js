@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -9,6 +9,8 @@ import { loginAdminByEmailAction } from '../../../reduxtool/auth/middleware';
 
 const Login = () => {
   const dispatch = useDispatch();
+  const passwordRef = useRef(null);
+  const loginButtonRef = useRef(null);
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -49,33 +51,52 @@ const Login = () => {
                         <Form onSubmit={handleSubmit}>
                           <div className="input-block">
                             <label htmlFor="email">Email <span className="login-danger">*</span></label>
-                            <Field id="email" name="email" type="text" className="form-control" />
+                            <Field
+                              id="email"
+                              name="email"
+                              type="text"
+                              className="form-control"
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  passwordRef.current.focus();
+                                }
+                              }}
+                            />
                             <ErrorMessage name="email" component="div" className="login-danger" />
                           </div>
                           <div className="input-block">
                             <label htmlFor="password">Password <span className="login-danger">*</span></label>
-                            <Field id="password" name="password" type="password" className="form-control pass-input" />
+                            <Field
+                              id="password"
+                              name="password"
+                              type="password"
+                              className="form-control pass-input"
+                              innerRef={passwordRef}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  loginButtonRef.current.click();
+                                }
+                              }}
+                            />
                             <ErrorMessage name="password" component="div" className="login-danger" />
                           </div>
-                          <div className="forgotpass">
-                            <div className="remember-me">
-                              <label className="custom_check mr-2 mb-0 d-inline-flex remember-me"> 
-                                Remember me
-                                <input type="checkbox" name="rememberMe" />
-                                <span className="checkmark"></span>
-                              </label>
-                            </div>
-                            {/* <Link to="/resetpassword">Forgot Password?</Link> */}
-                          </div>
                           <div className="input-block login-btn">
-                            <button className="btn btn-primary btn-block" type="submit">Login</button>
+                            <button
+                              className="btn btn-primary btn-block"
+                              type="submit"
+                              ref={loginButtonRef}
+                            >
+                              Login
+                            </button>
                           </div>
                         </Form>
                       )}
                     </Formik>
-
+                   
                     <div className="next-sign">
-                      <p className="account-subtitle">Need an account? <Link to="/register">Sign Up</Link></p>
+                      <p className="account-subtitle">Need an account? <Link to="/signup">Sign Up</Link></p>
                     </div>
                   </div>
                 </div>

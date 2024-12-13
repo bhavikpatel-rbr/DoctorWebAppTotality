@@ -475,9 +475,11 @@ h2.accordion-header button.accordion-button {
   }
 }
 
-.splashscreen-main {
-  background-color:linear-gradient(0deg, rgba(51, 53, 72, 0.05), rgba(51, 53, 72, 0.05)), #FFFFFF;
-}
+/* .splashscreen-main {
+  background-image: url('/src/img/screen1.jpg');
+  position-visibility: initial;
+  background-repeat: no-repeat;
+} */
 
 .btn.splash-btn {
   background: #0049cb;

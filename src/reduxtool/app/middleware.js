@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { hideLoader, showLoader, showMessage } from "../lem/lemSlice";
+
 import { defaultMessageObj } from "../../utils/hooks";
 import {
   allClinicsUsersAsync,
@@ -49,6 +50,8 @@ import {
   userDetailsAsync,
   getdepartmentlistAsync,
 } from "./service";
+import { useNavigate } from "react-router-dom";
+
 
 export const getAllUserAction = createAsyncThunk(
   "auth/getAllUser",
@@ -77,9 +80,11 @@ export const getAllUserAction = createAsyncThunk(
 
 export const registerDoctorAction = createAsyncThunk(
   "auth/registerDoctor",
-  async (payload, { rejectWithValue, dispatch }) => {
+  
+  async (payload ,  { rejectWithValue, dispatch }) => {
     dispatch(showLoader({ loading: true, message: "happening" }));
     try {
+     
       const response = await registerDoctorAsync(payload);
       if (response?.data) {
         dispatch(
@@ -89,6 +94,7 @@ export const registerDoctorAction = createAsyncThunk(
             messageText: response?.data?.message,
           })
         );
+      
         return response?.data;
       }
       dispatch(
