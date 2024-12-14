@@ -7,10 +7,14 @@ import { editSelector } from '../../../reduxtool/editstate/editSlice';
 import { useDispatch } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { updateDepartmentAction } from '../../../reduxtool/app/middleware';
+import { useNavigate } from 'react-router-dom';
 
 const EditDepartment = () => {
   const department = useSelector(editSelector)
   const dispatch = useDispatch()
+  const navigate = useNavigate();
+
+
   const formik = useFormik({
     initialValues: {
       departmentName: department?.departmentEdit?.department_name,
@@ -31,11 +35,14 @@ const EditDepartment = () => {
         department_id: department?.departmentEdit?.department_id,
         clinic_id: department?.departmentEdit?.clinic_id,
         department_name: values.departmentName
-    }
-   
-    dispatch(updateDepartmentAction(updateDta))
-   
-      // Handle form submission
+      }
+
+      dispatch(updateDepartmentAction(updateDta)).then((res) => {
+        console.log(res);
+        
+        navigate('/departments')
+      })
+ 
     },
   });
 
@@ -49,7 +56,7 @@ const EditDepartment = () => {
                 <a href="departments.html">Department</a>
               </li>
               <li className="breadcrumb-item">
-                <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>
+                <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
               </li>
               <li className="breadcrumb-item active">Edit Department</li>
             </ul>

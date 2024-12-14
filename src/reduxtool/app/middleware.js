@@ -700,7 +700,7 @@ export const updateStaffDataAction = createAsyncThunk(
     try {
       const response = await updateStaffDataAsync(payload);
       dispatch(hideLoader());
-      if (response?.data) {
+      if (response?.status) {
         dispatch(
           showMessage({
             ...defaultMessageObj,
@@ -714,7 +714,7 @@ export const updateStaffDataAction = createAsyncThunk(
         showMessage({
           ...defaultMessageObj,
           type: "error",
-          messageText: response.data.message,
+          messageText: response?.message || "Something went wrong",
         })
       );
       return rejectWithValue(response);
@@ -968,12 +968,12 @@ export const createDepartmentAction = createAsyncThunk(
     try {
       const response = await createDepartmentAsync(payload);
       dispatch(hideLoader());
-      if (response?.data) {
+      if (response?.data?.status) {
         dispatch(
           showMessage({
             ...defaultMessageObj,
             type: "success",
-            messageText: response.data.message,
+            messageText: response?.data?.message,
           })
         );
         return response.data;
@@ -982,7 +982,7 @@ export const createDepartmentAction = createAsyncThunk(
         showMessage({
           ...defaultMessageObj,
           type: "error",
-          messageText: response.data.message,
+          messageText: response?.data?.message || response?.message ,
         })
       );
       return rejectWithValue(response);
@@ -1001,12 +1001,14 @@ export const updateDepartmentAction = createAsyncThunk(
     try {
       const response = await updateDepartmentAsync(payload);
       dispatch(hideLoader());
-      if (response?.data) {
+      console.log(response);
+      
+      if (response?.data?.status) {
         dispatch(
           showMessage({
             ...defaultMessageObj,
             type: "success",
-            messageText: response.data.message,
+            messageText: response?.data?.message,
           })
         );
         return response.data;
@@ -1015,7 +1017,7 @@ export const updateDepartmentAction = createAsyncThunk(
         showMessage({
           ...defaultMessageObj,
           type: "error",
-          messageText: response.data.message,
+          messageText: response?.data?.message || response?.message,
         })
       );
       return rejectWithValue(response);

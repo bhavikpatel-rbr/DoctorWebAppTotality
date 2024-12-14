@@ -2,47 +2,47 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { ChevronRight } from 'react-feather';
-import { createDepartmentAction, registerPatientAction } from '../../../reduxtool/app/middleware';
-import { createDepartmentAsync } from '../../../reduxtool/app/service';
+import { createDepartmentAction } from '../../../reduxtool/app/middleware';
 import DatePicker from 'react-datepicker';
 import { useDispatch } from 'react-redux';
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from 'react-router-dom';
+
 const AddDepartment = () => {
   const currentDateTime = new Date().toISOString();
   const dispatch = useDispatch()
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
-      clinic_id:1,
+      clinic_id: 1,
       departmentName: '',
-      created_at:currentDateTime,
+      created_at: currentDateTime,
       // departmentHead: '',
       // description: '',
-       departmentDate:currentDateTime,
+      departmentDate: currentDateTime,
       // status: 'Active',
     },
     validationSchema: Yup.object({
       departmentName: Yup.string().required('Department Name is required'),
       // departmentHead: Yup.string().required('Department Head is required'),
       // description: Yup.string().required('Description is required'),
-       departmentDate: Yup.date().required('Department Date is required'),
+      departmentDate: Yup.date().required('Department Date is required'),
       // status: Yup.string().required('Status is required'),
     }),
     onSubmit: (values) => {
-      console.log("values",values);
+      console.log("values", values);
       const payload = {
         clinic_id: 1,
-        department_name:values?.departmentName,
-        created_at:values?.departmentDate
-
-       
+        department_name: values?.departmentName,
+        created_at: values?.departmentDate
       }
 
-      console.log('===============payload=====================');
-      console.log(payload);
-      console.log('=================payload===================');
-
-      dispatch(createDepartmentAction(payload))
-      // Handle form submission
+      dispatch(createDepartmentAction(payload)).then((res) => {
+        if (res?.payload?.status) {
+          navigate('/departments')
+        }
+      })
     },
   });
 
@@ -56,7 +56,7 @@ const AddDepartment = () => {
                 <a href="departments.html">Department</a>
               </li>
               <li className="breadcrumb-item">
-                <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>
+                <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
               </li>
               <li className="breadcrumb-item active">Add Department</li>
             </ul>

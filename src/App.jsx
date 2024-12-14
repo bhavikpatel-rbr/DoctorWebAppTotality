@@ -7,19 +7,18 @@ import { authSelector } from './reduxtool/auth/authSlice';
 import Loader from './component/AppLoader';
 import ScrollToTop from './utils/scrollToTop';
 import { useDispatch } from 'react-redux';
-import { allPatientsUsersAction, getAllUserAction } from './reduxtool/app/middleware';
-import { appSelector } from './reduxtool/app/appslice';
+import { hideLoader, lemSelector } from './reduxtool/lem/lemSlice';
 
 function App() {
-  const { token } = useSelector(authSelector)
-  const users = useSelector(appSelector)
   const dispatch = useDispatch()
-  // useEffect(() => {
-  //   if (token) {
-  //     dispatch(getAllUserAction())
-  //     dispatch(allPatientsUsersAction())
-  //   }
-  // }, [token])
+  const { token } = useSelector(authSelector)
+  const { loading } = useSelector(lemSelector)
+
+  useEffect(() => {
+    if (loading) {
+      dispatch(hideLoader());
+    }
+  }, [])
 
   return (
     <>

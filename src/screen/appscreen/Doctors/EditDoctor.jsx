@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
-import { editSelector, resetUpdateStatus } from '../../../reduxtool/editstate/editSlice';
+import { cleanEditState, editSelector, resetUpdateStatus } from '../../../reduxtool/editstate/editSlice';
 import { useDispatch } from 'react-redux';
 import { ChevronRight } from 'react-feather';
 import { updateStaffDataAction } from '../../../reduxtool/app/middleware';
@@ -15,10 +15,9 @@ const EditDoctor = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState(null);
+  
   const formik = useFormik({
-    
     initialValues: {
-      
       firstname: doctor?.doctorEdit?.firstname,
       lastname: doctor?.doctorEdit?.lastname,
       userName: doctor?.doctorEdit?.username,
@@ -27,14 +26,14 @@ const EditDoctor = () => {
       password: '',
       confirmPassword: '',
       doctor_name: doctor?.doctorEdit?.firstname,
-    specialization: doctor?.doctorEdit?.specialization,
-    license_number: doctor?.doctorEdit?.license_number,
-    years_of_experience: doctor?.doctorEdit?.years_of_experience,
-    doctor_phone: '',
-    doctor_email: '',
-    address_line_2: '',
-    birth_date: doctor?.doctorEdit?.birth_date,
-    gender: doctor?.doctorEdit?.gender,
+      specialization: doctor?.doctorEdit?.specialization,
+      license_number: doctor?.doctorEdit?.license_number,
+      years_of_experience: doctor?.doctorEdit?.years_of_experience,
+      doctor_phone: '',
+      doctor_email: '',
+      address_line_2: '',
+      birth_date: doctor?.doctorEdit?.birth_date,
+      gender: doctor?.doctorEdit?.gender,
       education: doctor?.doctorEdit?.education,
       designation: doctor?.doctorEdit?.designation,
       department: doctor?.doctorEdit?.department,
@@ -48,31 +47,29 @@ const EditDoctor = () => {
       status: doctor?.doctorEdit?.active,
     },
     validationSchema: Yup.object({
-      firstname:Yup.string().required('Fistname is required'),
-      lastname:Yup.string().required('Lastname is required'),
+      firstname: Yup.string().required('Fistname is required'),
+      lastname: Yup.string().required('Lastname is required'),
       username: Yup.string().required('Username is required'),
       email: Yup.string().email('Invalid email format').required('Email is required'),
       phone: Yup.string().required('Phone is required'),
-       password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
-       confirmPassword: Yup.string()
+      password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+      confirmPassword: Yup.string()
         .oneOf([Yup.ref('password')], 'Passwords must match')
         .required('Confirm Password is required'),
-       specialization: Yup.string().required('Specialization is required'),
+      specialization: Yup.string().required('Specialization is required'),
       license_number: Yup.string().required('License Number is required'),
-       years_of_experience: Yup.number().min(1, 'Experience must be greater than 0').required('Experience is required'),
-       education: Yup.string().required('Education is required'),
-       designation: Yup.string().required('Designation is required'),
-       address_line_1: Yup.string().required('Address Line 1 is required'),
-       city: Yup.string().required('City is required'),
+      years_of_experience: Yup.number().min(1, 'Experience must be greater than 0').required('Experience is required'),
+      education: Yup.string().required('Education is required'),
+      designation: Yup.string().required('Designation is required'),
+      address_line_1: Yup.string().required('Address Line 1 is required'),
+      city: Yup.string().required('City is required'),
       state: Yup.string().required('State is required'),
       postal_code: Yup.string().required('Postal Code is required'),
       country: Yup.string().required('Country is required'),
-      birth_date:Yup.string().required('BithDate is required')
+      birth_date: Yup.string().required('BithDate is required')
     }),
-    onSubmit: (values) => {
 
-      console.log("doctor?.doctorEdit?.user_id",doctor?.doctorEdit?.user_id);
-      
+    onSubmit: (values) => {
       const updateDta = {
         doctor_id: doctor?.doctorEdit?.doctor_id,
         user_id: doctor?.doctorEdit?.user_id,
@@ -112,26 +109,14 @@ const EditDoctor = () => {
         active: doctor?.doctorEdit?.active,
         is_deleted: doctor?.doctorEdit?.is_deleted
       }
-
-      console.log("updateDta0",updateDta);
-      
-      dispatch(updateStaffDataAction(updateDta))
+      dispatch(updateStaffDataAction(updateDta)).then((res) => {
+        if (res?.payload?.status) {
+          dispatch(cleanEditState());
+          navigate('/doctors');
+        }
+      })
     },
   });
-
-  const updateStatus = useSelector((state) => state.EditState.updateStatus);
-
-  useEffect(() => {
-
-    
-    
-    if (updateStatus === 'succeeded') {
-      
-      dispatch(resetUpdateStatus()); 
-      navigate('/doctors');
-    }
-  }, [updateStatus, navigate]);
-
 
   const handleFileChange = (event) => {
     setAvatar(event.target.files[0]);
@@ -154,7 +139,7 @@ const EditDoctor = () => {
         <div className="col-sm-12">
           <div className="card">
             <div className="card-body">
-            <form onSubmit={formik.handleSubmit}>
+              <form onSubmit={formik.handleSubmit}>
                 <div className="row">
                   <div className="col-12">
                     <div className="form-heading">
@@ -200,7 +185,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-4">
                     <div className="input-block local-forms">
                       <label>
-                      Username <span className="login-danger">*</span>
+                        Username <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -219,7 +204,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
-                      email <span className="login-danger">*</span>
+                        email <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -237,7 +222,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
-                      Mobile Number <span className="login-danger">*</span>
+                        Mobile Number <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -258,7 +243,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
-                      Password <span className="login-danger">*</span>
+                        Password <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -277,7 +262,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
-                      Confirm Password <span className="login-danger">*</span>
+                        Confirm Password <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -296,7 +281,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-4">
                     <div className="input-block local-forms">
                       <label>
-                      Specialization <span className="login-danger">*</span>
+                        Specialization <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -315,7 +300,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-4">
                     <div className="input-block local-forms">
                       <label>
-                      License Number <span className="login-danger">*</span>
+                        License Number <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -334,7 +319,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-4">
                     <div className="input-block local-forms">
                       <label>
-                      Experience (Years) <span className="login-danger">*</span>
+                        Experience (Years) <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -353,7 +338,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-3">
                     <div className="input-block local-forms">
                       <label>
-                      Education <span className="login-danger">*</span>
+                        Education <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -372,7 +357,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-3">
                     <div className="input-block local-forms">
                       <label>
-                      Designation <span className="login-danger">*</span>
+                        Designation <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -390,7 +375,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-4">
                     <div className="input-block local-forms">
                       <label>
-                      Department <span className="login-danger">*</span>
+                        Department <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -409,14 +394,14 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-2">
                     <div className="input-block local-forms ">
                       <label>
-                      birth date <span className="login-danger">*</span>
+                        birth date <span className="login-danger">*</span>
                       </label>
                       <DatePicker
                         selected={formik.values.birth_date}
                         onChange={(date) => formik.setFieldValue('birth_date', date)}
                         dateFormat="yyyy/MM/dd"
                         className="form-control"
-                        
+
                       />
                       {formik.touched.birth_date && formik.errors.birth_date ? (
                         <div className="text-danger">{formik.errors.birth_date}</div>
@@ -428,7 +413,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-12">
                     <div className="input-block local-forms">
                       <label>
-                      Address <span className="login-danger">*</span>
+                        Address <span className="login-danger">*</span>
                       </label>
                       <TextArea
                         className="form-control"
@@ -443,11 +428,11 @@ const EditDoctor = () => {
                       ) : null}
                     </div>
                   </div>
-                  
+
                   <div className="col-12 col-md-6 col-xl-3">
                     <div className="input-block local-forms">
                       <label>
-                      City <span className="login-danger">*</span>
+                        City <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -466,7 +451,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-3">
                     <div className="input-block local-forms">
                       <label>
-                      State <span className="login-danger">*</span>
+                        State <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -481,11 +466,11 @@ const EditDoctor = () => {
                       ) : null}
                     </div>
                   </div>
-                 
+
                   <div className="col-12 col-md-6 col-xl-3">
                     <div className="input-block local-forms">
                       <label>
-                      Country <span className="login-danger">*</span>
+                        Country <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -504,7 +489,7 @@ const EditDoctor = () => {
                   <div className="col-12 col-md-6 col-xl-3">
                     <div className="input-block local-forms">
                       <label>
-                      Postal Code <span className="login-danger">*</span>
+                        Postal Code <span className="login-danger">*</span>
                       </label>
                       <input
                         className="form-control"
@@ -606,10 +591,10 @@ const EditDoctor = () => {
                       ) : null}
                     </div>
                   </div>
-                
-                 
-                 
-                  
+
+
+
+
                   <div className="col-12">
                     <div className="doctor-submit text-end">
                       <button

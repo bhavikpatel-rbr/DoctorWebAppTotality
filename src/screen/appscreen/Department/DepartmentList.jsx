@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Assuming you're using react-router for navigation
-import { ChevronRight } from 'react-feather'; 
+import { ChevronRight } from 'react-feather';
 import plus from '../../../img/icons/plus.svg'
 import { FaPen, FaTrash } from 'react-icons/fa';
 import refresh from '../../../img/icons/re-fresh.svg'
-import searchnormal from '../../../img/icons/search-normal.svg' 
+import searchnormal from '../../../img/icons/search-normal.svg'
 import { useDispatch } from 'react-redux';
 import { getdepartmentlist, getdepartmentlistAction } from '../../../reduxtool/app/middleware';
 import { appSelector } from '../../../reduxtool/app/appslice';
 import { useSelector } from 'react-redux';
 import { departmentEditData } from '../../../reduxtool/editstate/editSlice';
+
+
 const DepartmentList = () => {
   // Sample data
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,9 +22,9 @@ const DepartmentList = () => {
   const dispatch = useDispatch()
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const totalPages = Math.ceil(department?.departmentList?.length / rowsPerPage);
+
   useEffect(() => {
     dispatch(getdepartmentlistAction())
-    
   }, [dispatch])
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -30,7 +32,7 @@ const DepartmentList = () => {
   const currentRows = department?.departmentList?.slice(indexOfFirstRow, indexOfLastRow);
 
   const filteredDepartment = currentRows?.filter(department =>
-    department.department_name.toLowerCase().includes(searchQuery.toLowerCase()) 
+    department.department_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
 
@@ -45,7 +47,7 @@ const DepartmentList = () => {
                 <Link to="/departments">Department</Link>
               </li>
               <li className="breadcrumb-item">
-                <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>
+                <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
               </li>
               <li className="breadcrumb-item active">Department List</li>
             </ul>
@@ -65,13 +67,13 @@ const DepartmentList = () => {
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
                           <form>
-                          <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Search here"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Search here"
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                            />
                             <button type="submit" className="btn">
                               <img src={searchnormal} alt="" />
                             </button>
@@ -86,12 +88,12 @@ const DepartmentList = () => {
                             className="btn btn-primary doctor-refresh ms-2"
                           >
                             <img src={refresh} alt="" />
-                         </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
               </div>
 
@@ -99,7 +101,7 @@ const DepartmentList = () => {
                 <table className="table border-0 custom-table comman-table datatable mb-0">
                   <thead>
                     <tr>
-                     
+
                       <th>Department</th>
                       <th>Department Head</th>
                       <th>Description</th>
@@ -109,27 +111,25 @@ const DepartmentList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                  {filteredDepartment?.map(department => (
+                    {filteredDepartment?.map(department => (
                       <tr key={department.id}>
-                      
                         <td>{department.department_name}</td>
                         <td className="profile-image">
                           <Link to="/profile">
-                            
-                           static
+                            static
                           </Link>
                         </td>
                         <td>static</td>
                         <td>{department.created_at}</td>
                         <td>
-                          <button className={`custom-badge ${department.status === 'Active' ? 'status-green' : 'status-green'}`}> 
+                          <button className={`custom-badge ${department.status === 'Active' ? 'status-green' : 'status-green'}`}>
                             {/* 'status-pink' */}
                             Active
                           </button>
                         </td>
                         <td className="text-end">
-                          <button 
-                            className="btn btn-sm btn-danger me-2" 
+                          <button
+                            className="btn btn-sm btn-danger me-2"
                             style={{ backgroundColor: '#2e37a4', borderColor: '#2e37a4' }}
                             onClick={() => {
                               router('/editdepartment')
@@ -138,20 +138,19 @@ const DepartmentList = () => {
                           >
                             <FaPen />
                           </button>
-                          {/* <button 
-                            className="btn btn-sm btn-danger " 
+                          <button
+                            className="btn btn-sm btn-danger "
                             style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
-                            
                           >
                             <FaTrash />
-                          </button> */}
+                          </button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              
+
               <nav>
                 <ul className="pagination justify-content-center" style={{ marginTop: '20px' }}>
                   {Array.from({ length: totalPages }, (_, index) => (
