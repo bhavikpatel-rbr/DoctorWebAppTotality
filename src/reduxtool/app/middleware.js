@@ -49,6 +49,9 @@ import {
   updateScheduleAsync,
   userDetailsAsync,
   getdepartmentlistAsync,
+  getbloglistlistAsync,
+  getschedulelistAsync,
+  getMedicallistlistAsync,
 } from "./service";
 import { useNavigate } from "react-router-dom";
 
@@ -77,6 +80,7 @@ export const getAllUserAction = createAsyncThunk(
     }
   }
 );
+
 
 export const registerDoctorAction = createAsyncThunk(
   "auth/registerDoctor",
@@ -243,14 +247,14 @@ export const  allDoctorsUsersAction = createAsyncThunk(
     try {
       const response = await allDoctorsUsersAsync();
       if (response?.data) {
-        dispatch(hideLoader());
-        // dispatch(
-        //   showMessage({
-        //     ...defaultMessageObj,
-        //     type: "success",
-        //     messageText: response?.data?.message,
-        //   })
-        // );
+        dispatch(
+          showMessage({
+            ...defaultMessageObj,
+            type: "success",
+            messageText: response?.data?.message,
+          })
+        );
+       
         return response?.data;
       }
       dispatch(
@@ -274,6 +278,70 @@ export const  getdepartmentlistAction = createAsyncThunk(
     dispatch(showLoader({ loading: true, message: "happening" }));
     try {
       const response = await getdepartmentlistAsync();
+      if (response?.data) {
+        dispatch(hideLoader());
+        dispatch(
+          showMessage({
+            ...defaultMessageObj,
+            type: "success",
+            messageText: response?.data?.message,
+          })
+        );
+        return response?.data;
+      }
+      dispatch(
+        showMessage({
+          ...defaultMessageObj,
+          type: "error",
+          messageText: response?.data?.message,
+        })
+      );
+      return rejectWithValue(response);
+    } catch (error) {
+      dispatch(hideLoader());
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const  getschedulelistAction = createAsyncThunk(
+  "auth/getscheduleslist",
+  async (_, { rejectWithValue, dispatch }) => {
+    dispatch(showLoader({ loading: true, message: "happening" }));
+    try {
+      const response = await getschedulelistAsync();
+      if (response?.data) {
+        dispatch(hideLoader());
+        dispatch(
+          showMessage({
+            ...defaultMessageObj,
+            type: "success",
+            messageText: response?.data?.message,
+          })
+        );
+        return response?.data;
+      }
+      dispatch(
+        showMessage({
+          ...defaultMessageObj,
+          type: "error",
+          messageText: response?.data?.message,
+        })
+      );
+      return rejectWithValue(response);
+    } catch (error) {
+      dispatch(hideLoader());
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const  getbloglistAction = createAsyncThunk(
+  "auth/getbloglist",
+  async (_, { rejectWithValue, dispatch }) => {
+    dispatch(showLoader({ loading: true, message: "happening" }));
+    try {
+      const response = await getbloglistlistAsync();
       if (response?.data) {
         dispatch(hideLoader());
         // dispatch(
@@ -300,6 +368,37 @@ export const  getdepartmentlistAction = createAsyncThunk(
   }
 );
 
+export const  getMedicallistAction = createAsyncThunk(
+  "auth/getmedicalrecordlist",
+  async (_, { rejectWithValue, dispatch }) => {
+    dispatch(showLoader({ loading: true, message: "happening" }));
+    try {
+      const response = await getMedicallistlistAsync();
+      if (response?.data) {
+        dispatch(hideLoader());
+        // dispatch(
+        //   showMessage({
+        //     ...defaultMessageObj,
+        //     type: "success",
+        //     messageText: response?.data?.message,
+        //   })
+        // );
+        return response?.data;
+      }
+      dispatch(
+        showMessage({
+          ...defaultMessageObj,
+          type: "error",
+          messageText: response?.data?.message,
+        })
+      );
+      return rejectWithValue(response);
+    } catch (error) {
+      dispatch(hideLoader());
+      return rejectWithValue(error);
+    }
+  }
+);
 export const allStaffUsersAction = createAsyncThunk(
   "auth/allStaffUsers",
   async (_, { rejectWithValue, dispatch }) => {

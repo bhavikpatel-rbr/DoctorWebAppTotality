@@ -40,12 +40,17 @@ import {
   updateScheduleAction,
   userDetailsAction,
   getdepartmentlistAction,
+  getbloglistAction,
+  getschedulelistAction,
+  getMedicallistAction,
 } from "./middleware";
+import { getMedicallistlistAsync } from "./service";
 
 const INITIAL_STATE = {
   users: null,
   patientList: null,
   adminProfile: null,
+  sheduleList:null,
   doctorList: [],
 };
 
@@ -77,12 +82,27 @@ const appSlice = createSlice({
       ...state,
       doctorList: payload?.data
     }));
+    
+    builder.addCase(getschedulelistAction.fulfilled, (state, { payload }) => ({
+      ...state,
+      scheduleList: payload?.data
+    }));
     builder.addCase(getdepartmentlistAction.fulfilled, (state, { payload }) => ({
       ...state,
       departmentList: payload?.data
     }));
+    builder.addCase(getbloglistAction.fulfilled, (state, { payload }) => ({
+      ...state,
+      bloglist: payload?.data
+    }));
+    builder.addCase(getMedicallistAction.fulfilled, (state, { payload }) => ({
+      ...state,
+      Medicallist: payload?.data
+    }));
+    
     builder.addCase(allStaffUsersAction.fulfilled, (state, { payload }) => ({
       ...state,
+      Stafflist: payload?.data
     }));
     builder.addCase(allPatientsUsersAction.fulfilled, (state, { payload }) => ({
       ...state,
@@ -215,6 +235,9 @@ const appSlice = createSlice({
       getAppointmentListAction.fulfilled,
       (state, { payload }) => ({
         ...state,
+        AppointmentList: payload?.data
+        
+        
       })
     );
     builder.addCase(insertScheduleAction.fulfilled, (state, { payload }) => ({

@@ -1,33 +1,55 @@
+import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { ChevronRight } from 'react-feather';
-
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+import { insertScheduleAction } from '../../../reduxtool/app/middleware';
 const AddSchedule = () => {
+  const dispatch = useDispatch()
+    const navigate = useNavigate();
   // State for form fields
-  const [formData, setFormData] = useState({
-    doctorName: '',
-    department: '',
-    availableDays: '',
-    fromTime: '',
-    toTime: '',
-    notes: '',
-    status: 'Active'
-  });
+  
+  
+  
 
-  // Handle form field changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted:', formData);
-  };
+  const formik = useFormik({
+         initialValues: {
+              doctor_id: 1,
+              clinic_id: 1,
+              day_of_week: "",
+              start_time: "",
+              end_time: ""
+            
+            },
+            validationSchema: Yup.object({
+              day_of_week: Yup.string().required('Day is required'),
+              start_time: Yup.string().required('Start Time is required'),
+              end_time: Yup.string().required('end Date is required'),
+              // status: Yup.string().required('Status is required'),
+            }),
+        onSubmit: (values) => {
+          console.log('===========values=========================');
+      console.log(values);
+      console.log('==============values======================');
+          const payload = {
+            doctor_id: 1,
+            clinic_id: 1,
+            day_of_week: values?.day_of_week,
+            start_time: values?.start_time,
+            end_time: values?.end_time
+            
+           
+          }
+    
+          dispatch(insertScheduleAction(payload)).then((res) => {
+            if (res?.payload?.status) {
+              navigate('/schedulelist')
+            }
+          })
+        },
+      });
 
   return (
     <div className="content">
@@ -51,14 +73,14 @@ const AddSchedule = () => {
         <div className="col-sm-12">
           <div className="card">
             <div className="card-body">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={formik.handleSubmit}>
                 <div className="row">
                   <div className="col-12">
                     <div className="form-heading">
                       <h4>Add Schedule</h4>
                     </div>
                   </div>
-                  <div className="col-12 col-md-6 col-xl-6">
+                  {/* <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
                         Doctor Name <span className="login-danger">*</span>
@@ -71,8 +93,8 @@ const AddSchedule = () => {
                         onChange={handleChange}
                       />
                     </div>
-                  </div>
-                  <div className="col-12 col-md-6 col-xl-6">
+                  </div> */}
+                  {/* <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
                         Department <span className="login-danger">*</span>
@@ -89,56 +111,68 @@ const AddSchedule = () => {
                         <option value="Radiology">Radiology</option>
                       </select>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-12 col-md-6 col-xl-4">
-                    <div className="input-block local-forms cal-icon">
+                    <div className="input-block local-forms ">
                       <label>
-                        Available Days <span className="login-danger">*</span>
+                        Day <span className="login-danger">*</span>
                       </label>
                       <input
-                        className="form-control datetimepicker"
+                        className="form-control "
                         type="text"
-                        name="availableDays"
-                        value={formData.availableDays}
-                        onChange={handleChange}
+                        name="day_of_week"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.day_of_week}
                       />
+                       {formik.touched.day_of_week && formik.errors.day_of_week ? (
+                        <div className="text-danger">{formik.errors.day_of_week}</div>
+                      ) : null}
                     </div>
                   </div>
                   <div className="col-12 col-md-6 col-xl-4">
                     <div className="input-block local-forms">
                       <label>
-                        From <span className="login-danger">*</span>
+                        From Time<span className="login-danger">*</span>
                       </label>
-                      <div className="time-icon">
+                     
                         <input
                           type="text"
                           className="form-control"
-                          id="datetimepicker3"
-                          name="fromTime"
-                          value={formData.fromTime}
-                          onChange={handleChange}
+                         
+                          name="start_time"
+                          onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.start_time}
                         />
-                      </div>
+                         {formik.touched.start_time && formik.errors.start_time ? (
+                        <div className="text-danger">{formik.errors.start_time}</div>
+                      ) : null}
+                     
                     </div>
                   </div>
                   <div className="col-12 col-md-6 col-xl-4">
                     <div className="input-block local-forms">
                       <label>
-                        To <span className="login-danger">*</span>
+                        To Time<span className="login-danger">*</span>
                       </label>
-                      <div className="time-icon">
+                     
                         <input
                           type="text"
                           className="form-control"
-                          id="datetimepicker4"
-                          name="toTime"
-                          value={formData.toTime}
-                          onChange={handleChange}
+                        
+                          name="end_time"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.end_time}
                         />
-                      </div>
+                         {formik.touched.end_time && formik.errors.end_time ? (
+                        <div className="text-danger">{formik.errors.end_time}</div>
+                      ) : null}
+                     
                     </div>
                   </div>
-                  <div className="col-12 col-sm-12">
+                  {/* <div className="col-12 col-sm-12">
                     <div className="input-block local-forms">
                       <label>
                         Notes <span className="login-danger">*</span>
@@ -152,8 +186,8 @@ const AddSchedule = () => {
                         onChange={handleChange}
                       />
                     </div>
-                  </div>
-                  <div className="col-12 col-md-6 col-xl-4">
+                  </div> */}
+                  {/* <div className="col-12 col-md-6 col-xl-4">
                     <div className="input-block select-gender">
                       <label className="gen-label">
                         Status <span className="login-danger">*</span>
@@ -185,7 +219,7 @@ const AddSchedule = () => {
                         </label>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col-12">
                   <div className="doctor-submit text-end">

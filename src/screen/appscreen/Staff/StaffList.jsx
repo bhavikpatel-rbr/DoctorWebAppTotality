@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronRight } from 'react-feather';
 import searchnormal from '../../../img/icons/search-normal.svg'
 import pdf1 from '../../../img/icons/pdf-icon-01.svg'
@@ -10,178 +10,48 @@ import { FaPen, FaTrash } from 'react-icons/fa';
 import refresh from '../../../img/icons/re-fresh.svg'
 import { useSelector } from 'react-redux';
 import { appSelector } from '../../../reduxtool/app/appslice';
+import { allStaffUsersAction } from '../../../reduxtool/app/middleware';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const StaffList = () => {
 
-  const rowsPerPage = 5;
-  const data = [
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
-    {
-      id: 1,
-      profileImage: 'assets/img/profiles/avatar-01.jpg',
-      name: 'Andrea Lalema',
-      department: 'Otolaryngology',
-      specialization: 'Infertility',
-      degree: 'MBBS, MS',
-      mobile: '+1 23 456890',
-      email: 'andrea.lalema@example.com',
-      joiningDate: '01.10.2022'
-    },
+  const Staff = useSelector(appSelector)
+  const rowsPerPage = 8;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+  const router = useNavigate()
 
-    // Add more data items here
-  ];
-  const users = useSelector(appSelector)
-  const [currentPage, setCurrentPage] = useState(1);
+  
+  const dispatch = useDispatch()
+  
+  useEffect(() => {
+    dispatch(allStaffUsersAction())
+  }, [dispatch])
+
+  
+
+  
+  const filteredDepartment = Staff?.Stafflist?.filter((doctor) =>
+    `${doctor.firstname} ${doctor.lastname}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    doctor.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    doctor.specialization.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    doctor.education.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    doctor.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    doctor.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = users?.users?.Staff?.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = filteredDepartment?.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(filteredDepartment?.length / rowsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const totalPages = Math.ceil(users?.users?.Staff?.length / rowsPerPage);
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
   return (
     <div className="content">
       <div className="page-header">
@@ -273,7 +143,7 @@ const StaffList = () => {
                       <th>Name</th>
                       <th>Department</th>
                       <th>Specialization</th>
-                      <th>Degree</th>
+                     
                       <th>Mobile</th>
                       <th>Email</th>
                       <th>Joining Date</th>
@@ -282,7 +152,7 @@ const StaffList = () => {
                   </thead>
                   <tbody>
                     {/* Map through staff data here */}
-                    {users?.users?.Staff?.map((staff, index) => (
+                    {currentRows?.map((staff, index) => (
                       <tr key={index}>
                         <td className="profile-image">
                           <a href="profile.html">
@@ -298,7 +168,7 @@ const StaffList = () => {
                         </td>
                         <td>{staff.department}</td>
                         <td>{staff.specialization}</td>
-                        <td>{staff.degree}</td>
+                       
                         <td>
                           <a href="javascript:;">{staff.phone}</a>
                         </td>
@@ -316,13 +186,13 @@ const StaffList = () => {
                           >
                             <FaPen />
                           </button>
-                          <button
+                          {/* <button
                             className="btn btn-sm btn-danger "
                             style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
                           // onClick={() => console.log('Delete', doctor.id)}
                           >
                             <FaTrash />
-                          </button>
+                          </button> */}
                         </td>
                       </tr>
                     ))}
@@ -336,7 +206,7 @@ const StaffList = () => {
                       <a
                         className="page-link"
                         href="#"
-                        // onClick={() => paginate(index + 1)}
+                         onClick={() => paginate(index + 1)}
                         style={{
                           border: '1px solid #2e37a4',
                           color: currentPage === index + 1 ? '#fff' : '#2e37a4',

@@ -11,7 +11,16 @@ import menuicon3 from "../../../assest/img/icons/menu-icon-16.svg";
 import menuicon4 from "../../../assest/img/icons/menu-icon-08.svg";
 import medal1 from "../../../assest/img/icons/medal-02.svg";
 import medal2 from "../../../assest/img/icons/medal-03.svg";
+import { useSelector } from 'react-redux';
+import { authSelector } from "../../../reduxtool/auth/authSlice";
 const DoctorProfile = () => {
+
+  const userData = useSelector(authSelector)
+
+
+  console.log('================userData====================');
+  console.log(userData?.userDetails);
+  console.log('=================userData===================');
   return (
     <div className="content">
       <div className="page-header">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Dropdown, Form } from 'react-bootstrap';
 import pdf1 from '../../../img/icons/pdf-icon-01.svg'
 import pdf2 from '../../../img/icons/pdf-icon-02.svg'
@@ -12,19 +12,49 @@ import { ChevronRight } from 'react-feather';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { appSelector } from '../../../reduxtool/app/appslice';
+import { allPatientsUsersAction, getAllUserAction } from '../../../reduxtool/app/middleware';
+import { useDispatch } from 'react-redux';
 
-const rowsPerPage = 5;
+const rowsPerPage = 8;
 const PatientList = () => {
-  const users = useSelector(appSelector)
-  const [currentPage, setCurrentPage] = useState(1);
+   const users = useSelector(appSelector);
+   const dispatch = useDispatch();
 
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = users?.users?.Patient?.slice(indexOfFirstRow, indexOfLastRow);
+   console.log("users",users);
+   console.log('=====================patientList===============');
+     console.log(users?.patientList);
+     console.log('=====================patientList===============');
+    const router = useNavigate();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+ 
+ 
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+   useEffect(() => {
+      dispatch(allPatientsUsersAction());
+    }, [dispatch]);
 
-  const totalPages = Math.ceil(users?.users?.Patient?.length / rowsPerPage);
+    const handleSearchChange = (e) => {
+      setSearchQuery(e.target.value);
+      setCurrentPage(1); // Reset to first page on search
+    };
+  
+    const filteredDoctors = users?.patientList?.filter((doctor) =>
+      `${doctor.firstname} ${doctor.lastname}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor.specialization.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor.education.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = filteredDoctors?.slice(indexOfFirstRow, indexOfLastRow);
+  
+    const totalPages = Math.ceil(filteredDoctors?.length / rowsPerPage);
+  
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div className="content">
       <div className="page-header">
@@ -52,17 +82,16 @@ const PatientList = () => {
                       <h3>Patient List</h3>
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
-                          <form>
+                        <form>
                             <input
                               type="text"
                               className="form-control"
                               placeholder="Search here"
+                              value={searchQuery}
+                              onChange={handleSearchChange}
                             />
                             <a className="btn">
-                              <img
-                                src={searchnormal}
-                                alt="Search"
-                              />
+                              <img src={searchnormal} alt="Search" />
                             </a>
                           </form>
                         </div>
@@ -89,7 +118,7 @@ const PatientList = () => {
                       <th>Name</th>
                       <th>Department</th>
                       <th>Specialization</th>
-                      <th>Degree</th>
+                      <th>City</th>
                       <th>Mobile</th>
                       <th>Email</th>
                       <th>Joining Date</th>
@@ -97,7 +126,7 @@ const PatientList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentRows.map(doctor => (
+                    {currentRows?.map(doctor => (
                       <tr key={doctor.id}>
 
                         <td className="profile-image">
@@ -105,7 +134,7 @@ const PatientList = () => {
                         </td>
                         <td>{doctor.department}</td>
                         <td>{doctor.specialization}</td>
-                        <td>{doctor.degree}</td>
+                        <td>{doctor.city}</td>
                         <td><a href="javascript:;">{doctor.phone}</a></td>
                         <td><a href={`mailto:${doctor.email}`}>{doctor.email}</a></td>
                         <td>{doctor.created_at}</td>
@@ -117,13 +146,13 @@ const PatientList = () => {
                           >
                             <FaPen />
                           </button>
-                          <button
+                          {/* <button
                             className="btn btn-sm btn-danger "
                             style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
                             onClick={() => console.log('Delete', doctor.id)}
                           >
                             <FaTrash />
-                          </button>
+                          </button> */}
                         </td>
                       </tr>
                     ))}

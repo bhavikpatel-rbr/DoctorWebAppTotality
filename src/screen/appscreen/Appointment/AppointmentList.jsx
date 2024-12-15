@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronRight } from 'react-feather';
 import ReactPaginate from 'react-paginate';
 import searchnormal from '../../../assest/img/icons/search-normal.svg'
@@ -9,123 +9,46 @@ import pdf4 from '../../../img/icons/pdf-icon-04.svg'
 import plus from '../../../img/icons/plus.svg'
 import refresh from '../../../img/icons/re-fresh.svg'
 import { FaPen, FaTrash } from 'react-icons/fa';
-import { Link } from 'react-router-dom'; // Use react-router-dom for navigation
-const data =[
-  {
-    id: 1,
-    name: 'Andrea Lalema',
-    doctor: 'Dr.Bernardo James',
-    treatment: 'Infertility',
-    mobile: '+1 23 456890',
-    email: 'andrea@example.com',
-    date: '01.10.2022',
-    time: '07:30',
-    image: 'avatar-01.jpg'
-  },
-  {
-    id: 1,
-    name: 'Bhvaik Rupapara',
-    doctor: 'Dr.Tushar Joshi',
-    treatment: 'Infertility',
-    mobile: '+1 23 456890',
-    email: 'smith@example.com',
-    date: '01.10.2022',
-    time: '07:30',
-    image: 'avatar-02.jpg'
-  },
-  {
-    id: 1,
-    name: 'Bhvaik Rupapara',
-    doctor: 'Dr.Tushar Joshi',
-    treatment: 'Infertility',
-    mobile: '+1 23 456890',
-    email: 'smith@example.com',
-    date: '01.10.2022',
-    time: '07:30',
-    image: 'avatar-02.jpg'
-  },
-  {
-    id: 1,
-    name: 'Bhvaik Rupapara',
-    doctor: 'Dr.Tushar Joshi',
-    treatment: 'Infertility',
-    mobile: '+1 23 456890',
-    email: 'smith@example.com',
-    date: '01.10.2022',
-    time: '07:30',
-    image: 'avatar-02.jpg'
-  },
+import { Link, useNavigate } from 'react-router-dom'; // Use react-router-dom for navigation
+import { appSelector } from '../../../reduxtool/app/appslice';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { getAppointmentListAction } from '../../../reduxtool/app/middleware';
 
-  {
-    id: 1,
-    name: 'Bhvaik Rupapara',
-    doctor: 'Dr.Tushar Joshi',
-    treatment: 'Infertility',
-    mobile: '+1 23 456890',
-    email: 'smith@example.com',
-    date: '01.10.2022',
-    time: '07:30',
-    image: 'avatar-02.jpg'
-  },
-  {
-    id: 1,
-    name: 'Bhvaik Rupapara',
-    doctor: 'Dr.Tushar Joshi',
-    treatment: 'Infertility',
-    mobile: '+1 23 456890',
-    email: 'smith@example.com',
-    date: '01.10.2022',
-    time: '07:30',
-    image: 'avatar-02.jpg'
-  },
-  {
-    id: 1,
-    name: 'Bhvaik Rupapara',
-    doctor: 'Dr.Tushar Joshi',
-    treatment: 'Infertility',
-    mobile: '+1 23 456890',
-    email: 'smith@example.com',
-    date: '01.10.2022',
-    time: '07:30',
-    image: 'avatar-02.jpg'
-  },
 
-  {
-    id: 1,
-    name: 'Bhvaik Rupapara',
-    doctor: 'Dr.Tushar Joshi',
-    treatment: 'Infertility',
-    mobile: '+1 23 456890',
-    email: 'smith@example.com',
-    date: '01.10.2022',
-    time: '07:30',
-    image: 'avatar-02.jpg'
-  },
-  {
-    id: 1,
-    name: 'Bhvaik Rupapara',
-    doctor: 'Dr.Tushar Joshi',
-    treatment: 'Infertility',
-    mobile: '+1 23 456890',
-    email: 'smith@example.com',
-    date: '01.10.2022',
-    time: '07:30',
-    image: 'avatar-02.jpg'
-  },
-  // Add more rows as needed
-]
 
-const rowsPerPage = 5;
 const AppointmentList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const Appointment = useSelector(appSelector)
+  const rowsPerPage = 8;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+  const router = useNavigate()
+
+  
+  
+  const dispatch = useDispatch()
+  console.log("Appointmentlist",Appointment?.AppointmentList);
+  useEffect(() => {
+    dispatch(getAppointmentListAction())
+  }, [dispatch])
+
+  
+
+  const filteredDepartment = Appointment?.AppointmentList?.filter((doctor) =>
+  doctor.status.toLowerCase().includes(searchQuery.toLowerCase()) 
+  );
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = filteredDepartment?.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(filteredDepartment?.length / rowsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
   return (
     <div className="content">
       <div className="page-header">
@@ -225,25 +148,25 @@ const AppointmentList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                  {currentRows.map(appointment => (
+                  {currentRows?.map(appointment => (
                       <tr key={appointment.id}>
                         
                         <td className="profile-image">
                           <Link to="/profile">
                             
-                            {appointment.name}
+                            Static
                           </Link>
                         </td>
-                        <td>{appointment.doctor}</td>
-                        <td>{appointment.treatment}</td>
+                        <td>Static</td>
+                        <td>Static</td>
                         <td>
-                          <a href={`tel:${appointment.mobile}`}>{appointment.mobile}</a>
+                          <a href={`tel:${appointment.mobile}`}>Static</a>
                         </td>
                         <td>
-                          <a href={`mailto:${appointment.email}`}>{appointment.email}</a>
+                          <a href={`mailto:${appointment.email}`}>Static</a>
                         </td>
-                        <td>{appointment.date}</td>
-                        <td>{appointment.time}</td>
+                        <td>{appointment.appointment_date}</td>
+                        <td>{appointment.appointment_time}</td>
                        
                         <td className="text-end">
                           <button 
@@ -253,13 +176,13 @@ const AppointmentList = () => {
                           >
                             <FaPen />
                           </button>
-                          <button 
+                          {/* <button 
                             className="btn btn-sm btn-danger " 
                             style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
                             
                           >
                             <FaTrash />
-                          </button>
+                          </button> */}
                         </td>
                       </tr>
                     ))}

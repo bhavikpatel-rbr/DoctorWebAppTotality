@@ -81,6 +81,35 @@ export const getdepartmentlistAsync = async () => {
   }
 };
 
+export const getschedulelistAsync = async () => {
+  try {
+    const response = await axiosInstance.post(`/getscheduleslist`);
+    return response;
+  } catch (err) {
+    return isAxiosError(err);
+  }
+};
+
+export const getbloglistlistAsync = async () => {
+  try {
+    const response = await axiosInstance.post(`/getbloglist`);
+    return response;
+  } catch (err) {
+    return isAxiosError(err);
+  }
+};
+
+
+export const getMedicallistlistAsync = async () => {
+  try {
+    const response = await axiosInstance.post(`/getmedicalrecordlist`);
+    return response;
+  } catch (err) {
+    return isAxiosError(err);
+  }
+};
+
+
 
 export const allStaffUsersAsync = async () => {
   try {

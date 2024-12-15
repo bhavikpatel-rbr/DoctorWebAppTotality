@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ChevronRight } from 'react-feather';
 import { FaStore, FaMapMarkerAlt, FaPhoneAlt, FaLongArrowAltRight } from 'react-icons/fa';
 import store1 from '../../../assest/img/store/store1.jfif'
@@ -7,8 +7,20 @@ import store3 from '../../../assest/img/store/store1.jfif'
 import store4 from '../../../assest/img/store/store1.jfif'
 import store5 from '../../../assest/img/store/store1.jfif'
 import store6 from '../../../assest/img/store/store1.jfif'
+import { getMedicallistAction } from '../../../reduxtool/app/middleware';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { appSelector } from '../../../reduxtool/app/appslice';
 
 const StoreGrid = () => {
+  const dispatch = useDispatch()
+  const blogs  = useSelector(appSelector)
+  console.log('===================blog=================');
+  console.log(blogs?.Medicallist);
+  console.log('===================blog=================');
+    useEffect(() => {
+      dispatch(getMedicallistAction())
+    }, [dispatch])
   return (
     <div className="content">
       <div className="page-header">
@@ -28,215 +40,75 @@ const StoreGrid = () => {
       </div>
 
       <div className="row">
-        {/* Store 1 */}
-        <div className="col-sm-6 col-md-6 col-xl-4">
+      {blogs?.Medicallist?.map((blog) => (
+        <div key={blog.id} className="col-sm-6 col-md-6 col-xl-4">
           <div className="blog grid-blog">
             <div className="blog-image">
-              <a href="store-details.html">
-                <img
-                  className="img-fluid"
-                  src={store1}
-                  alt="Store 1"
-                />
+              <a href={blog.readMoreLink}>
+                <img className="img-fluid"  src={store6} alt={blog.title} />
               </a>
               <div className="blog-views">
-                <h5>HealthMart</h5>
+                {/* <h5>{blog.category}</h5> */}
+                <h5>Diabetes</h5>
               </div>
+              <ul className="nav view-blog-list blog-views">
+                {/* <li>
+                  <FaComments className="me-1" />
+                  {blog.comments}
+                </li>
+                <li>
+                  <FaEye className="me-1" />
+                  {blog.views}
+                </li> */}
+                {/* <li>
+                  <FaComments className="me-1" />58
+                </li>
+                <li>
+                  <FaEye className="me-1" />500
+                </li> */}
+              </ul>
             </div>
-            <div className="store-content">
-              <div className="store-grp-blk">
-                <span>
-                  <FaMapMarkerAlt className="me-1" />123 Health Street, Wellness City
-                </span>
-                <span>
-                  <FaPhoneAlt className="me-1" />(123) 456-7890
-                </span>
+            <div className="blog-content">
+              <div className="blog-grp-blk">
+                <div className="blog-img-blk">
+                  <a href={blog.profileLink}>
+                    <img className="img-fluid" src={store6} alt={blog.authorName} />
+                  </a>
+                  <div className="content-blk-blog ms-2">
+                    <h4>
+                      <a href="profile.html">{blog.author}</a>
+                    </h4>
+                    <h5>M.B.B.S, Diabetologist</h5>
+                  </div>
+                  {/* <div className="content-blk-blog ms-2">
+                    <h4>
+                      <a href={blog.profileLink}>{blog.authorName}</a>
+                    </h4>
+                    <h5>{blog.authorTitle}</h5>
+                  </div> */}
+                </div>
+                {/* <span>
+                  <FaCalendar className="me-1" />
+                  {blog.created_at
+                  } */}
+                  {/* 05 Sep 2022 */}
+                {/* </span> */}
               </div>
-              <p>
-                HealthMart provides a wide range of health products and supplements to support your well-being...
-              </p>
-              <a href="store-details.html" className="read-more d-flex">
-                View Store Details
+              <h3 className="blog-title">
+                <a href={blog.readMoreLink}>{blog.title}</a>
+              </h3>
+              <p>{blog.content
+              }</p>
+              <a href={blog.readMoreLink} className="read-more d-flex">
+                Read more in 2 Minutes
                 <FaLongArrowAltRight className="ms-2" />
               </a>
             </div>
           </div>
         </div>
+      ))}
 
-        {/* Store 2 */}
-        <div className="col-sm-6 col-md-6 col-xl-4">
-          <div className="blog grid-blog">
-            <div className="blog-image">
-              <a href="store-details.html">
-                <img
-                  className="img-fluid"
-                  src={store2}
-                  alt="Store 2"
-                />
-              </a>
-              <div className="blog-views">
-                <h5>PharmaPlus</h5>
-              </div>
-            </div>
-            <div className="store-content">
-              <div className="store-grp-blk">
-                <span>
-                  <FaMapMarkerAlt className="me-1" />456 Wellness Avenue, Health City
-                </span>
-                <span>
-                  <FaPhoneAlt className="me-1" />(987) 654-3210
-                </span>
-              </div>
-              <p>
-                PharmaPlus offers a comprehensive selection of pharmaceutical products and health services...
-              </p>
-              <a href="store-details.html" className="read-more d-flex">
-                View Store Details
-                <FaLongArrowAltRight className="ms-2" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Store 3 */}
-        <div className="col-sm-6 col-md-6 col-xl-4">
-          <div className="blog grid-blog">
-            <div className="blog-image">
-              <a href="store-details.html">
-                <img
-                  className="img-fluid"
-                  src={store3}
-                  alt="Store 3"
-                />
-              </a>
-              <div className="blog-views">
-                <h5>WellnessStore</h5>
-              </div>
-            </div>
-            <div className="store-content">
-              <div className="store-grp-blk">
-                <span>
-                  <FaMapMarkerAlt className="me-1" />789 Health Road, Medical Town
-                </span>
-                <span>
-                  <FaPhoneAlt className="me-1" />(555) 123-4567
-                </span>
-              </div>
-              <p>
-                WellnessStore is dedicated to providing high-quality wellness products and services...
-              </p>
-              <a href="store-details.html" className="read-more d-flex">
-                View Store Details
-                <FaLongArrowAltRight className="ms-2" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Store 4 */}
-        <div className="col-sm-6 col-md-6 col-xl-4">
-          <div className="blog grid-blog">
-            <div className="blog-image">
-              <a href="store-details.html">
-                <img
-                  className="img-fluid"
-                  src={store4}
-                  alt="Store 4"
-                />
-              </a>
-              <div className="blog-views">
-                <h5>PharmaWorld</h5>
-              </div>
-            </div>
-            <div className="store-content">
-              <div className="store-grp-blk">
-                <span>
-                  <FaMapMarkerAlt className="me-1" />101 Pharmacy Lane, Medic City
-                </span>
-                <span>
-                  <FaPhoneAlt className="me-1" />(444) 567-8901
-                </span>
-              </div>
-              <p>
-                PharmaWorld provides top-notch pharmaceutical products and personalized health solutions...
-              </p>
-              <a href="store-details.html" className="read-more d-flex">
-                View Store Details
-                <FaLongArrowAltRight className="ms-2" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Store 5 */}
-        <div className="col-sm-6 col-md-6 col-xl-4">
-          <div className="blog grid-blog">
-            <div className="blog-image">
-              <a href="store-details.html">
-                <img
-                  className="img-fluid"
-                  src={store5}
-                  alt="Store 5"
-                />
-              </a>
-              <div className="blog-views">
-                <h5>HealthPlus</h5>
-              </div>
-            </div>
-            <div className="store-content">
-              <div className="store-grp-blk">
-                <span>
-                  <FaMapMarkerAlt className="me-1" />202 Wellness Boulevard, Health District
-                </span>
-                <span>
-                  <FaPhoneAlt className="me-1" />(333) 678-9012
-                </span>
-              </div>
-              <p>
-                HealthPlus offers a diverse range of health products and expert advice for your well-being...
-              </p>
-              <a href="store-details.html" className="read-more d-flex">
-                View Store Details
-                <FaLongArrowAltRight className="ms-2" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Store 6 */}
-        <div className="col-sm-6 col-md-6 col-xl-4">
-          <div className="blog grid-blog">
-            <div className="blog-image">
-              <a href="store-details.html">
-                <img
-                  className="img-fluid"
-                  src={store6}
-                  alt="Store 6"
-                />
-              </a>
-              <div className="blog-views">
-                <h5>CareCenter</h5>
-              </div>
-            </div>
-            <div className="store-content">
-              <div className="store-grp-blk">
-                <span>
-                  <FaMapMarkerAlt className="me-1" />303 Care Drive, Health Haven
-                </span>
-                <span>
-                  <FaPhoneAlt className="me-1" />(222) 345-6789
-                </span>
-              </div>
-              <p>
-                CareCenter is your go-to place for all health-related products and consultations...
-              </p>
-              <a href="store-details.html" className="read-more d-flex">
-                View Store Details
-                <FaLongArrowAltRight className="ms-2" />
-              </a>
-            </div>
-          </div>
-        </div>
+       
       </div>
     </div>
   );

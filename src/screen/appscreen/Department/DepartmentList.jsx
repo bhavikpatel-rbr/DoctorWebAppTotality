@@ -14,28 +14,36 @@ import { departmentEditData } from '../../../reduxtool/editstate/editSlice';
 
 const DepartmentList = () => {
   // Sample data
-  const [searchQuery, setSearchQuery] = useState('');
+  
   const department = useSelector(appSelector)
-  const rowsPerPage = 5;
+  const rowsPerPage = 8;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
   const router = useNavigate()
-  const [currentPage, setCurrentPage] = useState(1);
-  const dispatch = useDispatch()
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const totalPages = Math.ceil(department?.departmentList?.length / rowsPerPage);
 
+  const dispatch = useDispatch()
+  
   useEffect(() => {
     dispatch(getdepartmentlistAction())
   }, [dispatch])
 
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = department?.departmentList?.slice(indexOfFirstRow, indexOfLastRow);
+  
 
-  const filteredDepartment = currentRows?.filter(department =>
-    department.department_name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredDepartment = department?.departmentList?.filter((doctor) =>
+  doctor.department_name.toLowerCase().includes(searchQuery.toLowerCase()) 
   );
 
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = filteredDepartment?.slice(indexOfFirstRow, indexOfLastRow);
 
+  const totalPages = Math.ceil(filteredDepartment?.length / rowsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
 
   return (
     <div className="content">
@@ -66,17 +74,17 @@ const DepartmentList = () => {
                       <h3>Department List</h3>
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
-                          <form>
+                        <form>
                             <input
                               type="text"
                               className="form-control"
                               placeholder="Search here"
                               value={searchQuery}
-                              onChange={(e) => setSearchQuery(e.target.value)}
+                              onChange={handleSearchChange}
                             />
-                            <button type="submit" className="btn">
-                              <img src={searchnormal} alt="" />
-                            </button>
+                            <a className="btn">
+                              <img src={searchnormal} alt="Search" />
+                            </a>
                           </form>
                         </div>
                         <div className="add-group">
@@ -111,7 +119,7 @@ const DepartmentList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredDepartment?.map(department => (
+                    {currentRows?.map(department => (
                       <tr key={department.id}>
                         <td>{department.department_name}</td>
                         <td className="profile-image">
@@ -138,12 +146,12 @@ const DepartmentList = () => {
                           >
                             <FaPen />
                           </button>
-                          <button
+                          {/* <button
                             className="btn btn-sm btn-danger "
                             style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
                           >
                             <FaTrash />
-                          </button>
+                          </button> */}
                         </td>
                       </tr>
                     ))}

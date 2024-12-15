@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   staffEdit: null,
   departmentEditData: null,
   updateStatus: 'idle',
+  SheduleEditData:null
 };
 
 const editSlice = createSlice({
@@ -24,6 +25,10 @@ const editSlice = createSlice({
       ...state,
       departmentEdit: payload,
     }),
+    SheduleEditData: (state, { payload }) => ({
+      ...state,
+      sheduleEdit: payload,
+    }),
     resetUpdateStatus: (state, { payload }) => ({
       ...state,
       departmentEdit: payload,
@@ -33,6 +38,7 @@ const editSlice = createSlice({
       doctorEdit: null,
       staffEdit: null,
       departmentEdit: null,
+      SheduleEditData:null
     }),
   },
   extraReducers: (builder) => {
@@ -49,7 +55,7 @@ const editSlice = createSlice({
   },
 });
 
-export const { doctorEditData, cleanEditState, staffEditData, departmentEditData, resetUpdateStatus } = editSlice.actions;
+export const { doctorEditData, cleanEditState, staffEditData, departmentEditData,SheduleEditData, resetUpdateStatus } = editSlice.actions;
 
 export const editSelector = (state) => state?.EditState;
 

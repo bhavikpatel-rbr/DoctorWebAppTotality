@@ -1,95 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronRight } from 'react-feather';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import searchnormal from '../../../img/icons/search-normal.svg';
 import plus from '../../../img/icons/plus.svg';
 import refresh from '../../../img/icons/re-fresh.svg';
 import { FaPen, FaTrash } from 'react-icons/fa';
-const ScheduleList = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { appSelector } from '../../../reduxtool/app/appslice';
+import { getdepartmentlistAction, getschedulelistAction } from '../../../reduxtool/app/middleware';
+import { departmentEditData, SheduleEditData } from '../../../reduxtool/editstate/editSlice';
 
-  // Sample data for doctors
-  const [data] = useState([
-    {
-      id: 1,
-      name: 'Dr. Andrea Lalema',
-      department: 'Cardiology',
-      availableDays: 'Mon - Sun',
-      availableTime: '09:00 AM - 06:00 PM',
-      status: 'Active',
-    },
-    {
-      id: 1,
-      name: 'Dr. John Doe',
-      department: 'Neurology',
-      availableDays: 'Mon - Fri',
-      availableTime: '10:00 AM - 05:00 PM',
-      status: 'Active',
-    },
-    {
-      id: 1,
-      name: 'Dr. Jane Smith',
-      department: 'Pediatrics',
-      availableDays: 'Mon - Sat',
-      availableTime: '08:00 AM - 04:00 PM',
-      status: 'Inactive',
-    },
-    {
-      id: 1,
-      name: 'Dr. Jane Smith',
-      department: 'Pediatrics',
-      availableDays: 'Mon - Sat',
-      availableTime: '08:00 AM - 04:00 PM',
-      status: 'Inactive',
-    },
-    {
-      id: 1,
-      name: 'Dr. Jane Smith',
-      department: 'Pediatrics',
-      availableDays: 'Mon - Sat',
-      availableTime: '08:00 AM - 04:00 PM',
-      status: 'Inactive',
-    },
-    {
-      id: 1,
-      name: 'Dr. Jane Smith',
-      department: 'Pediatrics',
-      availableDays: 'Mon - Sat',
-      availableTime: '08:00 AM - 04:00 PM',
-      status: 'Inactive',
-    },
-    {
-      id: 1,
-      name: 'Dr. John Doe',
-      department: 'Neurology',
-      availableDays: 'Mon - Fri',
-      availableTime: '10:00 AM - 05:00 PM',
-      status: 'Active',
-    },
-    {
-      id: 1,
-      name: 'Dr. John Doe',
-      department: 'Neurology',
-      availableDays: 'Mon - Fri',
-      availableTime: '10:00 AM - 05:00 PM',
-      status: 'Active',
-    },
-    // Add more doctors as needed
-  ]);
-  const rowsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
+const rowsPerPage = 8;
+const ScheduleList = () => {
+
+  const schedule = useSelector(appSelector)
+   const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+  const router = useNavigate()
+
+  const dispatch = useDispatch()
+  
+  useEffect(() => {
+    dispatch(getschedulelistAction())
+  }, [dispatch])
+
+
+  
+  
+
+  const filteredDepartment = schedule?.scheduleList?.filter((doctor) =>
+  doctor.day_of_week.toLowerCase().includes(searchQuery.toLowerCase()) 
+  );
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = filteredDepartment?.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(filteredDepartment?.length / rowsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const totalPages = Math.ceil(data.length / rowsPerPage);
-  
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
   };
+ 
 
   return (
     <div className="content">
@@ -125,7 +80,7 @@ const ScheduleList = () => {
                               type="text"
                               className="form-control"
                               placeholder="Search here"
-                              value={searchTerm}
+                               value={searchQuery}
                               onChange={handleSearchChange}
                             />
                             <a className="btn">
@@ -156,42 +111,48 @@ const ScheduleList = () => {
                     <tr>
                       <th>Doctor Name</th>
                       <th>Department</th>
-                      <th>Available Days</th>
-                      <th>Available Time</th>
-                      <th>Status</th>
+                      <th>Days</th>
+                      <th>From Time</th>
+                      <th>To Time</th>
+                      {/* <th>Status</th> */}
                       <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                  {currentRows.map(doctor => (
+                  {currentRows?.map(doctor => (
                       <tr key={doctor.id}>
                         <td className="profile-image">
-                          <Link to="profile.html">{doctor.name}</Link>
+                          <Link to="profile.html">Static</Link>
                         </td>
-                        <td>{doctor.department}</td>
-                        <td>{doctor.availableDays}</td>
-                        <td>{doctor.availableTime}</td>
                         <td>
+                          Static</td>
+                        <td>{doctor.day_of_week}</td>
+                        <td>{doctor.start_time}</td>
+                        <td>{doctor.end_time}</td>
+                        {/* <td>
                           <button className={`custom-badge ${doctor.status === 'Active' ? 'status-green' : 'status-red'}`}>
                             {doctor.status}
                           </button>
-                        </td>
+                        </td> */}
                         
                         <td className="text-end">
                           <button 
                             className="btn btn-sm btn-danger me-2" 
                             style={{ backgroundColor: '#2e37a4', borderColor: '#2e37a4' }}
-                            
+                            onClick={() => {
+                                                          router('/editschedule')
+                                                          dispatch(SheduleEditData(doctor))
+                                                        }}
                           >
                             <FaPen />
                           </button>
-                          <button 
+                          {/* <button 
                             className="btn btn-sm btn-danger " 
                             style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
                             
                           >
                             <FaTrash />
-                          </button>
+                          </button> */}
                         </td>
                       </tr>
                     ))}

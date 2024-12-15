@@ -11,9 +11,15 @@ import user from "../img/user1.jpg";
 import doctorImage from '../assest/logo.jpeg';
 import user06 from "../img/user-06.jpg";
 import settingicon01 from "../img/icons/setting-icon-01.svg";
+import { useSelector } from "react-redux";
+import { authSelector } from "../reduxtool/auth/authSlice";
 
 const Header = () => {
   const [toggle, SetToggle] = useState(false);
+  const userData = useSelector(authSelector)
+
+  console.log("userData",userData?.userDetails);
+  
   
   const isElementVisible = (element) => {
     return element.offsetWidth > 0 || element.offsetHeight > 0;
@@ -66,7 +72,7 @@ const Header = () => {
           onMouseOver={expandMenuOpen}>
         <Link className="logo logo-normal">
           <img src={doctorImage} width="50" height="50" alt="" style={{marginBottom:"30px" , borderRadius:"10px"}}/>{" "}
-          <span style={{marginBottom:"30px"}}>Totality</span>
+          {/* <span style={{marginBottom:"30px"}}>Totality</span> */}
         </Link>
       </div>
       <Link id="toggle_btn" href="javascript:void(0);" onClick={handlesidebar}>
@@ -76,17 +82,12 @@ const Header = () => {
         <img src={baricon} alt="" />
       </Link>
       <div className="top-nav-search mob-view">
-        <form>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search here"
-          />
-          <Link className="btn">
-            <img src={searchnormal} alt="" />
-          </Link>
-        </form>
+        <Link className="logo logo-normal">
+        
+          <span style={{marginBottom:"30px"}}>Totality4homoeopathy - The Holistic Concept of Homoeopathy</span>
+        </Link>
       </div>
+     
       <ul className="nav user-menu float-end">
         <li className="nav-item dropdown d-none d-md-block">
           {/* <Link
@@ -106,12 +107,14 @@ const Header = () => {
                 <li className="notification-message">
                   <Link href="activities.html">
                     <div className="media">
-                      <span className="avatar">
+                      {/* <span className="avatar">
                         <img alt="John Doe" src={user} className="img-fluid" />
-                      </span>
+                      </span> */}
                       <div className="media-body">
                         <p className="noti-details">
-                          <span className="noti-title">Tushar Joshi</span> added new
+                          <span className="noti-title">
+                            {userData?.userDetails?.username}
+                            </span> added new
                           task{" "}
                           <span className="noti-title">
                             Patient appointment booking
@@ -212,7 +215,7 @@ const Header = () => {
             </div>
           </div>
         </li>
-        <li className="nav-item dropdown d-none d-md-block">
+        {/* <li className="nav-item dropdown d-none d-md-block">
           <Link
             href="javascript:void(0);"
             id="open_msg_box"
@@ -221,7 +224,7 @@ const Header = () => {
             <img src={noteicon01} alt="" />
             <span className="pulse"></span>
           </Link>
-        </li>
+        </li> */}
         <li className="nav-item dropdown has-arrow user-profile-list">
           <Link
             to="/profilepage"
@@ -230,8 +233,9 @@ const Header = () => {
             data-bs-toggle="dropdown"
           >
             <div className="user-names">
-              <h5>Tushar Joshi</h5>
-              <span>Admin</span>
+              <h5>{userData?.userDetails?.username}</h5>
+              <span>{userData?.userDetails?.phone
+              }</span>
             </div>
             <span className="user-img">
               <img src={user} alt="Admin" />
@@ -252,11 +256,11 @@ const Header = () => {
             </Link>
           </div>
         </li>
-        <li className="nav-item ">
+        {/* <li className="nav-item ">
           <Link href="settings.html" className="hasnotifications nav-link">
             <img src={settingicon01} alt="" />
           </Link>
-        </li>
+        </li> */}
       </ul>
       <div className="dropdown mobile-user-menu float-end">
         <Link

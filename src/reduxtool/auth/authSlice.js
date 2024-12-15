@@ -7,6 +7,7 @@ import {
 
 const INITIAL_STATE = {
   token: "",
+  userDetails:null
 };
 
 const authSlice = createSlice({
@@ -22,7 +23,8 @@ const authSlice = createSlice({
       loginAdminByEmailAction.fulfilled,
       (state, { payload }) => ({
         ...state,
-        token: payload.access_token,
+        token: payload?.access_token,
+        userDetails:payload?.user
       })
     );
     builder.addCase(
@@ -30,6 +32,7 @@ const authSlice = createSlice({
       (state, { payload }) => ({
         ...state,
         token: payload.access_token,
+        userDetails:payload?.user
       })
     );
   },

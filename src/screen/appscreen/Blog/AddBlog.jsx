@@ -1,50 +1,58 @@
+import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { ChevronRight } from 'react-feather';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { createBlogAction } from '../../../reduxtool/app/middleware';
 
 const AddBlogPage = () => {
   // State to handle form inputs
-  const [blogTitle, setBlogTitle] = useState('');
-  const [authorName, setAuthorName] = useState('');
-  const [blogCategory, setBlogCategory] = useState('');
-  const [blogSubCategory, setBlogSubCategory] = useState('');
-  const [tags, setTags] = useState('');
-  const [blogStatus, setBlogStatus] = useState('Active');
-  const [message, setMessage] = useState('');
+ 
   const [avatar, setAvatar] = useState(null);
+
+
   const dispatch = useDispatch()
-
-  const initialValues = {
-      blog_id:1,
-      clinic_id:2,
-      title: "Test Blog Update",
-      content: "This is Test Blog Create By Tushar joshi for totality Helth Project",
-      author: "Tushar Joshi",
-      created_at: "2024-10-14 21:08:29"
-  };
+  const navigate = useNavigate();
 
 
-  const validationSchema = Yup.object().shape({
-    title:Yup.string().required('Title is required'),
+  const formik = useFormik({
+      initialValues: {
+        blog_id:0,
+        clinic_id:1,
+        title: "",
+        content: "",
+        author: "",
+        created_at: ""
+        
+      },
+      validationSchema: Yup.object({
+        title:Yup.string().required('Title is required'),
     content:Yup.string().required('Content is required'),
     author: Yup.string().required('Author is required'),
-  });
- 
-  const handleSubmit = (values) => {
-    console.log('===========values=========================');
+      }),
+      onSubmit: (values) => {
+        console.log('===========values=========================');
     console.log(values);
     console.log('==============values======================');
-    const payload = {
-      blog_id:1,
-      clinic_id:2,
-      title: "Test Blog Update",
-      content: "This is Test Blog Create By Tushar joshi for totality Helth Project",
-      author: "Tushar Joshi",
-      created_at: "2024-10-14 21:08:29"
-    }
-    // dispatch(registerDoctorAction(payload))
-  };
+        const payload = {
+          clinic_id:1,
+          title:values?.title,
+          content: values?.content,
+          author: values?.author,
+          created_at: new Date().toISOString(),
+          images:''
+         
+        }
+  
+        dispatch(createBlogAction(payload)).then((res) => {
+          if (res?.payload?.status) {
+            navigate('/blog')
+          }
+        })
+      },
+    });
+  
 
   // Handle file upload
   const handleFileChange = (event) => {
@@ -71,7 +79,7 @@ const AddBlogPage = () => {
         <div className="col-sm-12">
           <div className="card">
             <div className="card-body">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={formik.handleSubmit}>
                 <div className="row">
                   <div className="col-12">
                     <div className="form-heading">
@@ -86,9 +94,14 @@ const AddBlogPage = () => {
                         className="form-control" 
                         type="text" 
                         placeholder="Enter Blog Title"
-                        value={blogTitle}
-                        onChange={(e) => setBlogTitle(e.target.value)}
+                         name="title"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.title}
                       />
+                       {formik.touched.title && formik.errors.title ? (
+                        <div className="text-danger">{formik.errors.title}</div>
+                      ) : null}
                     </div>
                   </div>
 
@@ -99,13 +112,18 @@ const AddBlogPage = () => {
                         className="form-control" 
                         type="text" 
                         placeholder="Enter Author Name"
-                        value={authorName}
-                        onChange={(e) => setAuthorName(e.target.value)}
+                        name="author"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.author}
                       />
+                       {formik.touched.author && formik.errors.author ? (
+                        <div className="text-danger">{formik.errors.author}</div>
+                      ) : null}
                     </div>
                   </div>
 
-                  <div className="col-12 col-md-6 col-xl-6">
+                  {/* <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>Blog Category <span className="login-danger">*</span></label>
                       <select 
@@ -119,9 +137,9 @@ const AddBlogPage = () => {
                         <option>Safety</option>
                       </select>
                     </div>
-                  </div>
+                  </div> */}
 
-                  <div className="col-12 col-md-6 col-xl-6">
+                  {/* <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>Blog Sub Category <span className="login-danger">*</span></label>
                       <select 
@@ -134,9 +152,9 @@ const AddBlogPage = () => {
                         <option>Corona Virus</option>
                       </select>
                     </div>
-                  </div>
+                  </div> */}
 
-                  <div className="col-12 col-md-6 col-xl-6">
+                  {/* <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>Tags <small>(separated with a comma)</small> <span className="login-danger">*</span></label>
                       <input 
@@ -147,9 +165,9 @@ const AddBlogPage = () => {
                         onChange={(e) => setTags(e.target.value)}
                       />
                     </div>
-                  </div>
+                  </div> */}
 
-                  <div className="col-12 col-md-6 col-xl-6">
+                  {/* <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block select-gender">
                       <label className="gen-label">Blog Status <span className="login-danger">*</span></label>
                       <div className="form-check-inline">
@@ -177,7 +195,7 @@ const AddBlogPage = () => {
                         </label>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-12 col-md-6 col-xl-12">
                     <div className="input-block summer-mail">
@@ -185,10 +203,15 @@ const AddBlogPage = () => {
                         rows="4" 
                         cols="5" 
                         className="form-control summernote" 
-                        placeholder="Enter your message here"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                         name="content"
+                        placeholder="Enter your blog details here"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.content}
                       ></textarea>
+                       {formik.touched.content && formik.errors.content ? (
+                        <div className="text-danger">{formik.errors.content}</div>
+                      ) : null}
                     </div>
                   </div>
 
@@ -211,10 +234,16 @@ const AddBlogPage = () => {
 
                   <div className="col-12">
                     <div className="doctor-submit text-end">
-                      <button type="submit" className="btn btn-primary submit-form me-2">
-                        Add Blog
+                      <button
+                        type="submit"
+                        className="btn btn-primary submit-form me-2"
+                      >
+                        Save Changes
                       </button>
-                      <button type="button" className="btn btn-primary cancel-form">
+                      <button
+                        type="button"
+                        className="btn btn-primary cancel-form"
+                      >
                         Cancel
                       </button>
                     </div>
