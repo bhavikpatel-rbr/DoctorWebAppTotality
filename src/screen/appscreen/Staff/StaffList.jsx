@@ -12,8 +12,8 @@ import { useSelector } from 'react-redux';
 import { appSelector } from '../../../reduxtool/app/appslice';
 import { allStaffUsersAction } from '../../../reduxtool/app/middleware';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { staffEditData } from '../../../reduxtool/editstate/editSlice';
 const StaffList = () => {
 
   const Staff = useSelector(appSelector)
@@ -96,12 +96,15 @@ const StaffList = () => {
                           </form>
                         </div>
                         <div className="add-group">
-                          <a href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
+                        <Link to="/addstaff" className="btn btn-primary add-pluss ms-2">
                             <img src={plus} alt="" />
-                          </a>
-                          <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
-                            <img src={refresh} alt="" />
-                          </a>
+                          </Link>
+                          <div
+                            onClick={() => dispatch(allStaffUsersAction())}
+                            className="btn btn-primary doctor-refresh ms-2"
+                          >
+                            <img src={refresh} alt="Refresh" />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -182,7 +185,10 @@ const StaffList = () => {
                           <button
                             className="btn btn-sm btn-danger me-2"
                             style={{ backgroundColor: '#2e37a4', borderColor: '#2e37a4' }}
-                          // onClick={() => console.log('Edit', doctor.id)}
+                            onClick={() => {
+                              router('/editstaff');
+                              dispatch(staffEditData(staff));
+                            }}
                           >
                             <FaPen />
                           </button>

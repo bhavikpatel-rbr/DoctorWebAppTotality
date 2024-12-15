@@ -91,6 +91,7 @@ export const registerDoctorAction = createAsyncThunk(
      
       const response = await registerDoctorAsync(payload);
       if (response?.data) {
+        dispatch(hideLoader());
         dispatch(
           showMessage({
             ...defaultMessageObj,
@@ -123,6 +124,7 @@ export const registerClinicAction = createAsyncThunk(
     try {
       const response = await registerClinicAsync(payload);
       if (response?.data) {
+        dispatch(hideLoader());
         dispatch(
           showMessage({
             ...defaultMessageObj,
@@ -154,6 +156,7 @@ export const registerStaffAction = createAsyncThunk(
     try {
       const response = await registerStaffAsync(payload);
       if (response?.data) {
+         dispatch(hideLoader());
         dispatch(
           showMessage({
             ...defaultMessageObj,
@@ -185,13 +188,14 @@ export const registerPatientAction = createAsyncThunk(
     try {
       const response = await registerPatientAsync(payload);
       if (response?.data) {
-        dispatch(
-          showMessage({
-            ...defaultMessageObj,
-            type: "success",
-            messageText: response?.data?.message,
-          })
-        );
+        dispatch(hideLoader());
+        // dispatch(
+        //   showMessage({
+        //     ...defaultMessageObj,
+        //     type: "success",
+        //     messageText: response?.data?.message,
+        //   })
+        // );
         return response?.data;
       }
       dispatch(
@@ -216,13 +220,14 @@ export const allClinicsUsersAction = createAsyncThunk(
     try {
       const response = await allClinicsUsersAsync();
       if (response?.data) {
-        dispatch(
-          showMessage({
-            ...defaultMessageObj,
-            type: "success",
-            messageText: response?.data?.message,
-          })
-        );
+        dispatch(hideLoader());
+        // dispatch(
+        //   showMessage({
+        //     ...defaultMessageObj,
+        //     type: "success",
+        //     messageText: response?.data?.message,
+        //   })
+        // );
         return response?.data;
       }
       dispatch(
@@ -247,13 +252,14 @@ export const  allDoctorsUsersAction = createAsyncThunk(
     try {
       const response = await allDoctorsUsersAsync();
       if (response?.data) {
-        dispatch(
-          showMessage({
-            ...defaultMessageObj,
-            type: "success",
-            messageText: response?.data?.message,
-          })
-        );
+        dispatch(hideLoader());
+        // dispatch(
+        //   showMessage({
+        //     ...defaultMessageObj,
+        //     type: "success",
+        //     messageText: response?.data?.message,
+        //   })
+        // );
        
         return response?.data;
       }
@@ -406,13 +412,14 @@ export const allStaffUsersAction = createAsyncThunk(
     try {
       const response = await allStaffUsersAsync();
       if (response?.data) {
-        dispatch(
-          showMessage({
-            ...defaultMessageObj,
-            type: "success",
-            messageText: response?.data?.message,
-          })
-        );
+        dispatch(hideLoader());
+        // dispatch(
+        //   showMessage({
+        //     ...defaultMessageObj,
+        //     type: "success",
+        //     messageText: response?.data?.message,
+        //   })
+        // );
         return response?.data;
       }
       dispatch(
@@ -437,13 +444,13 @@ export const allPatientsUsersAction = createAsyncThunk(
     try {
       const response = await allPatientsUsersAsync();
       if (response?.data) {
-        dispatch(
-          showMessage({
-            ...defaultMessageObj,
-            type: "success",
-            messageText: response?.data?.message,
-          })
-        );
+        // dispatch(
+        //   showMessage({
+        //     ...defaultMessageObj,
+        //     type: "success",
+        //     messageText: response?.data?.message,
+        //   })
+        // );
         return response?.data;
       }
       dispatch(

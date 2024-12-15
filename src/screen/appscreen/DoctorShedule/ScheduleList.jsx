@@ -92,12 +92,15 @@ const ScheduleList = () => {
                           </form>
                         </div>
                         <div className="add-group">
-                          <Link to="add-doctor.html" className="btn btn-primary add-pluss ms-2">
+                        <Link to="/addstaff" className="btn btn-primary add-pluss ms-2">
                             <img src={plus} alt="" />
                           </Link>
-                          <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
-                            <img src={refresh} alt="" />
-                          </a>
+                          <div
+                            onClick={() => dispatch(getschedulelistAction())}
+                            className="btn btn-primary doctor-refresh ms-2"
+                          >
+                            <img src={refresh} alt="Refresh" />
+                          </div>
                         </div>
                       </div>
                     </div>

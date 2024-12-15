@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
-import { Table, Dropdown, Modal, Button, Form } from 'react-bootstrap';
+import { Table, Modal, Button, Form } from 'react-bootstrap';
 import { ChevronRight } from 'react-feather';
+import { FaTrash } from 'react-icons/fa';
 import searchnormal from '../../../img/icons/search-normal.svg';
-import plus from '../../../img/icons/plus.svg'
-import { FaPen, FaTrash } from 'react-icons/fa';
-import refresh from '../../../img/icons/re-fresh.svg'
+import plus from '../../../img/icons/plus.svg';
+
 const Holidays = () => {
+  const [holidays, setHolidays] = useState([
+    { title: 'New Year', date: '01.01.2022', day: 'Sunday', description: 'Common Holiday' },
+    { title: 'Pongal', date: '14.01.2022', day: 'Friday', description: 'Common Holiday' },
+    { title: 'Pongal Holiday', date: '15.01.2022', day: 'Saturday', description: 'Common Holiday' },
+    { title: 'Tamil New Year', date: '14.04.2022', day: 'Thursday', description: 'Common Holiday' },
+    { title: 'Good Friday', date: '15.04.2022', day: 'Friday', description: 'Common Holiday' },
+    { title: 'May Day', date: '01.05.2022', day: 'Sunday', description: 'Common Holiday' },
+    { title: 'Ramzan', date: '02.05.2022', day: 'Monday', description: 'Common Holiday' },
+    { title: 'Independence day', date: '15.08.2022', day: 'Monday', description: 'Common Holiday' }
+  ]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newHoliday, setNewHoliday] = useState({
     title: '',
@@ -16,10 +26,14 @@ const Holidays = () => {
 
   const handleAddHoliday = (e) => {
     e.preventDefault();
-    // Implement holiday addition logic
-    console.log('Adding Holiday:', newHoliday);
+    setHolidays([...holidays, newHoliday]);
     setShowAddModal(false);
-    setNewHoliday({ title: '', date: '', day: '', description: '' }); // Reset form
+    setNewHoliday({ title: '', date: '', day: '', description: '' });
+  };
+
+  const handleDeleteHoliday = (index) => {
+    const updatedHolidays = holidays.filter((_, i) => i !== index);
+    setHolidays(updatedHolidays);
   };
 
   return (
@@ -53,17 +67,12 @@ const Holidays = () => {
                           </form>
                         </div>
                         <div className="add-group">
-                        <button 
+                          <button 
                             className="btn btn-primary add-pluss ms-2" 
                             onClick={() => setShowAddModal(true)}
                           >
-                          <img 
-                          
-                          src={plus} alt="" />
-                         </button>
-                          <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
-                          <img src={refresh} alt="" />
-                          </a>
+                            <img src={plus} alt="" />
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -81,30 +90,25 @@ const Holidays = () => {
                 <Table className="border-0 custom-table comman-table datatable mb-0" striped bordered hover>
                   <thead>
                     <tr>
-                      
                       <th>Title</th>
                       <th>Holiday Date</th>
                       <th>Day</th>
                       <th>Description</th>
-                      <th></th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {/* Repeat rows for each holiday */}
-                    {['New Year', 'Pongal', 'Pongal Holiday', 'Tamil New Year', 'Good Friday', 'May Day', 'Ramzan', 'Independence day'].map((holiday, index) => (
+                    {holidays.map((holiday, index) => (
                       <tr key={index}>
-                        
-                        <td>{holiday}</td>
-                        <td>{`01.01.2022`}</td>
-                        <td>Sunday</td>
-                        <td>Common Holiday</td>
-                        
-                        <td className="text-end">
-                         
+                        <td>{holiday.title}</td>
+                        <td>{holiday.date}</td>
+                        <td>{holiday.day}</td>
+                        <td>{holiday.description}</td>
+                        <td >
                           <button 
-                            className="btn btn-sm btn-danger " 
+                            className="btn btn-sm btn-danger" 
                             style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
-                            onClick={() => console.log('Delete', )}
+                            onClick={() => handleDeleteHoliday(index)}
                           >
                             <FaTrash />
                           </button>
@@ -119,9 +123,8 @@ const Holidays = () => {
         </div>
       </div>
 
-      {/* Add Holiday Modal */}
-      <Modal show={showAddModal} onHide={() => setShowAddModal(false)}  dialogClassName="transparent-modal">
-        <Modal.Header>
+      <Modal show={showAddModal} onHide={() => setShowAddModal(false)} dialogClassName="transparent-modal">
+        <Modal.Header closeButton>
           <Modal.Title>Add Holiday</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -133,7 +136,7 @@ const Holidays = () => {
                 placeholder="Enter holiday title" 
                 value={newHoliday.title} 
                 onChange={(e) => setNewHoliday({ ...newHoliday, title: e.target.value })} 
-                required
+                required 
               />
             </Form.Group>
             <Form.Group controlId="holidayDate">
@@ -166,11 +169,17 @@ const Holidays = () => {
               />
             </Form.Group>
             <div className="col-12 mt-3">
-                                            <div className="doctor-submit text-end">
-                                                <button type="submit" className="btn btn-primary submit-form me-2">Add Holiday</button>
-                                                <button type="button" className="btn btn-primary cancel-form">Cancel</button>
-                                            </div>
-                                        </div>
+              <div className="doctor-submit text-end">
+                <button type="submit" className="btn btn-primary submit-form me-2">Add Holiday</button>
+                <button 
+                  type="button" 
+                  className="btn btn-secondary cancel-form" 
+                  onClick={() => setShowAddModal(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </Form>
         </Modal.Body>
       </Modal>

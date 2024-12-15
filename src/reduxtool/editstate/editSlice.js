@@ -21,6 +21,10 @@ const editSlice = createSlice({
       ...state,
       staffEdit: payload,
     }),
+    patientEditData: (state, { payload }) => ({
+      ...state,
+      patientEdit: payload,
+    }),
     departmentEditData: (state, { payload }) => ({
       ...state,
       departmentEdit: payload,
@@ -38,7 +42,8 @@ const editSlice = createSlice({
       doctorEdit: null,
       staffEdit: null,
       departmentEdit: null,
-      SheduleEditData:null
+      SheduleEditData:null,
+      patientEditData:null
     }),
   },
   extraReducers: (builder) => {
@@ -55,7 +60,7 @@ const editSlice = createSlice({
   },
 });
 
-export const { doctorEditData, cleanEditState, staffEditData, departmentEditData,SheduleEditData, resetUpdateStatus } = editSlice.actions;
+export const { doctorEditData, cleanEditState, staffEditData, departmentEditData,SheduleEditData, resetUpdateStatus ,patientEditData} = editSlice.actions;
 
 export const editSelector = (state) => state?.EditState;
 

@@ -7,12 +7,12 @@ import { registerDoctorAction } from '../../../reduxtool/app/middleware';
 import { useDispatch } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { TextArea } from '@blueprintjs/core';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const AddDoctor = () => {
   const [avatar, setAvatar] = useState(null);
   const dispatch = useDispatch()
-
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
     firstname:"",
@@ -103,7 +103,12 @@ const AddDoctor = () => {
         doctor_type: "",
         images: ''
     }
-       dispatch(registerDoctorAction(payload))
+    dispatch(registerDoctorAction(payload)).then((res) => {
+            if (res?.payload?.status) {
+              navigate('/doctors')
+            }
+          })
+      //  dispatch(registerDoctorAction(payload))
     },
   });
   
@@ -112,39 +117,7 @@ const AddDoctor = () => {
     setAvatar(event.target.files[0]);
   };
 
-  const handleSubmit = (values) => {
-    const payload = {
-      firstname:values?.firstname,
-      lastname:values?.lastname,
-      username: values?.username,
-      email: values?.email,
-      phone: values?.phone,
-      password: values?.password,
-      doctor_name: values?.doctor_name,
-      specialization: values?.specialization,
-      license_number: values?.license_number,
-      years_of_experience: values?.years_of_experience,
-      clinic_id: 1,
-      education: values?.education,
-      designation: values?.designation,
-      department: values?.department,
-      doctor_phone: values?.doctor_phone,
-      doctor_email: values?.doctor_email,
-      address_line_1: values?.address_line_1,
-      address_line_2: values?.address_line_2,
-      city: values?.city,
-      state: values?.state,
-      postal_code: values?.postal_code,
-      country: values?.country,
-      operating_hours: values?.operating_hours,
-      services: values?.services,
-      latitude: values?.latitude,
-      longitude: values?.longitude,
-      doctor_type: values?.doctor_type,
-    }
-    dispatch(registerDoctorAction(payload))
-  };
-
+  
   const handleKeyPress = (e, fieldName) => {
     if (e.key === 'Enter') {
       e.preventDefault();
