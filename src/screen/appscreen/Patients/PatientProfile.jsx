@@ -4,7 +4,7 @@ import profile from '../../../assest/img/profile-bg.jpg'
 import user from "../../../assest/img/user1.jpg";
 const PatientProfile = () => {
   return (
-    <div className="content">
+    <div >
       <div className="page-header">
         <div className="row">
           <div className="col-sm-12">

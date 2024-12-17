@@ -18,7 +18,7 @@ export default function EmotionalState() {
 
   return (
     <div
-      className="content"
+      
       style={{
         padding: "20px",
         backgroundColor: "#f8f9fa",

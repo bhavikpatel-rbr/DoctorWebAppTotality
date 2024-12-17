@@ -53,7 +53,7 @@ const StaffList = () => {
     setCurrentPage(1); // Reset to first page on search
   };
   return (
-    <div className="content">
+    <div >
       <div className="page-header">
         <div className="row">
           <div className="col-sm-12">

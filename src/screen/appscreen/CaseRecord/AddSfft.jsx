@@ -145,7 +145,7 @@ const DynamicDiagram = () => {
   };
 
   return (
-    <div className="content">
+    <div >
        <div className="input-section">
           <input
             type="text"

@@ -167,7 +167,7 @@ const Chiefcomplaintstart = ({ patient }) => {
   };
 
   return (
-    <div className="content">
+    <div >
       <div className="row">
         <div className="col-sm-7 col-6">
           <ul className="breadcrumb">

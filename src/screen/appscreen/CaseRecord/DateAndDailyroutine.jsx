@@ -81,7 +81,7 @@ const DateAndDailyroutine = () => {
   }, [manualText]);
 
   return (
-    <div className="content" style={{ padding: "20px", backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
+    <div  style={{ padding: "20px", backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
       <div className="row">
         <div className="col-sm-7 col-6">
           <ul className="breadcrumb">

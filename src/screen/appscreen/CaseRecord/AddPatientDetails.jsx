@@ -55,7 +55,7 @@ const AddPatientDetails = () => {
   };
 
   return (
-    <div className="content">
+    <div >
       <div className="page-header">
         <div className="row">
           <div className="col-sm-12">
@@ -72,7 +72,7 @@ const AddPatientDetails = () => {
         </div>
       </div>
 
-      <div className="content">
+      <div >
   <div className="col-sm-12">
     <div className="card">
       <div className="card-body">

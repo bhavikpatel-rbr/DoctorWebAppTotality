@@ -17,7 +17,7 @@ import call3 from '../../../assest/img/calls/call-03.jpg'
 
 const VideoCall = () => {
   return (
-    <div className="content">
+    <div >
       <PageHeader />
       <div className="row">
         <ParticipantsSection />

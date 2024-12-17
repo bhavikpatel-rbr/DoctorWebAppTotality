@@ -152,7 +152,7 @@ const [avatar, setAvatar] = useState(null);
    }, [formik]);
 
   return (
-    <div className="content">
+    <div >
       <div className="page-header">
         <div className="row">
           <div className="col-sm-12">

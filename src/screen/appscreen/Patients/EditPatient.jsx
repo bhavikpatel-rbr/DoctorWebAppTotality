@@ -132,7 +132,7 @@ const EditPatient = () => {
     setAvatar(event.target.files[0]);
   };
   return (
-    <div className="content">
+    <div >
       <div className="page-header">
         <div className="row">
           <div className="col-sm-12">
@@ -153,7 +153,7 @@ const EditPatient = () => {
                               <div className="row">
                                 <div className="col-12">
                                   <div className="form-heading">
-                                    <h4>Add Doctor</h4>
+                                    <h4>Edit Patient</h4>
                                   </div>
                                 </div>
                                 <div className="col-12 col-md-6 col-xl-4">

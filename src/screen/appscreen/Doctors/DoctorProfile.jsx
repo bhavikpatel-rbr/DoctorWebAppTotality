@@ -22,7 +22,7 @@ const DoctorProfile = () => {
   console.log(userData?.userDetails);
   console.log('=================userData===================');
   return (
-    <div className="content">
+    <div >
       <div className="page-header">
         <div className="row">
           <div className="col-sm-12">

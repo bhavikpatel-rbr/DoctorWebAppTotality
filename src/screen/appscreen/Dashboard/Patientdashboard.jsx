@@ -180,7 +180,7 @@ const [date, setDate] = useState(new Date()); // Initialize with current date
     );
   };
   return (
-    <div className="content">
+    <div >
 
       {/* Page Header */}
       <div className="page-header">

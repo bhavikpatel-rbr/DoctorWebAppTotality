@@ -57,7 +57,7 @@ const EditSchedule = () => {
       },
     });
   return (
-    <div className="content">
+    <div >
       <div className="page-header">
         <div className="row">
           <div className="col-sm-12">
@@ -82,7 +82,7 @@ const EditSchedule = () => {
                 <div className="row">
                   <div className="col-12">
                     <div className="form-heading">
-                      <h4>Add Schedule</h4>
+                      <h4>Edit Schedule</h4>
                     </div>
                   </div>
                   {/* <div className="col-12 col-md-6 col-xl-6">

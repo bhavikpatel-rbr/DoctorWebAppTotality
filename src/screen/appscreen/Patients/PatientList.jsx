@@ -57,7 +57,7 @@ const PatientList = () => {
   
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <div className="content">
+    <div >
       <div className="page-header">
         <div className="row">
           <div className="col-sm-12">

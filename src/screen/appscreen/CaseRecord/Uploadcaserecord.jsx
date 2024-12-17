@@ -48,7 +48,7 @@ const UploadCaseRecord = () => {
   };
 
   return (
-    <div className="content">
+    <div >
       <div className="row">
         
       </div>

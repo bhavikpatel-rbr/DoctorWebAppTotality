@@ -4,7 +4,7 @@ import MentalSateItem from "../DiagramComponent/MentalSateItem";
 export default function IntellectualState1() {
   return (
     <div
-      className="content"
+      
       style={{
         backgroundColor: "#f8f9fa",
         minHeight: "100vh",

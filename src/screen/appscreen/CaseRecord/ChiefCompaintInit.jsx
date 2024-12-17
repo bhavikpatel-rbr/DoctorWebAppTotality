@@ -189,7 +189,7 @@ const ChiefCompaintInit = ({ patient }) => {
   };
 
   return (
-    <div className="content">
+    <div >
       {/* <div class="row">
         <div class="col-sm-7 col-6">
           <ul class="breadcrumb">

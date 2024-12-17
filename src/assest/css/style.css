@@ -481,6 +481,11 @@ h2.accordion-header button.accordion-button {
   background-repeat: no-repeat;
 } */
 
+@media only screen and (max-width: 575.98px) {
+  .page-wrapper>.content {
+      padding: 15px;
+  }
+}
 .btn.splash-btn {
   background: #0049cb;
   font-size: 18px;
