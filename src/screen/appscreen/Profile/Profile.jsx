@@ -21,15 +21,15 @@ const ProfilePage = () => {
       <div className="row">
         <div className="col-sm-7 col-6">
           <ul className="breadcrumb">
-            <li className="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+            <li className="breadcrumb-item"><div  href="index.html">Dashboard</div ></li>
             <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} /></li>
             <li className="breadcrumb-item active">My Profile</li>
           </ul>
         </div>
         <div className="col-sm-5 col-6 text-end mb-3">
-          <a href="edit-profile.html" className="btn btn-primary btn-rounded">
+          <div  href="edit-profile.html" className="btn btn-primary btn-rounded">
             <i className="fa fa-plus"></i> Edit Profile
-          </a>
+          </div >
         </div>
       </div>
       <div className="card-box profile-header">
@@ -38,9 +38,9 @@ const ProfilePage = () => {
             <div className="profile-view">
               <div className="profile-img-wrap">
                 <div className="profile-img">
-                  <a href="#">
+                  <div  href="#">
                     <img className="avatar" src="assets/img/doctor-03.jpg" alt="Profile" />
-                  </a>
+                  </div >
                 </div>
               </div>
               <div
@@ -53,7 +53,7 @@ const ProfilePage = () => {
                       <small className="text-muted">Gynecologist</small>
                       <div className="staff-id">Employee ID : DR-0001</div>
                       <div className="staff-msg">
-                        <a href="chat.html" className="btn btn-primary">Send Message</a>
+                        <div  href="chat.html" className="btn btn-primary">Send Message</div >
                       </div>
                     </div>
                   </div>
@@ -61,12 +61,12 @@ const ProfilePage = () => {
                     <ul className="personal-info">
                       <li>
                         <span className="title">Phone:</span>
-                        <span className="text"><a href="tel:770-889-6484">770-889-6484</a></span>
+                        <span className="text"><div  href="tel:770-889-6484">770-889-6484</div ></span>
                       </li>
                       <li>
                         <span className="title">Email:</span>
                         <span className="text">
-                          <a href="mailto:[email protected]"><span className="__cf_email__">[email protected]</span></a>
+                          <div  href="mailto:[email protected]"><span className="__cf_email__">[email protected]</span></div >
                         </span>
                       </li>
                       <li>
@@ -91,7 +91,7 @@ const ProfilePage = () => {
       </div>
       <div className="profile-tabs mt-3">
         <ul className="nav nav-tabs nav-tabs-bottom">
-          <li className="nav-item"><a className="nav-link active" href="#about-cont" data-bs-toggle="tab">About</a></li>
+          <li className="nav-item"><div  className="nav-link active" href="#about-cont" data-bs-toggle="tab">About</div ></li>
 
         </ul>
         <div className="tab-content">
@@ -108,7 +108,7 @@ const ProfilePage = () => {
                         </div>
                         <div className="experience-content">
                           <div className="timeline-content">
-                            <a href="#/" className="name">International College of Medical Science (UG)</a>
+                            <div  href="#/" className="name">International College of Medical Science (UG)</div >
                             <div>MBBS</div>
                             <span className="time">2001 - 2003</span>
                           </div>
@@ -120,7 +120,7 @@ const ProfilePage = () => {
                         </div>
                         <div className="experience-content">
                           <div className="timeline-content">
-                            <a href="#/" className="name">International College of Medical Science (PG)</a>
+                            <div  href="#/" className="name">International College of Medical Science (PG)</div >
                             <div>MD - Obstetrics & Gynaecology</div>
                             <span className="time">1997 - 2001</span>
                           </div>
@@ -139,7 +139,7 @@ const ProfilePage = () => {
                         </div>
                         <div className="experience-content">
                           <div className="timeline-content">
-                            <a href="#/" className="name">Consultant Gynecologist</a>
+                            <div  href="#/" className="name">Consultant Gynecologist</div >
                             <span className="time">Jan 2014 - Present (4 years 8 months)</span>
                           </div>
                         </div>
@@ -150,7 +150,7 @@ const ProfilePage = () => {
                         </div>
                         <div className="experience-content">
                           <div className="timeline-content">
-                            <a href="#/" className="name">Consultant Gynecologist</a>
+                            <div  href="#/" className="name">Consultant Gynecologist</div >
                             <span className="time">Jan 2009 - Present (6 years 1 month)</span>
                           </div>
                         </div>
@@ -161,7 +161,7 @@ const ProfilePage = () => {
                         </div>
                         <div className="experience-content">
                           <div className="timeline-content">
-                            <a href="#/" className="name">Consultant Gynecologist</a>
+                            <div  href="#/" className="name">Consultant Gynecologist</div >
                             <span className="time">Jan 2004 - Present (5 years 2 months)</span>
                           </div>
                         </div>

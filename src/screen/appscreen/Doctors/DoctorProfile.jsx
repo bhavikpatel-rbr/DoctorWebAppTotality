@@ -28,7 +28,7 @@ const DoctorProfile = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="doctors.html">Doctors</a>
+                <div href="doctors.html">Doctors</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>
@@ -47,9 +47,9 @@ const DoctorProfile = () => {
                 <div className="col-md-12">
                   <div className="about-info">
                     <h4>Doctor Profile  <span>
-          {/* <a href="#">
+          {/* <div href="#">
             <FontAwesomeIcon icon={faEllipsisV} />
-          </a> */}
+          </div> */}
         </span></h4>
                   </div>
                   <div className="doctor-profile-head">
@@ -220,28 +220,28 @@ const DoctorProfile = () => {
                   <div className="tab-content-set">
                     <ul className="nav">
                       <li>
-                        <a href="doctor-profile.html" className="active">
+                        <div href="doctor-profile.html" className="active">
                           <span className="set-about-icon me-2">
                             <img src={menuicon2} alt="About me" />
                           </span>
                           About me
-                        </a>
+                        </div>
                       </li>
                       <li>
-                        <a href="doctor-setting.html">
+                        <div href="doctor-setting.html">
                           <span className="set-about-icon me-2">
                             <img src={menuicon3}  alt="Settings" />
                           </span>
                           Settings
-                        </a>
+                        </div>
                       </li>
                       <li>
-                        <a href="doctor-notification.html">
+                        <div href="doctor-notification.html">
                           <span className="set-about-icon me-2">
                             <img src={menuicon4} alt="Notifications" />
                           </span>
                           Notifications
-                        </a>
+                        </div>
                       </li>
                     </ul> */}
 
@@ -255,43 +255,43 @@ const DoctorProfile = () => {
                           </div>
                           <div className="post-item">
                             <div className="post-item-img">
-                              <a href="javascript:;">
+                              <div href="javascript:;">
                                
-                              </a>
+                              </div>
                             </div>
                             <div className="post-item-content">
                               <h5>New Patient Information Added</h5>
                               <p>Here’s a quick note about new information added regarding patients. Always stay updated.</p>
                               <div className="post-item-footer">
-                                <a href="javascript:;" className="btn btn-info">View Details</a>
+                                <div href="javascript:;" className="btn btn-info">View Details</div>
                               </div>
                             </div>
                           </div>
                           <div className="post-item">
                             <div className="post-item-img">
-                              <a href="javascript:;">
+                              <div href="javascript:;">
                                
-                              </a>
+                              </div>
                             </div>
                             <div className="post-item-content">
                               <h5>Welcome to the New Clinic</h5>
                               <p>We’re excited to announce our new clinic opening. We’re ready to provide the best care.</p>
                               <div className="post-item-footer">
-                                <a href="javascript:;" className="btn btn-info">View Details</a>
+                                <div href="javascript:;" className="btn btn-info">View Details</div>
                               </div>
                             </div>
                           </div>
                           <div className="post-item">
                             <div className="post-item-img">
-                              <a href="javascript:;">
+                              <div href="javascript:;">
                                 
-                              </a>
+                              </div>
                             </div>
                             <div className="post-item-content">
                               <h5>Health Tips for the Season</h5>
                               <p>Check out our latest health tips to stay healthy during the upcoming season. Follow these guidelines for a healthy lifestyle.</p>
                               <div className="post-item-footer">
-                                <a href="javascript:;" className="btn btn-info">View Details</a>
+                                <div href="javascript:;" className="btn btn-info">View Details</div>
                               </div>
                             </div>
                           </div>

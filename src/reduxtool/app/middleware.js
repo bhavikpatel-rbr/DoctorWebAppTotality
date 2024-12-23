@@ -444,6 +444,7 @@ export const allPatientsUsersAction = createAsyncThunk(
     try {
       const response = await allPatientsUsersAsync();
       if (response?.data) {
+        dispatch(hideLoader());
         // dispatch(
         //   showMessage({
         //     ...defaultMessageObj,

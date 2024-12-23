@@ -83,12 +83,12 @@ const ScheduleList = () => {
                                value={searchQuery}
                               onChange={handleSearchChange}
                             />
-                            <a className="btn">
+                            <div className="btn">
                               <img
                                 src={searchnormal}
                                 alt="Search"
                               />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
@@ -167,7 +167,7 @@ const ScheduleList = () => {
                 <ul className="pagination justify-content-center" style={{ marginTop: '20px' }}>
                   {Array.from({ length: totalPages }, (_, index) => (
                     <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`} style={{ margin: '0 5px' }}>
-                      <a
+                      <div
                         className="page-link"
                         href="#"
                         onClick={() => paginate(index + 1)}
@@ -181,7 +181,7 @@ const ScheduleList = () => {
                         }}
                       >
                         {index + 1}
-                      </a>
+                      </div>
                     </li>
                   ))}
                 </ul>

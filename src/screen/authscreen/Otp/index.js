@@ -20,9 +20,9 @@ const Otp = () => {
           <h2 className="my-3 fw-bold">Verification Code</h2>
           <p className="text-muted mb-0">Enter The Code We Send You?</p>
         </div>
-        <a className="toggle bg-white shadow rounded-circle icon d-flex align-items-center justify-content-center fs-5 hc-nav-trigger hc-nav-1" href="#">
+        <div className="toggle bg-white shadow rounded-circle icon d-flex align-items-center justify-content-center fs-5 hc-nav-trigger hc-nav-1" href="#">
           <BiAbacus size={24} className="d-flex" />
-        </a>
+        </div>
       </div>
       <div className="d-flex gap-1 mb-2">
         {[5, 2, 7, 2, 8].map((num, index) => (
@@ -37,13 +37,13 @@ const Otp = () => {
         ))}
       </div>
       <p className="text-muted text-center mt-4">
-        Didn't receive it? <a href="#" className="ml-2 text-primary">Resend Code</a>
+        Didn't receive it? <div href="#" className="ml-2 text-primary">Resend Code</div>
       </p>
     </div>
     <div className="footer fixed-bottom m-4">
-      <a href="congrats.html" className="btn btn-info btn-lg w-100 rounded-4">
+      <div href="congrats.html" className="btn btn-info btn-lg w-100 rounded-4">
         Confirm
-      </a>
+      </div>
     </div>
  </div>
   

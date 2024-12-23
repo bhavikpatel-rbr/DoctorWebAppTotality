@@ -190,32 +190,7 @@ const ChiefCompaintInit = ({ patient }) => {
 
   return (
     <div >
-      {/* <div class="row">
-        <div class="col-sm-7 col-6">
-          <ul class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="chief_complaint.html">Chief Complaint </a>
-            </li>
-            <li class="breadcrumb-item">
-              <i class="feather-chevron-right"></i>
-            </li>
-            <li class="breadcrumb-item active">Chief Complaint</li>
-          </ul>
-        </div>
-        <div class="col-sm-5 col-6 text-end m-b-30">
-          <a
-            className={`btn btn-${
-              isRecording ? "danger" : "primary"
-            } btn-rounded`}
-            onClick={toggleRecording}
-          >
-            {isRecording ? <BsMicMute size={20} /> : <BsMicFill size={20} />}
-            <span className="ms-2">
-              {isRecording ? "Stop Recording" : "Start Recording"}
-            </span>
-          </a>
-        </div>
-      </div> */}
+     
 
       {/* <div className="patient-details mb-4 p-4 bg-white rounded border shadow-lg d-flex justify-content-between align-items-start">
         <div className="details-info">
@@ -257,13 +232,7 @@ const ChiefCompaintInit = ({ patient }) => {
         <div class="row">
           <div class="col-md-12">
             <div class="profile-view">
-              {/* <div class="">
-                <div class="profile-img">
-                  <a href="#">
-                    <img class="patient_img"  src={Avatar} alt="" width={50} />
-                  </a>
-                </div>
-              </div> */}
+             
 
               <div class="profile-basic">
                 <div class="row">
@@ -284,13 +253,13 @@ const ChiefCompaintInit = ({ patient }) => {
                           <li>
                             <span class="title">Name:</span>
                             <span class="text">
-                              <a href>Tushar Joshi</a>
+                              <div href>Tushar Joshi</div>
                             </span>
                           </li>
                           <li>
                             <span class="title">Phone:</span>
                             <span class="text">
-                              <a href>770-889-6484</a>
+                              <div href>770-889-6484</div>
                             </span>
                           </li>
 

@@ -29,7 +29,7 @@ export default function EmotionalState() {
         <div className="col-sm-6 col-6">
           <ul className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="chief_complaint.html">Chief Complaint</a>
+              <div href="chief_complaint.html">Chief Complaint</div>
             </li>
             <li className="breadcrumb-item">
               <i className="feather-chevron-right"></i>

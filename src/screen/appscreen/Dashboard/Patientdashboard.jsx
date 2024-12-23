@@ -173,9 +173,9 @@ const [date, setDate] = useState(new Date()); // Initialize with current date
             <p>{time}</p>
           </div>
         </div>
-        <a href="javascript:;" className={`custom-badge ${status}`}>
+        <div href="javascript:;" className={`custom-badge ${status}`}>
           {status === 'status-green' ? 'Active' : 'Pending'}
-        </a>
+        </div>
       </div>
     );
   };
@@ -187,7 +187,7 @@ const [date, setDate] = useState(new Date()); // Initialize with current date
         <div className="row">
           <div className="col-sm-12">
             <ul className="breadcrumb">
-              <li className="breadcrumb-item"><a href="index.html">Dashboard </a></li>
+              <li className="breadcrumb-item"><div href="index.html">Dashboard </div></li>
               <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/></li>
               <li className="breadcrumb-item active">Patient Dashboard</li>
             </ul>
@@ -392,7 +392,7 @@ const [date, setDate] = useState(new Date()); // Initialize with current date
       <div className="card">
         <div className="card-header">
           <h4 className="card-title d-inline-block">Medical History</h4>
-          <a href="appointments.html" className="patient-views float-end">Show all</a>
+          <div href="appointments.html" className="patient-views float-end">Show all</div>
         </div>
         <div className="card-body p-0 table-dash">
           <div className="table-responsive">
@@ -420,16 +420,16 @@ const [date, setDate] = useState(new Date()); // Initialize with current date
                     <td><button className="custom-badge status-gray re-shedule">Reschedule</button></td>
                     <td className="text-end">
                       <div className="dropdown dropdown-action">
-                        <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                           <i className="fa fa-ellipsis-v"></i>
-                        </a>
+                        </div>
                         <div className="dropdown-menu dropdown-menu-end">
-                          <a className="dropdown-item" href="edit-appointment.html">
+                          <div className="dropdown-item" href="edit-appointment.html">
                             <i className="fa-solid fa-pen-to-square m-r-5"></i> Edit
-                          </a>
-                          <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_appointment">
+                          </div>
+                          <div className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_appointment">
                             <i className="fa fa-trash-o m-r-5"></i> Delete
-                          </a>
+                          </div>
                         </div>
                       </div>
                     </td>

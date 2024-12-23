@@ -137,7 +137,7 @@ const EditPatient = () => {
         <div className="row">
           <div className="col-sm-12">
             <ul className="breadcrumb">
-              <li className="breadcrumb-item"><a href="patients.html">Patients</a></li>
+              <li className="breadcrumb-item"><div href="patients.html">Patients</div></li>
               <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/></li>
               <li className="breadcrumb-item active">Edit Patient</li>
             </ul>
@@ -614,6 +614,9 @@ const EditPatient = () => {
                                       Save Changes
                                     </button>
                                     <button
+                                     onClick={()=>{
+                                      navigate('/patients')
+                                     }}
                                       type="button"
                                       className="btn btn-primary cancel-form"
                                     >

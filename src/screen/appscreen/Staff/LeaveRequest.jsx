@@ -137,7 +137,7 @@ const LeaveRequest = () => {
         <div className="row">
           <div className="col-sm-12">
             <ul className="breadcrumb">
-              <li className="breadcrumb-item"><a href="staff-list.html">Staffs </a></li>
+              <li className="breadcrumb-item"><div href="staff-list.html">Staffs </div></li>
               <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/></li>
               <li className="breadcrumb-item active">Leave Request</li>
             </ul>
@@ -162,38 +162,38 @@ const LeaveRequest = () => {
                               className="form-control"
                               placeholder="Search here"
                             />
-                            <a className="btn">
+                            <div className="btn">
                               <img
                                 src={searchnormal}
                                 alt="Search"
                               />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
-                          <a href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
+                          <div href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
                           <img src={plus} alt="" />
-                          </a>
-                          <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
+                          </div>
+                          <div href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
                           <img src={refresh} alt="" />
-                          </a>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="col-auto text-end float-end ms-auto download-grp">
-                    <a href="javascript:;" className="me-2">
+                    <div href="javascript:;" className="me-2">
                       <img src="assets/img/icons/pdf-icon-01.svg" alt="" />
-                    </a>
-                    <a href="javascript:;" className="me-2">
+                    </div>
+                    <div href="javascript:;" className="me-2">
                       <img src="assets/img/icons/pdf-icon-02.svg" alt="" />
-                    </a>
-                    <a href="javascript:;" className="me-2">
+                    </div>
+                    <div href="javascript:;" className="me-2">
                       <img src="assets/img/icons/pdf-icon-03.svg" alt="" />
-                    </a>
-                    <a href="javascript:;">
+                    </div>
+                    <div href="javascript:;">
                       <img src="assets/img/icons/pdf-icon-04.svg" alt="" />
-                    </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -218,7 +218,7 @@ const LeaveRequest = () => {
              <tr key={request.id}>
              
              <td className="profile-image">
-               <a href="profile.html">{request.employeeName}</a>
+               <div href="profile.html">{request.employeeName}</div>
              </td>
              <td>{request.leaveType}</td>
              <td>{request.fromDate}</td>
@@ -328,7 +328,7 @@ const LeaveRequest = () => {
                 <ul className="pagination justify-content-center" style={{ marginTop: '20px' }}>
                   {Array.from({ length: totalPages }, (_, index) => (
                     <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`} style={{ margin: '0 5px' }}>
-                      <a
+                      <div
                         className="page-link"
                         href="#"
                         onClick={() => paginate(index + 1)}
@@ -342,7 +342,7 @@ const LeaveRequest = () => {
                         }}
                       >
                         {index + 1}
-                      </a>
+                      </div>
                     </li>
                   ))}
                 </ul>

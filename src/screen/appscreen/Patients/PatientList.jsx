@@ -91,9 +91,9 @@ const PatientList = () => {
                               value={searchQuery}
                               onChange={handleSearchChange}
                             />
-                            <a className="btn">
+                            <div className="btn">
                               <img src={searchnormal} alt="Search" />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
@@ -134,13 +134,13 @@ const PatientList = () => {
                       <tr key={doctor.id}>
 
                         <td className="profile-image">
-                          <a href="profile.html">{doctor.firstname}&nbsp;{doctor.lastname}</a>
+                          <div href="profile.html">{doctor.firstname}&nbsp;{doctor.lastname}</div>
                         </td>
                         <td>{doctor.department}</td>
                         <td>{doctor.specialization}</td>
                         <td>{doctor.city}</td>
-                        <td><a href="javascript:;">{doctor.phone}</a></td>
-                        <td><a href={`mailto:${doctor.email}`}>{doctor.email}</a></td>
+                        <td><div href="javascript:;">{doctor.phone}</div></td>
+                        <td><div href={`mailto:${doctor.email}`}>{doctor.email}</div></td>
                         <td>{doctor.created_at}</td>
                         <td className="text-end">
                           <button
@@ -170,7 +170,7 @@ const PatientList = () => {
                 <ul className="pagination justify-content-center" style={{ marginTop: '20px' }}>
                   {Array.from({ length: totalPages }, (_, index) => (
                     <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`} style={{ margin: '0 5px' }}>
-                      <a
+                      <div
                         className="page-link"
                         href="#"
                         onClick={() => paginate(index + 1)}
@@ -184,7 +184,7 @@ const PatientList = () => {
                         }}
                       >
                         {index + 1}
-                      </a>
+                      </div>
                     </li>
                   ))}
                 </ul>

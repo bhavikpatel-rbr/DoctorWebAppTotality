@@ -55,7 +55,7 @@ const CaseRecordAdd = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="doctors.html">Case Record</a>
+                <div href="doctors.html">Case Record</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>
@@ -96,7 +96,7 @@ const CaseRecordAdd = () => {
         {currentRows.map((doctor) => (
           <tr key={doctor.id} className="align-middle">
             <td className="profile-image ">
-              <a href="profile.html" >ONSET / SUDDEN</a>
+              <div href="profile.html" >ONSET / SUDDEN</div>
             </td>
             <td className="text-muted">Alcohol</td>
             <td

@@ -28,7 +28,7 @@ const StoreGrid = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="stores.html">Stores </a>
+                <div href="stores.html">Stores </div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
@@ -44,9 +44,9 @@ const StoreGrid = () => {
         <div key={blog.id} className="col-sm-6 col-md-6 col-xl-4">
           <div className="blog grid-blog">
             <div className="blog-image">
-              <a href={blog.readMoreLink}>
+              <div href={blog.readMoreLink}>
                 <img className="img-fluid"  src={store6} alt={blog.title} />
-              </a>
+              </div>
               <div className="blog-views">
                 {/* <h5>{blog.category}</h5> */}
                 <h5>Diabetes</h5>
@@ -71,38 +71,28 @@ const StoreGrid = () => {
             <div className="blog-content">
               <div className="blog-grp-blk">
                 <div className="blog-img-blk">
-                  <a href={blog.profileLink}>
+                  <div href={blog.profileLink}>
                     <img className="img-fluid" src={store6} alt={blog.authorName} />
-                  </a>
+                  </div>
                   <div className="content-blk-blog ms-2">
                     <h4>
-                      <a href="profile.html">{blog.author}</a>
+                      <div href="profile.html">{blog.author}</div>
                     </h4>
                     <h5>M.B.B.S, Diabetologist</h5>
                   </div>
-                  {/* <div className="content-blk-blog ms-2">
-                    <h4>
-                      <a href={blog.profileLink}>{blog.authorName}</a>
-                    </h4>
-                    <h5>{blog.authorTitle}</h5>
-                  </div> */}
+                  
                 </div>
-                {/* <span>
-                  <FaCalendar className="me-1" />
-                  {blog.created_at
-                  } */}
-                  {/* 05 Sep 2022 */}
-                {/* </span> */}
+               
               </div>
               <h3 className="blog-title">
-                <a href={blog.readMoreLink}>{blog.title}</a>
+                <div href={blog.readMoreLink}>{blog.title}</div>
               </h3>
               <p>{blog.content
               }</p>
-              <a href={blog.readMoreLink} className="read-more d-flex">
+              <div href={blog.readMoreLink} className="read-more d-flex">
                 Read more in 2 Minutes
                 <FaLongArrowAltRight className="ms-2" />
-              </a>
+              </div>
             </div>
           </div>
         </div>

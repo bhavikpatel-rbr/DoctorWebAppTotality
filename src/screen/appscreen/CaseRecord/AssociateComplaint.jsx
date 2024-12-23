@@ -176,7 +176,7 @@ const AssociateComplaint = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="chief_complaint.html">Associate Complaint</a>
+                <div  href="chief_complaint.html">Associate Complaint</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
@@ -204,50 +204,50 @@ const AssociateComplaint = () => {
                               className="form-control"
                               placeholder="Search here"
                             />
-                            <a className="btn">
+                            <div  className="btn">
                               <img
                                 src={searchnormal}
                                 alt="Search"
                               />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
-                          <a href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
+                          <div  href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
                           <img src={plus} alt="" />
-                          </a>
-                          <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
+                          </div>
+                          <div  href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
                           <img src={refresh} alt="" />
-                          </a>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="col-auto text-end float-end ms-auto download-grp">
-                    <a href="javascript:;" className="me-2">
+                    <div  href="javascript:;" className="me-2">
                       <img
                         src={pdf1}
                         alt="PDF Icon 1"
                       />
-                    </a>
-                    <a href="javascript:;" className="me-2">
+                    </div>
+                    <div  href="javascript:;" className="me-2">
                       <img
                         src={pdf2}
                         alt="PDF Icon 2"
                       />
-                    </a>
-                    <a href="javascript:;" className="me-2">
+                    </div>
+                    <div  href="javascript:;" className="me-2">
                       <img
                          src={pdf3}
                         alt="PDF Icon 3"
                       />
-                    </a>
-                    <a href="javascript:;">
+                    </div>
+                    <div  href="javascript:;">
                     <img
                          src={pdf4}
                         alt="PDF Icon 3"
                       />
-                    </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -280,28 +280,28 @@ const AssociateComplaint = () => {
                 </div>
               </td>
               <td className="profile-image">
-                <a href="profile.html">{doctor.name}</a>
+                <div  href="profile.html">{doctor.name}</div>
               </td>
               <td>{doctor.department}</td>
               <td>{doctor.specialization}</td>
               <td>{doctor.degree}</td>
-              <td><a href="javascript:;">{doctor.mobile}</a></td>
-              <td><a href={`mailto:${doctor.email}`}>{doctor.email}</a></td>
+              <td><div  href="javascript:;">{doctor.mobile}</div></td>
+              <td><div  href={`mailto:${doctor.email}`}>{doctor.email}</div></td>
               <td>{doctor.joiningDate}</td>
               <td className="text-end">
                 <div className="dropdown dropdown-action">
-                  <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <div  href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <i className="fa fa-ellipsis-v"></i>
-                  </a>
+                  </div>
                   <div className="dropdown-menu dropdown-menu-end">
-                    <a className="dropdown-item" href="edit-doctor.html">
+                    <div  className="dropdown-item" href="edit-doctor.html">
                       <i className="fa-solid fa-pen-to-square m-r-5"></i>
                       Edit
-                    </a>
-                    <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient">
+                    </div>
+                    <div  className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_patient">
                       <i className="fa fa-trash-alt m-r-5"></i>
                       Delete
-                    </a>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -314,9 +314,9 @@ const AssociateComplaint = () => {
         <ul className="pagination justify-content-center">
           {Array.from({ length: totalPages }, (_, index) => (
             <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-              <a className="page-link" href="#" onClick={() => paginate(index + 1)}>
+              <div  className="page-link" href="#" onClick={() => paginate(index + 1)}>
                 {index + 1}
-              </a>
+              </div>
             </li>
           ))}
         </ul>

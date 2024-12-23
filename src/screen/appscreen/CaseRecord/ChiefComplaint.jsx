@@ -179,7 +179,7 @@ const ChiefCompaint = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="chief_complaint.html">Case Record</a>
+                <div href="chief_complaint.html">Case Record</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
@@ -207,21 +207,21 @@ const ChiefCompaint = () => {
                               className="form-control"
                               placeholder="Search here"
                             />
-                            <a className="btn">
+                            <div className="btn">
                               <img
                                 src={searchnormal}
                                 alt="Search"
                               />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
-                          <a href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
+                          <div href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
                           <img src={plus} alt="" />
-                          </a>
-                          <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
+                          </div>
+                          <div href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
                           <img src={refresh} alt="" />
-                          </a>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -250,13 +250,13 @@ const ChiefCompaint = () => {
             <tr key={doctor.id} onClick={() => handleRowClick(doctor.id)}>
               
               <td className="profile-image">
-                <a href="profile.html">{doctor.name}</a>
+                <div href="profile.html">{doctor.name}</div>
               </td>
               <td>{doctor.department}</td>
               <td>{doctor.specialization}</td>
               <td>{doctor.degree}</td>
-              <td><a href="javascript:;">{doctor.mobile}</a></td>
-              <td><a href={`mailto:${doctor.email}`}>{doctor.email}</a></td>
+              <td><div href="javascript:;">{doctor.mobile}</div></td>
+              <td><div href={`mailto:${doctor.email}`}>{doctor.email}</div></td>
               <td>{doctor.joiningDate}</td>
               <td className="text-end">
                           <button 

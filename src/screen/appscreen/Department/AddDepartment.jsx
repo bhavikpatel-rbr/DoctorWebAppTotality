@@ -53,7 +53,7 @@ const AddDepartment = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="departments.html">Department</a>
+                <div href="departments.html">Department</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
@@ -190,9 +190,12 @@ const AddDepartment = () => {
                         type="submit"
                         className="btn btn-primary submit-form me-2"
                       >
-                        Save Changes
+                        Save
                       </button>
                       <button
+                      onClick={() =>{
+                        navigate('/departments')
+                      }}
                         type="button"
                         className="btn btn-primary cancel-form"
                       >

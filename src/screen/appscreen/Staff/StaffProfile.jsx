@@ -10,7 +10,7 @@ const StaffProfile = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="staff-list.html">Staffs</a>
+                <div href="staff-list.html">Staffs</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>

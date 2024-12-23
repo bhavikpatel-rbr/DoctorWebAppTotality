@@ -171,7 +171,7 @@ const AssociateComplaintInit = ({ patient }) => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="chief_complaint.html">Associate Complaint</a>
+                <div href="chief_complaint.html">Associate Complaint</div>
               </li>
               <li className="breadcrumb-item active">Associate Complaint</li>
             </ul>

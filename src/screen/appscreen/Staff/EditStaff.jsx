@@ -137,7 +137,7 @@ const EditStaff = ({ staffData, onSubmit }) => {
         <div className="row">
           <div className="col-sm-12">
             <ul className="breadcrumb">
-              <li className="breadcrumb-item"><a href="staff-list.html">Staff</a></li>
+              <li className="breadcrumb-item"><div href="staff-list.html">Staff</div></li>
               <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/></li>
               <li className="breadcrumb-item active">Edit Staff</li>
             </ul>
@@ -614,6 +614,9 @@ const EditStaff = ({ staffData, onSubmit }) => {
                                                     Save Changes
                                                   </button>
                                                   <button
+                                                   onClick={()=>{
+                                                    navigate('/stafflist')
+                                                   }}
                                                     type="button"
                                                     className="btn btn-primary cancel-form"
                                                   >

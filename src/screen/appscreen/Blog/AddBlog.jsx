@@ -67,7 +67,7 @@ const AddBlogPage = () => {
         <div className="row">
           <div className="col-sm-12">
             <ul className="breadcrumb">
-              <li className="breadcrumb-item"><a href="blog.html">Blog </a></li>
+              <li className="breadcrumb-item"><div href="blog.html">Blog </div></li>
               <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/></li>
               <li className="breadcrumb-item active">Add Blogs</li>
             </ul>
@@ -241,6 +241,9 @@ const AddBlogPage = () => {
                         Save Changes
                       </button>
                       <button
+                      onClick={()=>{
+                        navigate('/blog')
+                      }}
                         type="button"
                         className="btn btn-primary cancel-form"
                       >

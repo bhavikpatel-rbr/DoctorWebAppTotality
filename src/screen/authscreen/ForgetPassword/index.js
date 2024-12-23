@@ -21,9 +21,9 @@ const ForgetPassword = () => {
                 We need your registration email account to send you password reset code!
               </p>
             </div>
-            <a className="toggle bg-white shadow rounded-circle icon d-flex align-items-center justify-content-center fs-5 hc-nav-trigger hc-nav-1" href="#">
+            <div className="toggle bg-white shadow rounded-circle icon d-flex align-items-center justify-content-center fs-5 hc-nav-trigger hc-nav-1" href="#">
           <BiAbacus size={24} className="d-flex" />
-        </a>
+        </div>
           </div>
           <form>
             <div className="mb-2">

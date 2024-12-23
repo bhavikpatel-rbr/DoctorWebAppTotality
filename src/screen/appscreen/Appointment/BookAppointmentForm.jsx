@@ -53,7 +53,7 @@ const BookAppointmentForm = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="appointments.html">Appointment</a>
+                <div href="appointments.html">Appointment</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>
@@ -302,9 +302,9 @@ const BookAppointmentForm = () => {
                       {formData.avatar &&
                       <div className="upload-images upload-size">
                         {formData.avatar && <img src={URL.createObjectURL(formData.avatar)} alt="Avatar" />}
-                        <a href="javascript:void(0);" className="btn-icon logo-hide-btn">
+                        <div href="javascript:void(0);" className="btn-icon logo-hide-btn">
                           <i className="feather-x-circle"></i>
-                        </a>
+                        </div>
                       </div>
 }
                     </div>

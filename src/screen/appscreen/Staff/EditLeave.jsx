@@ -24,7 +24,7 @@ const EditLeave = ({ existingLeave }) => {
                 <div className="row">
                     <div className="col-sm-12">
                         <ul className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="staff-list.html">Leave Request</a></li>
+                            <li className="breadcrumb-item"><div href="staff-list.html">Leave Request</div></li>
                             <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} /></li>
                             <li className="breadcrumb-item active">Edit Leave Request</li>
                         </ul>

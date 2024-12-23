@@ -53,7 +53,7 @@ const EditDepartment = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="departments.html">Department</a>
+                <div href="departments.html">Department</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
@@ -131,7 +131,7 @@ const EditDepartment = () => {
                     </div>
                   </div> */}
                   <div className="col-12 col-md-6 col-xl-6">
-                    <div className="input-block local-forms cal-icon">
+                    <div className="input-block local-forms ">
                       <label>
                         Department Date <span className="login-danger">*</span>
                       </label>
@@ -193,6 +193,9 @@ const EditDepartment = () => {
                         Save Changes
                       </button>
                       <button
+                       onClick={() =>{
+                        navigate('/departments')
+                      }}
                         type="button"
                         className="btn btn-primary cancel-form"
                       >

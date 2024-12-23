@@ -11,7 +11,7 @@ import { ChevronRight } from 'react-feather';
 // Breadcrumb Component
 const Breadcrumb = () => (
   <ul className="breadcrumb">
-    <li className="breadcrumb-item"><a href="stores.html">Stores</a></li>
+    <li className="breadcrumb-item"><div href="stores.html">Stores</div></li>
     <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} /></li>
     <li className="breadcrumb-item active">Store Details</li>
   </ul>
@@ -23,17 +23,17 @@ const StoreView = () => (
     <article className="blog blog-single-post">
       <h3 className="blog-title">HealthMart: Your Go-To Store for Health Products</h3>
       <div className="blog-info clearfix">
-        <div className="post-right read-blks"><a href="#.">Open for Visits</a></div>
+        <div className="post-right read-blks"><div href="#.">Open for Visits</div></div>
         <div className="post-left date-blks">
           <ul>
-            <li><a href="#."><i className="feather-map-pin"></i> <span>123 Health Street, Wellness City</span></a></li>
-            <li><a href="#."><i className="feather-phone"></i> <span>(123) 456-7890</span></a></li>
-            <li><a href="#."><i className="feather-clock"></i> <span>9 AM - 9 PM</span></a></li>
+            <li><div href="#."><i className="feather-map-pin"></i> <span>123 Health Street, Wellness City</span></div></li>
+            <li><div href="#."><i className="feather-phone"></i> <span>(123) 456-7890</span></div></li>
+            <li><div href="#."><i className="feather-clock"></i> <span>9 AM - 9 PM</span></div></li>
           </ul>
         </div>
       </div>
       <div className="blog-image">
-        <a href="#."><img src={store1} className="img-fluid" alt="Store" /></a>
+        <div href="#."><img src={store1} className="img-fluid" alt="Store" /></div>
       </div>
       <div className="blog-content">
         <p>Welcome to HealthMart, where we offer a wide range of health products to support your well-being...</p>
@@ -51,7 +51,7 @@ const StoreView = () => (
 const StoreShare = () => (
   <div className="blog-share">
     <div className="share-stores d-flex align-items-center">
-      <a href="javascript:;"><img src={store2} alt="" /></a>
+      <div href="javascript:;"><img src={store2} alt="" /></div>
       <span className="ms-2">4.5k</span>
     </div>
   </div>
@@ -79,10 +79,10 @@ const OwnerWidget = () => (
       <span>Owner</span>
       <p>Dedicated to providing you with the best health products and personalized service...</p>
       <ul className="nav social-blk">
-        <li><a href="javascript:;"><img src={store2} alt="" /></a></li>
-        <li><a href="javascript:;"><img src={store2} alt="" /></a></li>
-        <li><a href="javascript:;"><img src={store2} alt="" /></a></li>
-        <li><a href="javascript:;"><img src={store2} alt="" /></a></li>
+        <li><div href="javascript:;"><img src={store2} alt="" /></div></li>
+        <li><div href="javascript:;"><img src={store2} alt="" /></div></li>
+        <li><div href="javascript:;"><img src={store2} alt="" /></div></li>
+        <li><div href="javascript:;"><img src={store2} alt="" /></div></li>
       </ul>
     </div>
   </div>
@@ -121,7 +121,7 @@ const Review = ({ author, avatar, time, content }) => (
   <li>
     <div className="review">
       <div className="review-author">
-        <a href="profile.html"><img className="avatar" src={avatar} alt={author} /></a>
+        <div href="profile.html"><img className="avatar" src={avatar} alt={author} /></div>
       </div>
       <div className="review-block">
         <div className="review-by">
@@ -130,7 +130,7 @@ const Review = ({ author, avatar, time, content }) => (
             <span className="week-list">{time}</span>
           </div>
           <span className="float-end">
-            <span className="blog-reply"><a href="#."><i className="fa fa-reply"></i> Reply</a></span>
+            <span className="blog-reply"><div href="#."><i className="fa fa-reply"></i> Reply</div></span>
           </span>
         </div>
         <p>{content}</p>
@@ -186,12 +186,12 @@ const ReviewForm = () => (
 
 // Sidebar Component
 const Sidebar = () => (
-  <aside className="col-md-4">
+  <side className="col-md-4">
     <RelatedStores />
     <TagsWidget />
     {/* <MostPopularStores /> */}
     <Categories />
-  </aside>
+  </side>
 );
 
 // Related Stores Component
@@ -199,7 +199,7 @@ const RelatedStores = () => (
   <div className="widget blog-widget">
     <div className="relat-head">
       <h5>Related Stores</h5>
-      <a href="javascript:;">Show All</a>
+      <div href="javascript:;">Show All</div>
     </div>
     <ul className="latest-stores">
       <RelatedStore 
@@ -246,12 +246,12 @@ const RelatedStores = () => (
 const RelatedStore = ({ category, date, title, imgSrc }) => (
   <li className='mt-3'>
     <div className="post-thumb">
-      <a href="blog-details.html">
+      <div href="blog-details.html">
         <img className="img-fluid" src={imgSrc} alt="Related Post" />
-      </a>
+      </div>
     </div>
     <div className="post-info">
-      <h4><a href="blog-details.html">{title}</a></h4>
+      <h4><div href="blog-details.html">{title}</div></h4>
       <p><span>{category}</span> | <span>{date}</span></p>
     </div>
   </li>
@@ -280,12 +280,12 @@ const MostPopularStores = () => (
 const PopularStore = ({ title, category, imgSrc }) => (
   <li>
   <div className="post-thumb">
-    <a href="blog-details.html">
+    <div href="blog-details.html">
       <img className="img-fluid" src={imgSrc} alt="Related Post" />
-    </a>
+    </div>
   </div>
   <div className="post-info">
-    <h4><a href="blog-details.html">{title}</a></h4>
+    <h4><div href="blog-details.html">{title}</div></h4>
     <p><span>{category}</span></p>
   </div>
 </li>
@@ -296,9 +296,9 @@ const TagsWidget = () => (
   <div className="widget tags-widget">
     <h5>Tags</h5>
     <ul className="tags-list">
-      <li><a href="#.">Health</a></li>
-      <li><a href="#.">Wellness</a></li>
-      <li><a href="#.">Organic</a></li>
+      <li><div href="#.">Health</div></li>
+      <li><div href="#.">Wellness</div></li>
+      <li><div href="#.">Organic</div></li>
     </ul>
   </div>
 );
@@ -308,10 +308,10 @@ const Categories = () => (
   <div className="widget categories-widget">
     <h5>Categories</h5>
     <ul className="categories-list">
-      <li><a href="#.">Supplements</a></li>
-      <li><a href="#.">Fitness Gear</a></li>
-      <li><a href="#.">Supplements</a></li>
-      <li><a href="#.">Supplements</a></li>
+      <li><div href="#.">Supplements</div></li>
+      <li><div href="#.">Fitness Gear</div></li>
+      <li><div href="#.">Supplements</div></li>
+      <li><div href="#.">Supplements</div></li>
     </ul>
   </div>
 );

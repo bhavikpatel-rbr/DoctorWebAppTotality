@@ -38,7 +38,7 @@ const AddMedicalStorePage = () => {
         <div className="row">
           <div className="col-sm-12">
             <ul className="breadcrumb">
-              <li className="breadcrumb-item"><a href="stores.html">Stores</a></li>
+              <li className="breadcrumb-item"><div href="stores.html">Stores</div></li>
               <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} /></li>
               <li className="breadcrumb-item active">Add Medical Store</li>
             </ul>

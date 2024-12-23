@@ -52,7 +52,7 @@ const DoctorList = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="doctors.html">Doctors</a>
+                <div href="doctors.html">Doctors</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
@@ -82,9 +82,9 @@ const DoctorList = () => {
                               value={searchQuery}
                               onChange={handleSearchChange}
                             />
-                            <a className="btn">
+                            <div className="btn">
                               <img src={searchnormal} alt="Search" />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
@@ -123,14 +123,14 @@ const DoctorList = () => {
                       {currentRows?.map((doctor) => (
                         <tr key={doctor?.id}>
                           <td className="profile-image">
-                            <a href="profile.html">{doctor?.firstname}&nbsp;{doctor?.lastname}</a>
+                            <div href="profile.html">{doctor?.firstname}&nbsp;{doctor?.lastname}</div>
                           </td>
                           <td>{doctor?.department}</td>
                           <td>{doctor?.years_of_experience}</td>
                           <td>{doctor?.specialization}</td>
                           <td>{doctor?.education}</td>
-                          <td><a href="javascript:;">{doctor?.phone}</a></td>
-                          <td><a href={`mailto:${doctor?.email}`}>{doctor?.email}</a></td>
+                          <td><div href="javascript:;">{doctor?.phone}</div></td>
+                          <td><div href={`mailto:${doctor?.email}`}>{doctor?.email}</div></td>
                           <td>{doctor?.created_at}</td>
                           <td className="text-end">
                             <button

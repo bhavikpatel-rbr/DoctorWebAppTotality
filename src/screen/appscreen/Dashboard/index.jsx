@@ -178,7 +178,7 @@ const Dashboard = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="index.html">Dashboard </a>
+                <div href="index.html">Dashboard </div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight
@@ -378,8 +378,8 @@ const Dashboard = () => {
                           explodeOffset="10%"
                           explodeIndex={0}
                         />
-                      </AccumulationSeriesCollectionDirective>
-                    </AccumulationChartComponent>
+                      </divccumulationSeriesCollectionDirective>
+                    </divccumulationChartComponent>
                   </div>
                 </div>
               </div> */}
@@ -463,9 +463,9 @@ const Dashboard = () => {
               <h4 className="card-title d-inline-block">
                 Upcoming Appointments
               </h4>
-              <a href="appointments.html" className="patient-views float-end">
+              <div href="appointments.html" className="patient-views float-end">
                 Show all
-              </a>
+              </div>
             </div>
             <div className="card-body p-0 table-dash mt-0">
               <div className="table-responsive">
@@ -501,9 +501,9 @@ const Dashboard = () => {
                       </td>
                       <td>Ear Pain</td>
                       <td className="text-end">
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <div href="#" className="btn btn-outline-primary btn-sm">
                            View
-                        </a>
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -525,9 +525,9 @@ const Dashboard = () => {
                      </td>
                      <td>Ear Pain</td>
                      <td className="text-end">
-                       <a href="#" className="btn btn-outline-primary btn-sm">
+                       <div href="#" className="btn btn-outline-primary btn-sm">
                           View
-                       </a>
+                       </div>
                      </td>
                    </tr>
                     <tr>
@@ -549,9 +549,9 @@ const Dashboard = () => {
                       </td>
                       <td>Ear Pain</td>
                       <td className="text-end">
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <div href="#" className="btn btn-outline-primary btn-sm">
                            View
-                        </a>
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -573,9 +573,9 @@ const Dashboard = () => {
                       </td>
                       <td>Ear Pain</td>
                       <td className="text-end">
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <div href="#" className="btn btn-outline-primary btn-sm">
                            View
-                        </a>
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -597,9 +597,9 @@ const Dashboard = () => {
                       </td>
                       <td>Ear Pain</td>
                       <td className="text-end">
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <div href="#" className="btn btn-outline-primary btn-sm">
                            View
-                        </a>
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -621,9 +621,9 @@ const Dashboard = () => {
                       </td>
                       <td>Ear Pain</td>
                       <td className="text-end">
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <div href="#" className="btn btn-outline-primary btn-sm">
                            View
-                        </a>
+                        </div>
                       </td>
                     </tr>
                  
@@ -668,9 +668,9 @@ const Dashboard = () => {
                         </span>
                       </td>
                       <td className="text-end">
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <div href="#" className="btn btn-outline-primary btn-sm">
                            View
-                        </a>
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -685,9 +685,9 @@ const Dashboard = () => {
                         </span>
                       </td>
                       <td className="text-end">
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <div href="#" className="btn btn-outline-primary btn-sm">
                            View
-                        </a>
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -702,9 +702,9 @@ const Dashboard = () => {
                         </span>
                       </td>
                       <td className="text-end">
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <div href="#" className="btn btn-outline-primary btn-sm">
                            View
-                        </a>
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -719,9 +719,9 @@ const Dashboard = () => {
                         </span>
                       </td>
                       <td className="text-end">
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <div href="#" className="btn btn-outline-primary btn-sm">
                            View
-                        </a>
+                        </div>
                       </td>
                     </tr>
                   </tbody>

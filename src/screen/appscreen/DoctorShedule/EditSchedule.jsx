@@ -63,7 +63,7 @@ const EditSchedule = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="schedule.html">Doctor Schedule</a>
+                <div href="schedule.html">Doctor Schedule</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>
@@ -229,9 +229,13 @@ const EditSchedule = () => {
                 <div className="col-12">
                   <div className="doctor-submit text-end">
                     <button type="submit" className="btn btn-primary submit-form me-2">
-                      Create Schedule
+                      Update Schedule
                     </button>
-                    <button type="button" className="btn btn-primary cancel-form">
+                    <button 
+                     onClick={()=>{
+                      navigate('/schedulelist')
+                    }}
+                    type="button" className="btn btn-primary cancel-form">
                       Cancel
                     </button>
                   </div>

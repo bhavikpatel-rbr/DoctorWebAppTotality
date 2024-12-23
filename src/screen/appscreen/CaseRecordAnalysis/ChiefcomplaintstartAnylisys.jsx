@@ -172,7 +172,7 @@ const ChiefcomplaintstartAnylisys = ({ patient }) => {
       <div className="col-sm-7 col-6">
         <ul className="breadcrumb">
           <li className="breadcrumb-item">
-            <a href="chief_complaint.html">Chief Complaint</a>
+            <div href="chief_complaint.html">Chief Complaint</div>
           </li>
           <li className="breadcrumb-item">
             <i className="feather-chevron-right"></i>

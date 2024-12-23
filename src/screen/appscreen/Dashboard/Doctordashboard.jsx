@@ -276,7 +276,7 @@ const DoctorDashboard = () => {
         <div className="row">
             <div className="col-sm-12">
                 <ul className="breadcrumb">
-                    <li className="breadcrumb-item"><a href="index.html">Dashboard </a></li>
+                    <li className="breadcrumb-item"><div href="index.html">Dashboard </div ></li>
                     <li className="breadcrumb-item">
       <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>
     </li>
@@ -418,8 +418,8 @@ const DoctorDashboard = () => {
                             explodeOffset='10%' 
                             explodeIndex={0}
                         />
-                    </AccumulationSeriesCollectionDirective>
-                </AccumulationChartComponent>
+                    </div ccumulationSeriesCollectionDirective>
+                </div ccumulationChartComponent>
             </div>
         </div>
                     </div> */}
@@ -474,7 +474,7 @@ const DoctorDashboard = () => {
                                         <span className="badge rounded-pill bg-danger">Critical</span>
                                     </td>
                                     <td className="text-end">
-                                        <a href="#" className="btn btn-outline-primary btn-sm"><i className="feather-eye me-1"></i> View</a>
+                                        <div href="#" className="btn btn-outline-primary btn-sm"><i className="feather-eye me-1"></i> View</div >
                                     </td>
                                 </tr>
                                
@@ -583,7 +583,7 @@ const DoctorDashboard = () => {
         <div className="card">
           <div className="card-header">
             <h4 className="card-title d-inline-block">Recent Appointments</h4>
-            <a href="appointments.html" className="patient-views float-end">Show all</a>
+            <div href="appointments.html" className="patient-views float-end">Show all</div >
           </div>
           <div className="card-body p-0 table-dash">
             <div className="table-responsive">
@@ -713,7 +713,7 @@ const DoctorDashboard = () => {
             <div className="card flex-fill comman-shadow">
                 <div className="card-header">
                     <h4 className="card-title d-inline-block">Recent Appointments</h4>
-                    <a href="appointments.html" className="patient-views float-end">Show all</a>
+                    <div href="appointments.html" className="patient-views float-end">Show all</div >
                 </div>
                 <div className="card-body">
                     {/* Appointment Time: 08:00 */}
@@ -732,27 +732,27 @@ const DoctorDashboard = () => {
                                             <i className="fas fa-circle me-2"></i>08:00 <span>bhavik patel</span>
                                         </li>
                                         <li className="dropdown ongoing-blk">
-                                            <a href="#" className="dropdown-toggle active-doctor" data-bs-toggle="dropdown">
+                                            <div href="#" className="dropdown-toggle active-doctor" data-bs-toggle="dropdown">
                                                 <i className="fas fa-circle me-2 active-circles"></i>08:00 <span>bhavik patel</span>
                                                 <span className="ongoing-drapt">Ongoing <i className="feather-chevron-down ms-2"></i></span>
-                                            </a>
+                                            </div >
                                             <ul className="doctor-sub-list dropdown-menu">
                                                 <li className="patient-new-list dropdown-item">
                                                     Patient<span>parth</span>
-                                                    <a href="javascript:;" className="new-dot status-green">
+                                                    <div href="javascript:;" className="new-dot status-green">
                                                         <i className="fas fa-circle me-1 fa-2xs"></i>New
-                                                    </a>
+                                                    </div >
                                                 </li>
                                                 <li className="dropdown-item">
                                                     Time<span>8:30 - 9:00 (30min)</span>
                                                 </li>
                                                 <li className="schedule-blk mb-0 pt-2 dropdown-item">
                                                     <ul className="nav schedule-time">
-                                                        <li><a href="javascript:;"><img src="assets/img/icons/trash.svg" alt="Trash Icon" /></a></li>
-                                                        <li><a href="javascript:;"><img src="assets/img/icons/profile.svg" alt="Profile Icon" /></a></li>
-                                                        <li><a href="javascript:;"><img src="assets/img/icons/edit.svg" alt="Edit Icon" /></a></li>
+                                                        <li><div href="javascript:;"><img src="assets/img/icons/trash.svg" alt="Trash Icon" /></div ></li>
+                                                        <li><div href="javascript:;"><img src="assets/img/icons/profile.svg" alt="Profile Icon" /></div ></li>
+                                                        <li><div href="javascript:;"><img src="assets/img/icons/edit.svg" alt="Edit Icon" /></div ></li>
                                                     </ul>
-                                                    <a className="btn btn-primary appoint-start">Start Appointment</a>
+                                                    <div className="btn btn-primary appoint-start">Start Appointment</div >
                                                 </li>
                                             </ul>
                                         </li>

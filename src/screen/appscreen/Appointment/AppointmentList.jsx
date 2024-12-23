@@ -84,51 +84,26 @@ const AppointmentList = () => {
                               className="form-control"
                               placeholder="Search here"
                             />
-                            <a className="btn">
+                            <div className="btn">
                               <img
                                 src={searchnormal}
                                 alt="Search"
                               />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
-                          <a href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
+                          <div href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
                           <img src={plus} alt="" />
-                          </a>
-                          <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
+                          </div>
+                          <div href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
                           <img src={refresh} alt="" />
-                          </a>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  {/* <div className="col-auto text-end float-end ms-auto download-grp">
-                    <a href="javascript:;" className="me-2">
-                      <img
-                        src={pdf1}
-                        alt="PDF Icon 1"
-                      />
-                    </a>
-                    <a href="javascript:;" className="me-2">
-                      <img
-                        src={pdf2}
-                        alt="PDF Icon 2"
-                      />
-                    </a>
-                    <a href="javascript:;" className="me-2">
-                      <img
-                         src={pdf3}
-                        alt="PDF Icon 3"
-                      />
-                    </a>
-                    <a href="javascript:;">
-                    <img
-                         src={pdf4}
-                        alt="PDF Icon 3"
-                      />
-                    </a>
-                  </div> */}
+                 
                 </div>
               </div>
 
@@ -160,10 +135,10 @@ const AppointmentList = () => {
                         <td>Static</td>
                         <td>Static</td>
                         <td>
-                          <a href={`tel:${appointment.mobile}`}>Static</a>
+                          <div href={`tel:${appointment.mobile}`}>Static</div>
                         </td>
                         <td>
-                          <a href={`mailto:${appointment.email}`}>Static</a>
+                          <div href={`mailto:${appointment.email}`}>Static</div>
                         </td>
                         <td>{appointment.appointment_date}</td>
                         <td>{appointment.appointment_time}</td>
@@ -193,7 +168,7 @@ const AppointmentList = () => {
                 <ul className="pagination justify-content-center" style={{ marginTop: '20px' }}>
                   {Array.from({ length: totalPages }, (_, index) => (
                     <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`} style={{ margin: '0 5px' }}>
-                      <a
+                      <div
                         className="page-link"
                         href="#"
                         onClick={() => paginate(index + 1)}
@@ -207,7 +182,7 @@ const AppointmentList = () => {
                         }}
                       >
                         {index + 1}
-                      </a>
+                      </div>
                     </li>
                   ))}
                 </ul>

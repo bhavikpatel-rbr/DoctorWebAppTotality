@@ -7,7 +7,7 @@ import { ChevronRight,  } from 'react-feather';
 const Breadcrumb = () => (
   <ul className="breadcrumb">
     <li className="breadcrumb-item">
-      <a href="chat.html">App</a>
+      <div href="chat.html">App</div>
     </li>
     <li className="breadcrumb-item">
     <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/>
@@ -19,9 +19,9 @@ const Breadcrumb = () => (
 const ChatUserGroup = ({ user }) => (
   <div className="chat-user-group d-flex align-items-center">
     <div className="img-users call-user">
-      <a href="profile.html">
+      <div href="profile.html">
         <img src={avatar1} alt="img" />
-      </a>
+      </div>
       <span className={`active-users ${user.isActive ? 'bg-info' : ''}`}></span>
     </div>
     <div className="chat-users">
@@ -88,22 +88,22 @@ const ChatFooter = () => (
                 <img src="assets/img/icons/chat-foot-icon-04.svg" alt="" />
               </div>
               <div className="send-chat position-icon comman-flex">
-                <a href="javascript:;">
+                <div href="javascript:;">
                   <img src={chatfootericon3} alt="" />
-                </a>
+                </div>
               </div>
               <div className="symple-text position-icon">
                 <ul>
                   <li>
-                    <a href="javascript:;">
+                    <div href="javascript:;">
                       <img src={chatfootericon1}
                         className="me-2" alt="" />
-                    </a>
+                    </div>
                   </li>
                   <li>
-                    <a href="javascript:;">
+                    <div href="javascript:;">
                       <img src={chatfootericon2} alt="" />
-                    </a>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -255,9 +255,9 @@ const ChatBox = () => {
   //             </button>
   //           </div>
   //           <div className="add-search">
-  //             <a href="javascript:;">
+  //             <div href="javascript:;">
   //               <i className="feather-plus"></i>
-  //             </a>
+  //             </div>
   //           </div>
   //         </div>
   //       </form>

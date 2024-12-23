@@ -59,7 +59,7 @@ const StaffList = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="staff-list.html">Staffs </a>
+                <div href="staff-list.html">Staffs </div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
@@ -87,12 +87,12 @@ const StaffList = () => {
                               className="form-control"
                               placeholder="Search here"
                             />
-                            <a className="btn">
+                            <div className="btn">
                               <img
                                 src={searchnormal}
                                 alt="Search"
                               />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
@@ -110,30 +110,30 @@ const StaffList = () => {
                     </div>
                   </div>
                   {/* <div className="col-auto text-end float-end ms-auto download-grp">
-                    <a href="javascript:;" className="me-2">
+                    <div href="javascript:;" className="me-2">
                       <img
                         src={pdf1}
                         alt="PDF Icon 1"
                       />
-                    </a>
-                    <a href="javascript:;" className="me-2">
+                    </div>
+                    <div href="javascript:;" className="me-2">
                       <img
                         src={pdf2}
                         alt="PDF Icon 2"
                       />
-                    </a>
-                    <a href="javascript:;" className="me-2">
+                    </div>
+                    <div href="javascript:;" className="me-2">
                       <img
                          src={pdf3}
                         alt="PDF Icon 3"
                       />
-                    </a>
-                    <a href="javascript:;">
+                    </div>
+                    <div href="javascript:;">
                     <img
                          src={pdf4}
                         alt="PDF Icon 3"
                       />
-                    </a>
+                    </div>
                   </div> */}
                 </div>
               </div>
@@ -158,7 +158,7 @@ const StaffList = () => {
                     {currentRows?.map((staff, index) => (
                       <tr key={index}>
                         <td className="profile-image">
-                          <a href="profile.html">
+                          <div href="profile.html">
                             {/* <img
                               width="28"
                               height="28"
@@ -167,18 +167,18 @@ const StaffList = () => {
                               alt=""
                             /> */}
                             {staff.firstname}&nbsp;{staff.lastname}
-                          </a>
+                          </div>
                         </td>
                         <td>{staff.department}</td>
                         <td>{staff.specialization}</td>
                        
                         <td>
-                          <a href="javascript:;">{staff.phone}</a>
+                          <div href="javascript:;">{staff.phone}</div>
                         </td>
                         <td>
-                          <a href={`mailto:${staff.email}`} className="__cf_email__">
+                          <div href={`mailto:${staff.email}`} className="__cf_email__">
                             {staff.email}
-                          </a>
+                          </div>
                         </td>
                         <td>{staff.created_at}</td>
                         <td className="text-end">
@@ -209,7 +209,7 @@ const StaffList = () => {
                 <ul className="pagination justify-content-center" style={{ marginTop: '20px' }}>
                   {Array.from({ length: totalPages }, (_, index) => (
                     <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`} style={{ margin: '0 5px' }}>
-                      <a
+                      <div
                         className="page-link"
                         href="#"
                          onClick={() => paginate(index + 1)}
@@ -223,7 +223,7 @@ const StaffList = () => {
                         }}
                       >
                         {index + 1}
-                      </a>
+                      </div>
                     </li>
                   ))}
                 </ul>

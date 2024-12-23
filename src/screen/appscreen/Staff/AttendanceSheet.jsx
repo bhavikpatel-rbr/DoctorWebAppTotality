@@ -26,7 +26,7 @@ const AttendanceSheet = () => {
           <div className="col-sm-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="staff-list.html">Staffs</a>
+                <div href="staff-list.html">Staffs</div>
               </li>
               <li className="breadcrumb-item">
                 <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
@@ -54,19 +54,19 @@ const AttendanceSheet = () => {
                               className="form-control"
                               placeholder="Search here"
                             />
-                            <a className="btn">
+                            <div className="btn">
                               <img
                                 src={searchnormal}
                                 alt=""
                               />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
                          
-                          <a href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
+                          <div href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
                             <img src={refresh} alt="" />
-                          </a>
+                          </div>
                         </div>
                       </div>
                     </div>

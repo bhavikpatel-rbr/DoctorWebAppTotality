@@ -42,7 +42,7 @@ const Holidays = () => {
         <div className="row">
           <div className="col-sm-12">
             <ul className="breadcrumb">
-              <li className="breadcrumb-item"><a href="staff-list.html">Staffs</a></li>
+              <li className="breadcrumb-item"><div href="staff-list.html">Staffs</div></li>
               <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} /></li>
               <li className="breadcrumb-item active">Holidays</li>
             </ul>
@@ -63,7 +63,7 @@ const Holidays = () => {
                         <div className="top-nav-search table-search-blk">
                           <form>
                             <input type="text" className="form-control" placeholder="Search here" />
-                            <a className="btn"><img src={searchnormal} alt="" /></a>
+                            <div className="btn"><img src={searchnormal} alt="" /></div>
                           </form>
                         </div>
                         <div className="add-group">
@@ -78,10 +78,10 @@ const Holidays = () => {
                     </div>
                   </div>
                   <div className="col-auto text-end float-end ms-auto download-grp">
-                    <a href="javascript:;" className="me-2"><img src="assets/img/icons/pdf-icon-01.svg" alt="" /></a>
-                    <a href="javascript:;" className="me-2"><img src="assets/img/icons/pdf-icon-02.svg" alt="" /></a>
-                    <a href="javascript:;" className="me-2"><img src="assets/img/icons/pdf-icon-03.svg" alt="" /></a>
-                    <a href="javascript:;"><img src="assets/img/icons/pdf-icon-04.svg" alt="" /></a>
+                    <div href="javascript:;" className="me-2"><img src="assets/img/icons/pdf-icon-01.svg" alt="" /></div>
+                    <div href="javascript:;" className="me-2"><img src="assets/img/icons/pdf-icon-02.svg" alt="" /></div>
+                    <div href="javascript:;" className="me-2"><img src="assets/img/icons/pdf-icon-03.svg" alt="" /></div>
+                    <div href="javascript:;"><img src="assets/img/icons/pdf-icon-04.svg" alt="" /></div>
                   </div>
                 </div>
               </div>

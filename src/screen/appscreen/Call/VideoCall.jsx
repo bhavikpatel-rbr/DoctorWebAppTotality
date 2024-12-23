@@ -34,7 +34,7 @@ const PageHeader = () => {
         <div className="col-sm-12">
           <ul className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="voice-call.html">App </a>
+              <div href="voice-call.html">App </div>
             </li>
             <li className="breadcrumb-item">
               <i className="feather-chevron-right"></i>
@@ -54,7 +54,7 @@ const ParticipantsSection = () => {
         <div className="chat-widgets">
           <div className="call-all comman-space-flex">
             <h4>Participants<span>32</span></h4>
-            <h5><a href="javascript:void(0);">Show All</a></h5>
+            <h5><div href="javascript:void(0);">Show All</div></h5>
           </div>
           <Participant name="Me" image={avatar1} />
           <Participant name="Laura Williams" image={avatar1} />
@@ -62,7 +62,7 @@ const ParticipantsSection = () => {
           
           <div className="call-all comman-space-flex">
             <h4>Chats<span>32</span></h4>
-            <h5><a href="javascript:void(0);">Show All</a></h5>
+            <h5><div href="javascript:void(0);">Show All</div></h5>
           </div>
           <ChatMessages />
         </div>
@@ -75,17 +75,17 @@ const Participant = ({ name, image }) => {
   return (
     <div className="chat-user-group video-call-blk d-flex align-items-center">
       <div className="img-users call-user">
-        <a href="profile.html">
+        <div href="profile.html">
           <img src={image} alt={name} />
-        </a>
+        </div>
       </div>
       <div className="chat-users chat-user-blk">
         <div className="user-titles">
           <h5>{name}</h5>
         </div>
         <div className="chat-user-icon">
-          <a href="javascript:void(0);"><img src={videoicon01} className="me-2" alt="Video Icon" /></a>
-          <a href="javascript:void(0);"><img src={videoicon02} alt="Video Icon" /></a>
+          <div href="javascript:void(0);"><img src={videoicon01} className="me-2" alt="Video Icon" /></div>
+          <div href="javascript:void(0);"><img src={videoicon02} alt="Video Icon" /></div>
         </div>
       </div>
     </div>
@@ -140,7 +140,7 @@ const ChatUser = () => {
     <div className="chat-search-group">
       <div className="chat-user-group clinic-user mb-0 d-flex align-items-center">
         <div className="img-users call-user">
-          <a href="profile.html"><img src={avatar2} alt="img" /></a>
+          <div href="profile.html"><img src={avatar2} alt="img" /></div>
           <span className="active-users bg-info"></span>
         </div>
         <div className="chat-users">
@@ -152,15 +152,15 @@ const ChatUser = () => {
           </div>
         </div>
         <ul className="call-list-add">
-          <li><a href="javascript:void(0);"><img src={profile} alt="img" />32</a></li>
-          <li><a href="javascript:void(0);"><img src={plus} alt="img" /></a></li>
+          <li><div href="javascript:void(0);"><img src={profile} alt="img" />32</div></li>
+          <li><div href="javascript:void(0);"><img src={plus} alt="img" /></div></li>
         </ul>
       </div>
       <div className="chat-search-list">
         <ul>
-          <li><a href="video-call.html"><img src={chatIcon1} alt="img" /></a></li>
-          <li><a href="voice-call.html"><img src={chatIcon2} alt="img" /></a></li>
-          <li><a href="javascript:void(0);"><img src={chatIcon3} alt="img" /></a></li>
+          <li><div href="video-call.html"><img src={chatIcon1} alt="img" /></div></li>
+          <li><div href="voice-call.html"><img src={chatIcon2} alt="img" /></div></li>
+          <li><div href="javascript:void(0);"><img src={chatIcon3} alt="img" /></div></li>
         </ul>
       </div>
     </div>
@@ -203,12 +203,12 @@ const VideoParticipant = ({ name, image }) => {
         <h4><img src={videoicon03} className="me-2" alt="img" />{name}</h4>
       </div>
       <div className="more-icon">
-        <a href="#" className="handraise-on me-2">
+        <div href="#" className="handraise-on me-2">
           <i className="fas fa-thumbtack"></i>
-        </a>
-        <a href="#" className="mic-off">
+        </div>
+        <div href="#" className="mic-off">
           <i className="fe fe-mic-off"></i>
-        </a>
+        </div>
       </div>
     </div>
   );
@@ -220,7 +220,7 @@ const MeetingFooter = () => {
       <div className="meet-icons">
        
         <div className="end-call-chat">
-          <a href="javascript:void(0);" className="btn btn-primary">End Call</a>
+          <div href="javascript:void(0);" className="btn btn-primary">End Call</div>
         </div>
        
       </div>

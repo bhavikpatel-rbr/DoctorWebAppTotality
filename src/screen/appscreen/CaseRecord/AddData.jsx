@@ -183,7 +183,7 @@ const AddData = ({ patient }) => {
             <div class="col-sm-7 col-6">
               <ul class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="chief_complaint.html">Add Data </a>
+                  <div href="chief_complaint.html">Add Data </div>
                 </li>
                 <li class="breadcrumb-item">
                   <i class="feather-chevron-right"></i>
@@ -192,7 +192,7 @@ const AddData = ({ patient }) => {
               </ul>
             </div>
             <div class="col-sm-5 col-6 text-end m-b-30">
-          <a
+          <div
             className={`btn btn-${
               isRecording ? "danger" : "primary-StartRecording"
             } `}
@@ -202,7 +202,7 @@ const AddData = ({ patient }) => {
             {/* <span className="ms-2"> */}
               Add Row
             {/* </span> */}
-          </a>
+          </div>
         </div>
           </div>
     

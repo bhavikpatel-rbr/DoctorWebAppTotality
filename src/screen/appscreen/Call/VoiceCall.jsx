@@ -21,7 +21,7 @@ import { ChevronRight } from 'react-feather';
 const Breadcrumb = () => (
   <ul className="breadcrumb">
     <li className="breadcrumb-item">
-      <a href="voice-call.html">App</a>
+      <div href="voice-call.html">App</div>
     </li>
     <li className="breadcrumb-item">
       <ChevronRight size={16} />
@@ -34,9 +34,9 @@ const Breadcrumb = () => (
 const UserCallEntry = ({ user }) => (
   <div className="chat-user-group d-flex align-items-center">
     <div className="img-users call-user">
-      <a href="profile.html">
+      <div href="profile.html">
         <img src={avatar1} alt="img" />
-      </a>
+      </div>
     </div>
     <div className="chat-users chat-user-blk">
       <div className="user-titles">
@@ -58,7 +58,7 @@ const CallList = ({ calls }) => (
   <div className="chat-widgets">
     <div className="call-all comman-space-flex">
       <h4>Calls<span>{calls.length}</span></h4>
-      <h5><a href="javascript:;">Show All</a></h5>
+      <h5><div href="javascript:;">Show All</div></h5>
     </div>
     {calls.map((call, index) => (
       <UserCallEntry key={index} user={call} />
@@ -80,19 +80,19 @@ const CurrentCall = ({ user, callDuration }) => (
       </div>
       <div className="voice-menu">
         <ul>
-          <li><a href="javascript:;">
+          <li><div href="javascript:;">
             <img src={voiceIcon1} alt="img" />
-            </a></li>
-          <li className="active"><a href="javascript:;">
+            </div></li>
+          <li className="active"><div href="javascript:;">
             <img src={voiceIcon2} alt="img" />
-            </a></li>
-          <li><a href="javascript:;">
+            </div></li>
+          <li><div href="javascript:;">
             <img src={voiceIcon3} alt="img" />
-            </a></li>
+            </div></li>
         </ul>
       </div>
       <div className="end-call-voice">
-        <a href="javascript:;" className="btn btn-primary">End Call</a>
+        <div href="javascript:;" className="btn btn-primary">End Call</div>
       </div>
     </div>
   </div>
@@ -138,7 +138,7 @@ const VoiceCall = () => {
             <div className="chat-search-group">
               <div className="chat-user-group mb-0 d-flex align-items-center">
                 <div className="img-users call-user">
-                  <a href="profile.html"><img src={avatar1} alt="img" /></a>
+                  <div href="profile.html"><img src={avatar1} alt="img" /></div>
                 </div>
                 <div className="chat-users">
                   <div className="user-titles">
@@ -152,9 +152,9 @@ const VoiceCall = () => {
               <div className="chat-search-list">
                 <ul>
                 <ul>
-                  <li><a href="video-call.html"><img src={chatIcon1} alt="img" /></a></li>
-                  <li><a href="voice-call.html"><img src={chatIcon2} alt="img" /></a></li>
-                  <li><a href="javascript:;"><img src={chatIcon3} alt="img" /></a></li>
+                  <li><div href="video-call.html"><img src={chatIcon1} alt="img" /></div></li>
+                  <li><div href="voice-call.html"><img src={chatIcon2} alt="img" /></div></li>
+                  <li><div href="javascript:;"><img src={chatIcon3} alt="img" /></div></li>
                 </ul>
                 </ul>
               </div>

@@ -17,7 +17,7 @@ import { ChevronRight } from 'react-feather';
 // Breadcrumb Component
 const Breadcrumb = () => (
   <ul className="breadcrumb">
-    <li className="breadcrumb-item"><a href="blog.html">Blog </a></li>
+    <li className="breadcrumb-item"><div href="blog.html">Blog </div></li>
     <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }}/></li>
     <li className="breadcrumb-item active">View Blog</li>
   </ul>
@@ -29,17 +29,17 @@ const BlogView = () => (
     <article className="blog blog-single-post">
       <h3 className="blog-title">Eye Care Routine To Get Rid Of Under Eye Circles And Puffiness</h3>
       <div className="blog-info clearfix">
-        <div className="post-right read-blks"><a href="#.">Read more in 8 Minutes</a></div>
+        <div className="post-right read-blks"><div href="#.">Read more in 8 Minutes</div></div>
         <div className="post-left date-blks">
           <ul>
-            <li><a href="#."><i className="feather-calendar"></i> <span>05 Jul 2022</span></a></li>
-            <li><a href="#."><i className="feather-message-square"></i> <span>58</span></a></li>
-            <li><a href="#."><i className="feather-eye"></i> <span>2.8k</span></a></li>
+            <li><div href="#."><i className="feather-calendar"></i> <span>05 Jul 2022</span></div></li>
+            <li><div href="#."><i className="feather-message-square"></i> <span>58</span></div></li>
+            <li><div href="#."><i className="feather-eye"></i> <span>2.8k</span></div></li>
           </ul>
         </div>
       </div>
       <div className="blog-image">
-        <a href="#."><img src={blogdetail} className="img-fluid" alt="Blog Detail" /></a>
+        <div href="#."><img src={blogdetail} className="img-fluid" alt="Blog Detail" /></div>
       </div>
       <div className="blog-content">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
@@ -57,14 +57,14 @@ const BlogView = () => (
 const BlogShare = () => (
   <div className="blog-share ">
     <div className="share-blogs d-flex align-items-center">
-      <a href="javascript:;"><img src={social1} alt="" /></a>
+      <div href="javascript:;"><img src={social1} alt="" /></div>
       <span className="ms-2">2.8k</span>
     </div>
     <ul className="social-share nav">
-      <li><a href="javascript:;"><img src={social1} alt="" /></a></li>
-      <li><a href="javascript:;"><img src={social2} alt="" /></a></li>
-      <li><a href="javascript:;"><img src={social3} alt="" /></a></li>
-      <li><a href="javascript:;"><img src={social4} alt="" /></a></li>
+      <li><div href="javascript:;"><img src={social1} alt="" /></div></li>
+      <li><div href="javascript:;"><img src={social2} alt="" /></div></li>
+      <li><div href="javascript:;"><img src={social3} alt="" /></div></li>
+      <li><div href="javascript:;"><img src={social4} alt="" /></div></li>
     </ul>
   </div>
 );
@@ -80,25 +80,7 @@ const BlogTags = () => (
   </div>
 );
 
-// Author Widget Component
-// const AuthorWidget = () => (
-//   <div className="widget author-widget ">
-//     <div className="authr-blog-group text-center">
-//       <div className="authr-blg-img mb-2">
-//         <img className="avatar" src={avatar3} alt="Author" />
-//       </div>
-//       <h2>Markhay Smith</h2>
-//       <span>Dentist</span>
-//       <p> Integer enim neque volutpat ac tincidunt vitae...</p>
-//       <ul className="nav social-blk">
-//         <li><a href="javascript:;"><img src={social1} alt="" /></a></li>
-//         <li><a href="javascript:;"><img src={social2} alt="" /></a></li>
-//         <li><a href="javascript:;"><img src={social3} alt="" /></a></li>
-//         <li><a href="javascript:;"><img src={social4} alt="" /></a></li>
-//       </ul>
-//     </div>
-//   </div>
-// );
+
 
 // Comments Component
 const Comments = () => (
@@ -133,7 +115,7 @@ const Comment = ({ author, avatar, time, content }) => (
   <li>
     <div className="comment">
       <div className="comment-author">
-        <a href="profile.html"><img className="avatar" src={avatar} alt={author} /></a>
+        <div href="profile.html"><img className="avatar" src={avatar} alt={author} /></div>
       </div>
       <div className="comment-block">
         <div className="comment-by">
@@ -142,7 +124,7 @@ const Comment = ({ author, avatar, time, content }) => (
             <span className="week-list">{time}</span>
           </div>
           <span className="float-end">
-            <span className="blog-reply"><a href="#."><i className="fa fa-reply"></i> Reply</a></span>
+            <span className="blog-reply"><div href="#."><i className="fa fa-reply"></i> Reply</div></span>
           </span>
         </div>
         <p>{content}</p>
@@ -208,7 +190,7 @@ const RelatedPosts = () => (
   <div className="widget post-widget mt-5">
     <div className="relat-head">
       <h5>Related Posts</h5>
-      <a href="javascript:;">Show All</a>
+      <div href="javascript:;">Show All</div>
     </div>
     <ul className="latest-posts">
       <RelatedPost 
@@ -237,12 +219,12 @@ const RelatedPosts = () => (
 const RelatedPost = ({ category, date, title, imgSrc }) => (
   <li>
     <div className="post-thumb">
-      <a href="blog-details.html">
+      <div href="blog-details.html">
         <img className="img-fluid" src={imgSrc} alt="Related Post" />
-      </a>
+      </div>
     </div>
     <div className="post-info">
-      <h4><a href="blog-details.html">{title}</a></h4>
+      <h4><div href="blog-details.html">{title}</div></h4>
       <p><span>{category}</span> | <span>{date}</span></p>
     </div>
   </li>
@@ -253,14 +235,14 @@ const TagsWidget = () => (
   <div className="widget tags-widget">
     <h5>Tags</h5>
     <ul className="tags">
-      <li><a href="#.">#Health</a></li>
-      <li><a href="#.">#Hospital</a></li>
-      <li><a href="#.">#Doctors</a></li>
-      <li><a href="#.">#Nurse</a></li>
-      <li><a href="#.">#Wardboy</a></li>
-      <li><a href="#.">#Care</a></li>
-      <li><a href="#.">#OT</a></li>
-      <li><a href="#.">#ICU</a></li>
+      <li><div href="#.">#Health</div></li>
+      <li><div href="#.">#Hospital</div></li>
+      <li><div href="#.">#Doctors</div></li>
+      <li><div href="#.">#Nurse</div></li>
+      <li><div href="#.">#Wardboy</div></li>
+      <li><div href="#.">#Care</div></li>
+      <li><div href="#.">#OT</div></li>
+      <li><div href="#.">#ICU</div></li>
     </ul>
   </div>
 );
@@ -316,11 +298,11 @@ const Categories = () => (
   <div className="widget categories-widget">
     <h5>Categories</h5>
     <ul className="categories">
-      <li><a href="#.">Health<span>(30)</span></a></li>
-      <li><a href="#.">Business<span>(28)</span></a></li>
-      <li><a href="#.">Technology<span>(25)</span></a></li>
-      <li><a href="#.">Hospital<span>(20)</span></a></li>
-      <li><a href="#.">Medical<span>(16)</span></a></li>
+      <li><div href="#.">Health<span>(30)</span></div></li>
+      <li><div href="#.">Business<span>(28)</span></div></li>
+      <li><div href="#.">Technology<span>(25)</span></div></li>
+      <li><div href="#.">Hospital<span>(20)</span></div></li>
+      <li><div href="#.">Medical<span>(16)</span></div></li>
     </ul>
   </div>
 );

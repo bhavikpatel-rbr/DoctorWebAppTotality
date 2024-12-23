@@ -82,9 +82,9 @@ const DepartmentList = () => {
                               value={searchQuery}
                               onChange={handleSearchChange}
                             />
-                            <a className="btn">
+                            <div className="btn">
                               <img src={searchnormal} alt="Search" />
-                            </a>
+                            </div>
                           </form>
                         </div>
                         <div className="add-group">
