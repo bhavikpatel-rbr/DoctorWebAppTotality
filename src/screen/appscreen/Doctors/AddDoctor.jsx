@@ -172,6 +172,7 @@ const AddDoctor = () => {
                       <h4>Add Doctor</h4>
                     </div>
                   </div>
+                  
                   <div className="col-12 col-md-6 col-xl-4">
                     <div className="input-block local-forms">
                       <label>

@@ -59,7 +59,7 @@ body::-webkit-scrollbar-thumb {
 /* General scrollbar styling (for Firefox and other browsers that support it) */
 body {
   scrollbar-width: thin; /* Firefox: sets scrollbar width */
-  scrollbar-color: #6969dd #e0e0e0; /* Firefox: sets thumb and track colors */
+  /* scrollbar-color: #6969dd #e0e0e0; Firefox: sets thumb and track colors */
 }
 
 #donut-chart-dash {

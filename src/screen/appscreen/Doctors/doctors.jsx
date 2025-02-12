@@ -82,9 +82,9 @@ const DoctorList = () => {
                               value={searchQuery}
                               onChange={handleSearchChange}
                             />
-                            <div className="btn">
+                            {/* <div className="btn">
                               <img src={searchnormal} alt="Search" />
-                            </div>
+                            </div> */}
                           </form>
                         </div>
                         <div className="add-group">
@@ -103,35 +103,35 @@ const DoctorList = () => {
                   </div>
                 </div>
               </div>
-              <div className="table-responsive-container">
+              
                 <div className="table-responsive">
                   <table className="table border-0 custom-table comman-table datatable mb-0">
                     <thead>
                       <tr>
-                        <th>Name</th>
+                        <th style={{textAlign:'left'}}>Name</th>
                         <th>Department</th>
                         <th>Experience</th>
                         <th>Specialization</th>
-                        <th>Degree</th>
+                        
                         <th>Mobile</th>
                         <th>Email</th>
-                        <th>Joining Date</th>
+                        
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentRows?.map((doctor) => (
                         <tr key={doctor?.id}>
-                          <td className="profile-image">
+                          <td className="profile-image" style={{textAlign:'left'}}>
                             <div href="profile.html">{doctor?.firstname}&nbsp;{doctor?.lastname}</div>
                           </td>
-                          <td>{doctor?.department}</td>
+                          <td >{doctor?.department}</td>
                           <td>{doctor?.years_of_experience}</td>
                           <td>{doctor?.specialization}</td>
-                          <td>{doctor?.education}</td>
+                         
                           <td><div href="javascript:;">{doctor?.phone}</div></td>
-                          <td><div href={`mailto:${doctor?.email}`}>{doctor?.email}</div></td>
-                          <td>{doctor?.created_at}</td>
+                          <td><div style={{textAlign:'left'}}   href={`mailto:${doctor?.email}`}>{doctor?.email}</div></td>
+                          
                           <td className="text-end">
                             <button
                               className="btn btn-sm btn-danger me-2"
@@ -156,7 +156,7 @@ const DoctorList = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
+             
               <nav>
                 <ul className="pagination justify-content-center" style={{ marginTop: '20px' }}>
                   {Array.from({ length: totalPages }, (_, index) => (

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-
+import menuicon10 from "../img/icons/menu-icon-10.svg";
 import logo from '../img/logo.svg';
 import baricon from "../img/icons/bar-icon.svg";
 import searchnormal from "../img/icons/search-normal.svg";
+import logout from "../img/icons/logout.svg";
 import noteicon02 from "../img/icons/note-icon-02.svg";
 import noteicon01 from "../img/icons/note-icon-01.svg";
 import user from "../img/user1.jpg";
@@ -240,7 +241,9 @@ const Header = () => {
             <span className="user-img">
               <img src={user} alt="Admin" />
             </span>
+            
           </Link>
+         
           <div className="dropdown-menu">
             <Link className="dropdown-item" href="profile.html">
               My Profile
@@ -256,6 +259,15 @@ const Header = () => {
             </Link>
           </div>
         </li>
+        <ul className="nav user-menu float-end" >
+        <li className="nav-item dropdown has-arrow user-profile-list" >
+        <Link className="dropdown-toggle nav-link user-link"  style={{borderWidth:'5px' , borderColor:"black"}}>
+          <span className="user-img">
+                <img src={logout} alt="Logout" />
+              </span>
+          </Link>
+        </li>
+        </ul>
         {/* <li className="nav-item ">
           <Link href="settings.html" className="hasnotifications nav-link">
             <img src={settingicon01} alt="" />
