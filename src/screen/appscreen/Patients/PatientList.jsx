@@ -16,7 +16,7 @@ import { allPatientsUsersAction, getAllUserAction } from '../../../reduxtool/app
 import { useDispatch } from 'react-redux';
 import { patientEditData } from '../../../reduxtool/editstate/editSlice';
 
-const rowsPerPage = 8;
+const rowsPerPage = 25;
 const PatientList = () => {
    const users = useSelector(appSelector);
    const dispatch = useDispatch();
@@ -91,9 +91,7 @@ const PatientList = () => {
                               value={searchQuery}
                               onChange={handleSearchChange}
                             />
-                            <div className="btn">
-                              <img src={searchnormal} alt="Search" />
-                            </div>
+                            
                           </form>
                         </div>
                         <div className="add-group">
@@ -119,13 +117,12 @@ const PatientList = () => {
                   <thead>
                     <tr>
 
-                      <th>Name</th>
+                      <th  style={{textAlign:'left'}}>Name</th>
                       <th>Department</th>
                       <th>Specialization</th>
                       <th>City</th>
                       <th>Mobile</th>
-                      <th>Email</th>
-                      <th>Joining Date</th>
+                      <th style={{textAlign:'left'}}>Email</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -134,14 +131,14 @@ const PatientList = () => {
                       <tr key={doctor.id}>
 
                         <td className="profile-image">
-                          <div href="profile.html">{doctor.firstname}&nbsp;{doctor.lastname}</div>
+                          <div href="profile.html" style={{textAlign:'left'}}>{doctor.firstname}&nbsp;{doctor.lastname}</div>
                         </td>
                         <td>{doctor.department}</td>
                         <td>{doctor.specialization}</td>
                         <td>{doctor.city}</td>
                         <td><div href="javascript:;">{doctor.phone}</div></td>
-                        <td><div href={`mailto:${doctor.email}`}>{doctor.email}</div></td>
-                        <td>{doctor.created_at}</td>
+                        <td><div href={`mailto:${doctor.email}`} style={{textAlign:'left'}}>{doctor.email}</div></td>
+                       
                         <td className="text-end">
                           <button
                             className="btn btn-sm btn-danger me-2"

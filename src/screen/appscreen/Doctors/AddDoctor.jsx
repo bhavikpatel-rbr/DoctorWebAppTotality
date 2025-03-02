@@ -7,7 +7,7 @@ import { registerDoctorAction } from '../../../reduxtool/app/middleware';
 import { useDispatch } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { TextArea } from '@blueprintjs/core';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const AddDoctor = () => {
   const [avatar, setAvatar] = useState(null);
@@ -153,7 +153,7 @@ const AddDoctor = () => {
         <div className="row">
           <div className="col-sm-12">
             <ul className="breadcrumb">
-              <li className="breadcrumb-item"><div href="doctors.html">Doctors</div></li>
+              <li className="breadcrumb-item"><Link  to={"/doctors"}>Doctors</Link></li>
               <li className="breadcrumb-item"><ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} /></li>
               <li className="breadcrumb-item active">Add Doctor</li>
             </ul>
@@ -642,21 +642,22 @@ const AddDoctor = () => {
                   
                   <div className="col-12">
                     <div className="doctor-submit text-end">
-                      <button
-                        type="submit"
-                        className="btn btn-primary submit-form me-2"
-                      >
-                        Save
-                      </button>
-                      <button
+                    <button
                       onClick={()=>{
                         navigate('/doctors')
                       }}
                         type="button"
-                        className="btn btn-primary cancel-form"
+                        className="btn btn-primary cancel-form me-2"
                       >
                         Cancel
                       </button>
+                      <button
+                        type="submit"
+                        className="btn btn-primary submit-form "
+                      >
+                        Save
+                      </button>
+                     
                     </div>
                   </div>
                 </div>

@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { doctorEditData } from '../../../reduxtool/editstate/editSlice';
 
-const rowsPerPage = 8;
+const rowsPerPage = 25;
 const DoctorList = () => {
   const users = useSelector(appSelector);
   const router = useNavigate();
@@ -114,7 +114,7 @@ const DoctorList = () => {
                         <th>Specialization</th>
                         
                         <th>Mobile</th>
-                        <th>Email</th>
+                        <th style={{textAlign:'left'}}>Email</th>
                         
                         <th>Action</th>
                       </tr>
