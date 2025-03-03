@@ -147,14 +147,21 @@ const Sidebar = () => {
               {/* </ul> */}
             </li>
             <li className={`submenu ${openSubMenu === 'staff' ? 'active' : ''}`}>
-              <Link to="#" onClick={() => toggleSubMenu('staff')}>
+            <Link to="/stafflist"  onClick={() => handleLinkClick("/stafflist")}>
+                <span className="menu-side">
+                  <img src={menuicon03} alt="stafflist" />
+                </span>
+                <span> Staff </span>
+                <span className="menu-arrow"></span>
+              </Link>
+              {/* <Link to="#" onClick={() => toggleSubMenu('staff')}>
                 <span className="menu-side">
                   <img src={menuicon08} alt="Staff" />
                 </span>
                 <span> Staff </span>
                 <span className="menu-arrow"></span>
-              </Link>
-              <ul className={`${openSubMenu === 'staff' ? 'd-block' : 'd-none'}`}>
+              </Link> */}
+              {/* <ul className={`${openSubMenu === 'staff' ? 'd-block' : 'd-none'}`}>
                 <li><Link
                   to="/stafflist"
                   className={activeLink === "/stafflist" ? "active" : ""}
@@ -196,7 +203,48 @@ const Sidebar = () => {
                   className={activeLink === "/attendancesheet" ? "active" : ""}
                   onClick={() => handleLinkClick("/attendancesheet")}
                 >Attendance</Link></li>
-              </ul>
+              </ul> */}
+            </li>
+            <li className={`submenu ${openSubMenu === 'leaverequest' ? 'active' : ''}`}>
+            <Link to="/leaverequest"  onClick={() => handleLinkClick("/leaverequest")}>
+                <span className="menu-side">
+                  <img src={menuicon03} alt="stafflist" />
+                </span>
+                <span> Leave </span>
+                <span className="menu-arrow"></span>
+              </Link>
+              {/* <Link to="#" onClick={() => toggleSubMenu('leaverequest')}>
+                <span className="menu-side">
+                  <img src={menuicon08} alt="Staff" />
+                </span>
+                <span> Leave </span>
+                <span className="menu-arrow"></span>
+              </Link> */}
+              {/* <ul className={`${openSubMenu === 'leaverequest' ? 'd-block' : 'd-none'}`}>
+              
+                
+                <li><Link
+                  to="/addleave"
+                  className={activeLink === "/addleave" ? "active" : ""}
+                  onClick={() => handleLinkClick("/addleave")}
+                >Add Leaves</Link></li>
+                <li><Link
+                  to="/editleave"
+                  className={activeLink === "/editleave" ? "active" : ""}
+                  onClick={() => handleLinkClick("/editleave")}
+                >Edit Leaves</Link></li>
+                <li><Link
+                  to="/leaverequest"
+                  className={activeLink === "/leaverequest" ? "active" : ""}
+                  onClick={() => handleLinkClick("/leaverequest")}
+                >Leaves</Link></li>
+                
+                <li><Link
+                  to="/attendancesheet"
+                  className={activeLink === "/attendancesheet" ? "active" : ""}
+                  onClick={() => handleLinkClick("/attendancesheet")}
+                >Attendance</Link></li>
+              </ul> */}
             </li>
             <li className={`submenu ${openSubMenu === 'appointments' ? 'active' : ''}`}>
               <Link to="#" onClick={() => toggleSubMenu('appointments')}>

@@ -14,11 +14,12 @@ import user06 from "../img/user-06.jpg";
 import settingicon01 from "../img/icons/setting-icon-01.svg";
 import { useSelector } from "react-redux";
 import { authSelector } from "../reduxtool/auth/authSlice";
-
+import { useDispatch } from 'react-redux';
+import { logoutAction } from '../reduxtool/auth/middleware';
 const Header = () => {
   const [toggle, SetToggle] = useState(false);
   const userData = useSelector(authSelector)
-
+ const dispatch = useDispatch()
   console.log("userData",userData?.userDetails);
   
   
@@ -261,11 +262,15 @@ const Header = () => {
         </li>
         <ul className="nav user-menu float-end" >
         <li className="nav-item dropdown has-arrow user-profile-list" >
-        <Link className="dropdown-toggle nav-link user-link"  style={{borderWidth:'5px' , borderColor:"black"}}>
-          <span className="user-img">
-                <img src={logout} alt="Logout" />
-              </span>
-          </Link>
+        <Link
+  className="dropdown-toggle nav-link user-link"
+  style={{ borderWidth: "5px", borderColor: "black" }}
+  onClick={() => dispatch(logoutAction())} // Calls logout action on click
+>
+  <span className="user-img">
+    <img src={logout} alt="Logout" />
+  </span>
+</Link>
         </li>
         </ul>
         {/* <li className="nav-item ">

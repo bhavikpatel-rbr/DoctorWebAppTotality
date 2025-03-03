@@ -515,7 +515,7 @@ const EditStaff = ({ staffData, onSubmit }) => {
                                                 </div>
                                               </div>
                             
-                                              <div className="col-12 col-md-12 col-xl-5">
+                                              <div className="col-12 col-md-12 col-xl-6">
                                                 <div className="input-block local-top-form">
                                                   <label className="local-top">Avatar <span className="login-danger">*</span></label>
                                                   <div className="settings-btn upload-files-avator">
@@ -532,10 +532,12 @@ const EditStaff = ({ staffData, onSubmit }) => {
                                                 </div>
                                               </div>
                             
-                                              <div className="col-12 col-md-6 col-xl-2">
-                                                <div className="input-block select-gender">
-                                                  <label className="gen-label">Gender <span className="login-danger">*</span></label>
-                                                  <div className="form-check-inline">
+                                              <div className="col-12 col-md-6 col-xl-3" style={{justifyContent:"center" , marginTop:"7px", alignItems:"center"}} >
+                    <div className="input-block select-gender" style={{flexDirection:"row" ,alignContent:"center", alignItems:"center"}}>
+                      <label style={{color: "#333448",fontSize:"15px",fontWeight:"500"
+   
+    }} >Gender <span className="login-danger">*</span></label>
+                      <div className="form-check-inline" style={{marginLeft:"20px"}}>
                                                     <label className="form-check-label">
                                                       <input
                                                         type="radio"
@@ -567,10 +569,12 @@ const EditStaff = ({ staffData, onSubmit }) => {
                                                 </div>
                                               </div>
                             
-                                              <div className="col-12 col-md-6 col-xl-2">
-                                                <div className="input-block select-gender">
-                                                  <label className="gen-label">Status <span className="login-danger">*</span></label>
-                                                  <div className="form-check-inline">
+                                              <div className="col-12 col-md-6 col-xl-3" style={{justifyContent:"center" , marginTop:"7px", alignItems:"center"}} >
+                    <div className="input-block select-gender">
+                    <label style={{color: "#333448",fontSize:"15px",fontWeight:"500"
+   
+  }} >Status <span className="login-danger">*</span></label>
+                      <div className="form-check-inline" style={{marginLeft:"20px"}}>
                                                     <label className="form-check-label">
                                                       <input
                                                         type="radio"
@@ -607,21 +611,22 @@ const EditStaff = ({ staffData, onSubmit }) => {
                             
                                               <div className="col-12">
                                                 <div className="doctor-submit text-end">
-                                                  <button
-                                                    type="submit"
-                                                    className="btn btn-primary submit-form me-2"
-                                                  >
-                                                    Save Changes
-                                                  </button>
-                                                  <button
+                                                <button
                                                    onClick={()=>{
                                                     navigate('/stafflist')
                                                    }}
                                                     type="button"
-                                                    className="btn btn-primary cancel-form"
+                                                    className="btn btn-primary cancel-form  me-2"
                                                   >
                                                     Cancel
                                                   </button>
+                                                  <button
+                                                    type="submit"
+                                                    className="btn btn-primary submit-form"
+                                                  >
+                                                    Save Changes
+                                                  </button>
+                                                  
                                                 </div>
                                               </div>
                                             </div>

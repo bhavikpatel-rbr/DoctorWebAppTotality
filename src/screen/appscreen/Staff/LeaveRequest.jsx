@@ -122,13 +122,18 @@ const LeaveRequest = () => {
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
-
+ const [searchQuery, setSearchQuery] = useState('');
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(data.length / rowsPerPage);
   const handleSearch = (e) => {
     e.preventDefault();
     // Implement search functionality
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
   };
 
   return (
@@ -157,17 +162,13 @@ const LeaveRequest = () => {
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
                           <form>
-                            <input
+                          <input
                               type="text"
                               className="form-control"
                               placeholder="Search here"
+                              value={searchQuery}
+                              onChange={handleSearchChange}
                             />
-                            <div className="btn">
-                              <img
-                                src={searchnormal}
-                                alt="Search"
-                              />
-                            </div>
                           </form>
                         </div>
                         <div className="add-group">

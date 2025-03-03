@@ -11,20 +11,37 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("Full Name is required"),
+    username: Yup.string()
+      .trim()
+      .min(3, "Full Name must be at least 3 characters long")
+      .max(50, "Full Name cannot exceed 50 characters")
+      .matches(/^[a-zA-Z\s]+$/, "Full Name can only contain letters and spaces")
+      .required("Full Name is required"),
+    
     email: Yup.string()
-      .email("Invalid email format")
+      .email("Please enter a valid email address")
       .required("Email is required"),
+    
     password: Yup.string()
       .min(8, "Password must be at least 8 characters long")
+      .max(20, "Password cannot exceed 20 characters")
+      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+      .matches(/[0-9]/, "Password must contain at least one number")
+      .matches(/[@$!%*?&]/, "Password must contain at least one special character (@$!%*?&)")
       .required("Password is required"),
+
+    phone: Yup.string()
+    .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
+    .required("Phone number is required"),
+
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .oneOf([Yup.ref("password"), null], "Passwords do not match")
       .required("Confirm Password is required"),
-    agreeToTerms: Yup.bool().oneOf(
-      [true],
-      "You must accept the terms and privacy policy"
-    ),
+    
+    agreeToTerms: Yup.bool()
+      .oneOf([true], "You must accept the Terms and Privacy Policy")
+      .required("You must accept the Terms and Privacy Policy"),
   });
 
   const dispatch = useDispatch();
@@ -115,25 +132,17 @@ const SignUp = () => {
                           </div>
 
                           <div className="input-block">
-                            <label htmlFor="phone">
-                              phone <span className="login-danger">*</span>
-                            </label>
-                            <Field
-                              id="phone"
-                              name="phone"
-                              className={`form-control ${
-                                errors.phone && touched.phone
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
-                              type="text"
-                            />
-                            <ErrorMessage
-                              name="phone"
-                              component="div"
-                              className="invalid-feedback"
-                            />
-                          </div>
+  <label htmlFor="phone">
+    Phone <span className="login-danger">*</span>
+  </label>
+  <Field
+    id="phone"
+    name="phone"
+    className={`form-control ${errors.phone && touched.phone ? "is-invalid" : ""}`}
+    type="text"
+  />
+  <ErrorMessage name="phone" component="div" className="invalid-feedback" />
+</div>
 
                           <div className="input-block">
                             <label htmlFor="password">
@@ -180,20 +189,19 @@ const SignUp = () => {
                           </div>
 
                           <div className="forgotpass">
-                            <div className="remember-me">
-                              <label className="custom_check mr-2 mb-0 d-inline-flex remember-me">
-                                I agree to the &nbsp;terms of
-                                service&nbsp;and&nbsp;privacy policy&nbsp;
-                                <Field type="checkbox" name="agreeToTerms" />
-                                <span className="checkmark"></span>
-                              </label>
-                              <ErrorMessage
-                                name="agreeToTerms"
-                                component="div"
-                                className="invalid-feedback"
-                              />
-                            </div>
-                          </div>
+  <div className="remember-me">
+    <label className="custom_check mr-2 mb-0 d-inline-flex remember-me">
+      I agree to the &nbsp;terms of service&nbsp;and&nbsp;privacy policy&nbsp;
+      <Field
+        type="checkbox"
+        name="agreeToTerms"
+        className={errors.agreeToTerms && touched.agreeToTerms ? "is-invalid" : ""}
+      />
+      <span className="checkmark"></span>
+    </label>
+    <ErrorMessage name="agreeToTerms" component="div" className="invalid-feedback" />
+  </div>
+</div>
 
                           <div className="input-block login-btn">
                             <button

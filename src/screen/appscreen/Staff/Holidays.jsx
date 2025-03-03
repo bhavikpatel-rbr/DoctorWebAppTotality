@@ -57,15 +57,20 @@ const Holidays = () => {
               <div className="page-table-header mb-2">
                 <div className="row align-items-center">
                   <div className="col">
-                    <div className="doctor-table-blk">
+                    <div className="doctor-table-blk-holiday">
                       <h3>Holidays</h3>
                       <div className="doctor-search-blk">
-                        <div className="top-nav-search table-search-blk">
-                          <form>
-                            <input type="text" className="form-control" placeholder="Search here" />
-                            <div className="btn"><img src={searchnormal} alt="" /></div>
-                          </form>
-                        </div>
+                        {/* <div className="top-nav-search table-search-blk">
+                          <form> */}
+                          {/* <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Search here"
+                              value={searchQuery}
+                              onChange={handleSearchChange}
+                            /> */}
+                          {/* </form>
+                        </div> */}
                         <div className="add-group">
                           <button 
                             className="btn btn-primary add-pluss ms-2" 

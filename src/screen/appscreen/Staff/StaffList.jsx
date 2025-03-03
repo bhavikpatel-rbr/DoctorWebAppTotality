@@ -62,8 +62,8 @@ const StaffList = () => {
                 <div href="staff-list.html">Staffs </div>
               </li>
               <li className="breadcrumb-item">
-                <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
-              </li>
+                             <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
+                           </li>
               <li className="breadcrumb-item active">Staff List</li>
             </ul>
           </div>
@@ -82,17 +82,14 @@ const StaffList = () => {
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
                           <form>
-                            <input
+                          <input
                               type="text"
                               className="form-control"
                               placeholder="Search here"
+                              value={searchQuery}
+                              onChange={handleSearchChange}
                             />
-                            <div className="btn">
-                              <img
-                                src={searchnormal}
-                                alt="Search"
-                              />
-                            </div>
+                           
                           </form>
                         </div>
                         <div className="add-group">
