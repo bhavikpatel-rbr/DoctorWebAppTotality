@@ -4,7 +4,10 @@ import { ChevronRight } from 'react-feather';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { format } from "date-fns";
 import * as Yup from 'yup';
+
+import Select from 'react-select';
 import { editSelector } from '../../../reduxtool/editstate/editSlice';
 import DatePicker from 'react-datepicker';
 import { updateDepartmentAction, updateScheduleAction } from '../../../reduxtool/app/middleware';
@@ -13,8 +16,22 @@ const EditSchedule = () => {
   const shedule = useSelector(editSelector)
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  
+  const daysOptions = [
+    { value: 'Monday', label: 'Monday' },
+    { value: 'Tuesday', label: 'Tuesday' },
+    { value: 'Wednesday', label: 'Wednesday' },
+    { value: 'Thursday', label: 'Thursday' },
+    { value: 'Friday', label: 'Friday' },
+    { value: 'Saturday', label: 'Saturday' },
+    { value: 'Sunday', label: 'Sunday' }
+  ];
 
+  const formatTime = (date) => {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return ""; // ✅ Handle invalid Date case
+    }
+    return date.toTimeString().split(" ")[0]; // ✅ Converts to "HH:mm:ss"
+  };
   console.log('=============schedule=======================');
   console.log(shedule);
   console.log('==================schedule==================');
@@ -28,8 +45,8 @@ const EditSchedule = () => {
         clinic_id:shedule?.sheduleEdit?.clinic_id,
               clinic_id: shedule?.sheduleEdit?.clinic_id,
               day_of_week: shedule?.sheduleEdit?.day_of_week,
-              start_time: shedule?.sheduleEdit?.start_time,
-              end_time: shedule?.sheduleEdit?.end_time
+              start_time: formatTime(shedule?.sheduleEdit?.start_time),
+              end_time: formatTime(shedule?.sheduleEdit?.end_time)
        
       },
       validationSchema: Yup.object({
@@ -117,66 +134,87 @@ const EditSchedule = () => {
                       </select>
                     </div>
                   </div> */}
-                  <div className="col-12 col-md-6 col-xl-4">
-                    <div className="input-block local-forms ">
-                      <label>
-                        Day <span className="login-danger">*</span>
-                      </label>
-                      <input
-                        className="form-control "
-                        type="text"
-                        name="day_of_week"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.day_of_week}
-                      />
-                       {formik.touched.day_of_week && formik.errors.day_of_week ? (
-                        <div className="text-danger">{formik.errors.day_of_week}</div>
-                      ) : null}
-                    </div>
-                  </div>
-                  <div className="col-12 col-md-6 col-xl-4">
+                 <div className="col-12 col-md-6 col-xl-4">
+  <div className="input-block local-forms">
+    <label>Day <span className="login-danger">*</span></label>
+    <Select
+      options={daysOptions}
+      value={daysOptions.find(option => option.value === formik.values.day_of_week)}
+      onChange={(selectedOption) => formik.setFieldValue('day_of_week', selectedOption.value)}
+      // className="form-control"
+      // classNamePrefix="select"
+      styles={{
+        control: (provided) => ({
+          ...provided,
+          minHeight: '45px',
+          borderRadius: '10px',
+          border: '2px solid rgba(46, 55, 164, 0.1)',
+          boxShadow: 'none',
+          fontSize: '14px',
+          fontFamily: 'inherit',
+         
+        
+        }),
+      }}
+    />
+    {formik.touched.day_of_week && formik.errors.day_of_week ? (
+      <div className="text-danger">{formik.errors.day_of_week}</div>
+    ) : null}
+  </div>
+</div>
+
+
+                  {/* Start Time Picker */}
+                  <div className="col-12 col-md-6 col-xl-2">
                     <div className="input-block local-forms">
-                      <label>
-                        From Time<span className="login-danger">*</span>
-                      </label>
-                     
-                        <input
-                          type="text"
-                          className="form-control"
-                         
-                          name="start_time"
-                          onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.start_time}
-                        />
-                         {formik.touched.start_time && formik.errors.start_time ? (
+                      <label>From Time <span className="login-danger">*</span></label>
+                      <DatePicker
+                        selected={formik.values.start_time ? new Date(`1970-01-01T${formik.values.start_time}`) : null} // Convert string to Date
+                        onChange={(date) => {
+                          if (date) {
+                            const formattedTime = format(date, "HH:mm:ss"); // ✅ Convert Date to "HH:mm:ss"
+                            formik.setFieldValue("start_time", formattedTime);
+                          }
+                        }}
+                       
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeIntervals={15}
+                        timeCaption="Time"
+                        dateFormat="hh:mm:ss aa"
+                        className="form-control"
+                      />
+                      {formik.touched.start_time && formik.errors.start_time ? (
                         <div className="text-danger">{formik.errors.start_time}</div>
                       ) : null}
-                     
                     </div>
                   </div>
-                  <div className="col-12 col-md-6 col-xl-4">
+
+                  {/* End Time Picker */}
+                  <div className="col-12 col-md-6 col-xl-2">
                     <div className="input-block local-forms">
-                      <label>
-                        To Time<span className="login-danger">*</span>
-                      </label>
-                     
-                        <input
-                          type="text"
-                          className="form-control"
-                        
-                          name="end_time"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.end_time}
-                        />
-                         {formik.touched.end_time && formik.errors.end_time ? (
+                      <label>To Time <span className="login-danger">*</span></label>
+                      <DatePicker
+                        selected={formik.values.end_time ? new Date(`1970-01-01T${formik.values.end_time}`) : null} // Convert string to Date
+                        onChange={(date) => {
+                          if (date) {
+                            const formattedTime = format(date, "HH:mm:ss"); // ✅ Convert Date to "HH:mm:ss"
+                            formik.setFieldValue("end_time", formattedTime);
+                          }
+                        }}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeIntervals={15}
+                        timeCaption="Time"
+                        dateFormat="hh:mm:ss aa"
+                        className="form-control"
+                      />
+                      {formik.touched.end_time && formik.errors.end_time ? (
                         <div className="text-danger">{formik.errors.end_time}</div>
                       ) : null}
-                     
                     </div>
                   </div>
+
                   {/* <div className="col-12 col-sm-12">
                     <div className="input-block local-forms">
                       <label>
@@ -228,16 +266,17 @@ const EditSchedule = () => {
                 </div>
                 <div className="col-12">
                   <div className="doctor-submit text-end">
-                    <button type="submit" className="btn btn-primary submit-form me-2">
-                      Update Schedule
-                    </button>
-                    <button 
+                  <button 
                      onClick={()=>{
                       navigate('/schedulelist')
                     }}
-                    type="button" className="btn btn-primary cancel-form">
+                    type="button" className="btn btn-primary cancel-form me-2 ">
                       Cancel
                     </button>
+                    <button type="submit" className="btn btn-primary submit-form ">
+                      Update Schedule
+                    </button>
+                   
                   </div>
                 </div>
               </form>

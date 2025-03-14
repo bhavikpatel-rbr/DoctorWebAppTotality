@@ -16,7 +16,7 @@ const DepartmentList = () => {
   // Sample data
   
   const department = useSelector(appSelector)
-  const rowsPerPage = 8;
+  const rowsPerPage = 25;
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
   const router = useNavigate()
@@ -82,9 +82,9 @@ const DepartmentList = () => {
                               value={searchQuery}
                               onChange={handleSearchChange}
                             />
-                            <div className="btn">
+                            {/* <div className="btn">
                               <img src={searchnormal} alt="Search" />
-                            </div>
+                            </div> */}
                           </form>
                         </div>
                         <div className="add-group">
@@ -110,7 +110,7 @@ const DepartmentList = () => {
                   <thead>
                     <tr>
 
-                      <th>Department</th>
+                      <th  style={{textAlign:"left"}}>Department</th>
                       <th>Department Head</th>
                       <th>Description</th>
                       <th>Date</th>
@@ -121,18 +121,13 @@ const DepartmentList = () => {
                   <tbody>
                     {currentRows?.map(department => (
                       <tr key={department.id}>
-                        <td>{department.department_name}</td>
-                        <td className="profile-image">
-                          <Link to="/profile">
-                            static
-                          </Link>
-                        </td>
-                        <td>static</td>
+                        <td style={{textAlign:"left"}}>{department.department_name}</td>
+                        <td>{department.department_head}</td>
+                        <td>{department.description}</td>
                         <td>{department.created_at}</td>
                         <td>
-                          <button className={`custom-badge ${department.status === 'Active' ? 'status-green' : 'status-green'}`}>
-                            {/* 'status-pink' */}
-                            Active
+                          <button className={`custom-badge ${department.status === "1" ? 'status-green' : 'status-red'}`}>
+                          {department.status === "1" ? "Active" :"Inactive"}
                           </button>
                         </td>
                         <td className="text-end">

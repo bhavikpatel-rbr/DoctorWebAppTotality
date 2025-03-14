@@ -41,11 +41,12 @@ export const loginAdminByEmailAction = createAsyncThunk(
     dispatch(showLoader({ loading: true, message: "happening" }))
     try {
       const response = await loginWithEmailAsync(loginRequest)
+      console.log("response?",response);
       if (response?.data) {
         dispatch(hideLoader())
         return response?.data
       }
-      console.log("response?",response);
+     
       
       dispatch(
         showMessage({
@@ -67,10 +68,10 @@ export const registerAdminByEmailAction = createAsyncThunk(
     dispatch(showLoader({ loading: true, message: "happening" }))
     try {
       const response = await registerWithEmailAsync(registerRequest)
-      console.log("response?",response);
-      if (response?.data[0]?.message) {
+      console.log("response?",response.message);
+      if (response?.data) {
         dispatch(hideLoader())
-        return response?.data[0]?.message
+        return response?.data
       }
 
       dispatch(

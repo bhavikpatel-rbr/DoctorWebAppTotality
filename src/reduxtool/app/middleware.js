@@ -375,7 +375,7 @@ export const  getbloglistAction = createAsyncThunk(
 );
 
 export const  getMedicallistAction = createAsyncThunk(
-  "auth/getmedicalrecordlist",
+  "auth/getmedicalstorelist",
   async (_, { rejectWithValue, dispatch }) => {
     dispatch(showLoader({ loading: true, message: "happening" }));
     try {

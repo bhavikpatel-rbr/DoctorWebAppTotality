@@ -12,7 +12,7 @@ import refresh from '../../../img/icons/re-fresh.svg'
 import searchnormal from '../../../img/icons/search-normal.svg'
 import { useNavigate } from 'react-router-dom';
 
-const rowsPerPage = 5;
+const rowsPerPage = 25;
 const data = [
   { id: 1, name: 'Tushar Joshi', department: 'Otolaryngology', specialization: 'Infertility', degree: 'MBBS, MS', mobile: '9758698568', email: 'tushar@example.com', joiningDate: '01.10.2022', imgSrc: 'avatar-01.jpg' },
   { id: 2, name: 'Tushar Joshi', department: 'Otolaryngology', specialization: 'Infertility', degree: 'MBBS, MS', mobile: '9758698568', email: 'tushar@example.com', joiningDate: '01.10.2022', imgSrc: 'avatar-01.jpg' },

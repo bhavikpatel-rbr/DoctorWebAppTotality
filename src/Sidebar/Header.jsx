@@ -20,7 +20,7 @@ const Header = () => {
   const [toggle, SetToggle] = useState(false);
   const userData = useSelector(authSelector)
  const dispatch = useDispatch()
-  console.log("userData",userData?.userDetails);
+  console.log("userData111",userData?.userDetails);
   
   
   const isElementVisible = (element) => {

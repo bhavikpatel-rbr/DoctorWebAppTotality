@@ -11,7 +11,7 @@ import { appSelector } from '../../../reduxtool/app/appslice';
 import { getdepartmentlistAction, getschedulelistAction } from '../../../reduxtool/app/middleware';
 import { departmentEditData, SheduleEditData } from '../../../reduxtool/editstate/editSlice';
 
-const rowsPerPage = 8;
+const rowsPerPage = 25;
 const ScheduleList = () => {
 
   const schedule = useSelector(appSelector)
@@ -75,24 +75,21 @@ const ScheduleList = () => {
                       <h3>Schedule List</h3>
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
-                          <form>
+                        <form>
                             <input
                               type="text"
                               className="form-control"
                               placeholder="Search here"
-                               value={searchQuery}
+                              value={searchQuery}
                               onChange={handleSearchChange}
                             />
-                            <div className="btn">
-                              <img
-                                src={searchnormal}
-                                alt="Search"
-                              />
-                            </div>
+                            {/* <div className="btn">
+                              <img src={searchnormal} alt="Search" />
+                            </div> */}
                           </form>
                         </div>
                         <div className="add-group">
-                        <Link to="/addstaff" className="btn btn-primary add-pluss ms-2">
+                        <Link to="/addschedule" className="btn btn-primary add-pluss ms-2">
                             <img src={plus} alt="" />
                           </Link>
                           <div
@@ -112,8 +109,7 @@ const ScheduleList = () => {
                 <table className="table border-0 custom-table comman-table datatable mb-0">
                   <thead>
                     <tr>
-                      <th>Doctor Name</th>
-                      <th>Department</th>
+                      <th style={{textAlign:"left"}}>Doctor Name</th>
                       <th>Days</th>
                       <th>From Time</th>
                       <th>To Time</th>
@@ -124,11 +120,10 @@ const ScheduleList = () => {
                   <tbody>
                   {currentRows?.map(doctor => (
                       <tr key={doctor.id}>
-                        <td className="profile-image">
+                        <td className="profile-image" style={{textAlign:"left"}}>
                           <Link to="profile.html">Static</Link>
                         </td>
-                        <td>
-                          Static</td>
+                        
                         <td>{doctor.day_of_week}</td>
                         <td>{doctor.start_time}</td>
                         <td>{doctor.end_time}</td>

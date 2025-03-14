@@ -19,7 +19,7 @@ const data = [
     // Add more data items here
   ];
   
-  const rowsPerPage = 5;
+  const rowsPerPage = 25;
 const CaseRecordAdd = () => {
 
     const [currentPage, setCurrentPage] = useState(1);

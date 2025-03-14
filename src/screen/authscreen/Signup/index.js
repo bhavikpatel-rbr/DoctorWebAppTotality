@@ -30,6 +30,7 @@ const SignUp = () => {
       .matches(/[0-9]/, "Password must contain at least one number")
       .matches(/[@$!%*?&]/, "Password must contain at least one special character (@$!%*?&)")
       .required("Password is required"),
+      
 
     phone: Yup.string()
     .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")

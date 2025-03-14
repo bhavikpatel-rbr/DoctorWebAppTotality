@@ -18,22 +18,25 @@ const AddDepartment = () => {
       clinic_id: 1,
       departmentName: '',
       created_at: currentDateTime,
-      // departmentHead: '',
-      // description: '',
+      departmentHead: '',
+       description: '',
       departmentDate: currentDateTime,
-      // status: 'Active',
+       status: 'Active',
     },
     validationSchema: Yup.object({
       departmentName: Yup.string().required('Department Name is required'),
-      // departmentHead: Yup.string().required('Department Head is required'),
-      // description: Yup.string().required('Description is required'),
+       departmentHead: Yup.string().required('Department Head is required'),
+      description: Yup.string().required('Description is required'),
       departmentDate: Yup.date().required('Department Date is required'),
-      // status: Yup.string().required('Status is required'),
+      status: Yup.string().required('Status is required'),
     }),
     onSubmit: (values) => {
       console.log("values", values);
       const payload = {
         clinic_id: 1,
+        department_head:values?.departmentHead,
+        description:values?.description,
+        status:values?.status == "Active" ?1:0,
         department_name: values?.departmentName,
         created_at: values?.departmentDate
       }
@@ -93,7 +96,7 @@ const AddDepartment = () => {
                       ) : null}
                     </div>
                   </div>
-                  {/* <div className="col-12 col-md-6 col-xl-6">
+                  <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
                         Department Head <span className="login-danger">*</span>
@@ -110,8 +113,8 @@ const AddDepartment = () => {
                         <div className="text-danger">{formik.errors.departmentHead}</div>
                       ) : null}
                     </div>
-                  </div> */}
-                  {/* <div className="col-12 col-sm-12">
+                  </div>
+                  <div className="col-12 col-sm-12">
                     <div className="input-block local-forms">
                       <label>
                         Description <span className="login-danger">*</span>
@@ -129,7 +132,7 @@ const AddDepartment = () => {
                         <div className="text-danger">{formik.errors.description}</div>
                       ) : null}
                     </div>
-                  </div> */}
+                  </div>
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms ">
                       <label>
@@ -146,7 +149,7 @@ const AddDepartment = () => {
                       ) : null}
                     </div>
                   </div>
-                  {/* <div className="col-12 col-md-6 col-xl-6">
+                  <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block select-gender">
                       <label className="gen-label">
                         Status <span className="login-danger">*</span>
@@ -183,23 +186,24 @@ const AddDepartment = () => {
                         <div className="text-danger">{formik.errors.status}</div>
                       ) : null}
                     </div>
-                  </div> */}
+                  </div>
                   <div className="col-12">
                     <div className="doctor-submit text-end">
-                      <button
-                        type="submit"
-                        className="btn btn-primary submit-form me-2"
-                      >
-                        Save
-                      </button>
+                      
                       <button
                       onClick={() =>{
                         navigate('/departments')
                       }}
                         type="button"
-                        className="btn btn-primary cancel-form"
+                        className="btn btn-primary cancel-form me-2"
                       >
                         Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn btn-primary submit-form "
+                      >
+                        Save
                       </button>
                     </div>
                   </div>

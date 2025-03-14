@@ -109,7 +109,7 @@ const data = [
   // Add more leave request items here if needed
 ];;
 
-const rowsPerPage = 5;
+const rowsPerPage = 25;
 const LeaveRequest = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [employeeName, setEmployeeName] = useState('');

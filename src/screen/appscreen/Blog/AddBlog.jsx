@@ -234,20 +234,21 @@ const AddBlogPage = () => {
 
                   <div className="col-12">
                     <div className="doctor-submit text-end">
-                      <button
-                        type="submit"
-                        className="btn btn-primary submit-form me-2"
-                      >
-                        Save Changes
-                      </button>
+                      
                       <button
                       onClick={()=>{
                         navigate('/blog')
                       }}
                         type="button"
-                        className="btn btn-primary cancel-form"
+                        className="btn btn-primary cancel-form  me-2"
                       >
                         Cancel
+                      </button>
+                      <button
+                        type="submit"
+                         className="btn btn-primary submit-form "
+                      >
+                        Save Changes
                       </button>
                     </div>
                   </div>

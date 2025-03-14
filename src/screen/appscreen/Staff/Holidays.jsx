@@ -173,9 +173,27 @@ const Holidays = () => {
                 required 
               />
             </Form.Group>
-            <div className="col-12 mt-3">
+            <div className="col-12 mt-2">
+                    <div className="doctor-submit text-end">
+                      
+                      <button
+                      onClick={() => setShowAddModal(false)}
+                        type="button"
+                        className="btn btn-primary cancel-form me-2"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn btn-primary submit-form "
+                      >
+                        Save Changes
+                      </button>
+                    </div>
+                  </div>
+            {/* <div className="col-12 mt-3">
               <div className="doctor-submit text-end">
-                <button type="submit" className="btn btn-primary submit-form me-2">Add Holiday</button>
+                
                 <button 
                   type="button" 
                   className="btn btn-secondary cancel-form" 
@@ -183,8 +201,9 @@ const Holidays = () => {
                 >
                   Cancel
                 </button>
+                <button type="submit" className="btn btn-primary submit-form me-2">Add Holiday</button>
               </div>
-            </div>
+            </div> */}
           </Form>
         </Modal.Body>
       </Modal>

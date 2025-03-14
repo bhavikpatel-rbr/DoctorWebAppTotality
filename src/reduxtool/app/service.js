@@ -102,7 +102,7 @@ export const getbloglistlistAsync = async () => {
 
 export const getMedicallistlistAsync = async () => {
   try {
-    const response = await axiosInstance.post(`/getmedicalrecordlist`);
+    const response = await axiosInstance.post(`/getmedicalstorelist`);
     return response;
   } catch (err) {
     return isAxiosError(err);

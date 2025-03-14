@@ -272,13 +272,13 @@ const Sidebar = () => {
               </ul>
             </li>
             <li className={`submenu ${openSubMenu === 'doctorSchedule' ? 'active' : ''}`}>
-              <Link to="#" onClick={() => toggleSubMenu('doctorSchedule')}>
+              <Link to="/schedulelist" onClick={() => handleLinkClick("/schedulelist")}>
                 <span className="menu-side">
                   <img src={menuicon05} alt="Doctor Schedule" />
                 </span>
                 <span> Doctor Schedule </span> <span className="menu-arrow"></span>
               </Link>
-              <ul className={`${openSubMenu === 'doctorSchedule' ? 'd-block' : 'd-none'}`}>
+              {/* <ul className={`${openSubMenu === 'doctorSchedule' ? 'd-block' : 'd-none'}`}>
                 <li><Link
                   to="/schedulelist"
                   className={activeLink === "/schedulelist" ? "active" : ""}
@@ -294,7 +294,7 @@ const Sidebar = () => {
                   className={activeLink === "/editschedule" ? "active" : ""}
                   onClick={() => handleLinkClick("/editschedule")}
                 >Edit Schedule</Link></li>
-              </ul>
+              </ul> */}
             </li>
             <li className={`submenu ${openSubMenu === 'cashRecord' ? 'active' : ''}`}>
               <Link to="/chiefcompaint">
@@ -305,14 +305,15 @@ const Sidebar = () => {
               </Link>
               
             </li>
+           
             <li className={`submenu ${openSubMenu === 'departments' ? 'active' : ''}`}>
-              <Link to="#" onClick={() => toggleSubMenu('departments')}>
+              <Link to="/departments" onClick={() => handleLinkClick("/departments")}>
                 <span className="menu-side">
                   <img src={menuicon06} alt="Departments" />
                 </span>
                 <span> Departments </span> <span className="menu-arrow"></span>
               </Link>
-              <ul className={`${openSubMenu === 'departments' ? 'd-block' : 'd-none'}`}>
+              {/* <ul className={`${openSubMenu === 'departments' ? 'd-block' : 'd-none'}`}>
                 <li><Link
                   to="/departments"
                   className={activeLink === "/departments" ? "active" : ""}
@@ -328,51 +329,60 @@ const Sidebar = () => {
                   className={activeLink === "/editdepartment" ? "active" : ""}
                   onClick={() => handleLinkClick("/editdepartment")}
                 >Edit Department</Link></li>
-              </ul>
+              </ul> */}
             </li>
+           
             <li className={`submenu ${openSubMenu === 'blog' ? 'active' : ''}`}>
-              <Link to="#" onClick={() => toggleSubMenu('blog')}>
+              <Link to="/blog" onClick={() => handleLinkClick("/blog")}>
                 <span className="menu-side">
                   <img src={menuicon13} alt="blog" />
                 </span>
                 <span> Blog </span> <span className="menu-arrow"></span>
               </Link>
-              <ul className={`${openSubMenu === 'blog' ? 'd-block' : 'd-none'}`}>
+              {/* <ul className={`${openSubMenu === 'blog' ? 'd-block' : 'd-none'}`}>
                 <li><Link
                   to="/blog"
                   className={activeLink === "/blog" ? "active" : ""}
                   onClick={() => handleLinkClick("/blog")}
                 >Blog</Link></li>
-                {/* <li><Link
+                <li><Link
                   to="/blogdetails"
                   className={activeLink === "/blogdetails" ? "active" : ""}
                   onClick={() => handleLinkClick("/blogdetails")}
-                >Blog View</Link></li> */}
+                >Blog View</Link></li>
                 <li><Link
                   to="/addblogpage"
                   className={activeLink === "/addblogpage" ? "active" : ""}
                   onClick={() => handleLinkClick("/addblogpage")}
                 >Add Blog</Link></li>
-                {/* <li><Link
+                <li><Link
                   to="/editblogpage"
                   className={activeLink === "/editblogpage" ? "active" : ""}
                   onClick={() => handleLinkClick("/editblogpage")}
-                >Edit Blog</Link></li> */}
-              </ul>
+                >Edit Blog</Link></li>
+              </ul> */}
             </li>
+            {/* <li className={`submenu ${openSubMenu === 'blog' ? 'active' : ''}`}>
+              <Link to="/blog" onClick={() => handleLinkClick("/blog")}>
+                <span className="menu-side">
+                  <img src={menuicon13} alt="blog" />
+                </span>
+                <span> Blog </span> <span className="menu-arrow"></span>
+              </Link> */}
             <li className={`submenu ${openSubMenu === 'store' ? 'active' : ''}`}>
-              <Link to="#" onClick={() => toggleSubMenu('store')}>
+              <Link to="/store" onClick={() =>handleLinkClick("/store")}>
                 <span className="menu-side">
                   <img src={menuicon09} alt="store" />
                 </span>
                 <span>Medical Store </span> <span className="menu-arrow"></span>
               </Link>
-              <ul className={`${openSubMenu === 'store' ? 'd-block' : 'd-none'}`}>
-                <li><Link
+              
+              {/* <ul className={`${openSubMenu === 'store' ? 'd-block' : 'd-none'}`}> */}
+                {/* <li><Link
                   to="/store"
                   className={activeLink === "/store" ? "active" : ""}
                   onClick={() => handleLinkClick("/store")}
-                >Store</Link></li>
+                >Store</Link></li> */}
                 {/* <li><Link
                   to="/storedetails"
                   className={activeLink === "/storedetails" ? "active" : ""}
@@ -388,7 +398,7 @@ const Sidebar = () => {
                   className={activeLink === "/editstoredetails" ? "active" : ""}
                   onClick={() => handleLinkClick("/editstoredetails")}
                 >Edit Store</Link></li> */}
-              </ul>
+              {/* </ul> */}
             </li>
             {/* <li className={`submenu ${openSubMenu === 'call' ? 'active' : ''}`}>
               <Link to="#" onClick={() => toggleSubMenu('call')}>

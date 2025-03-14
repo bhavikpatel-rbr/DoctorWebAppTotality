@@ -18,23 +18,27 @@ const EditDepartment = () => {
   const formik = useFormik({
     initialValues: {
       departmentName: department?.departmentEdit?.department_name,
-      departmentHead: '',
-      description: '',
+      departmentHead: department?.departmentEdit?.department_name,
+      description:department?.departmentEdit?.department_name,
       departmentDate: department?.departmentEdit?.created_at,
-      status: 'Active',
+      status: department?.departmentEdit?.status == '1' ? 'Active' : "Inactive",
     },
     validationSchema: Yup.object({
       departmentName: Yup.string().required('Department Name is required'),
-      // departmentHead: Yup.string().required('Department Head is required'),
-      // description: Yup.string().required('Description is required'),
-      // departmentDate: Yup.date().required('Department Date is required'),
-      // status: Yup.string().required('Status is required'),
+      departmentHead: Yup.string().required('Department Head is required'),
+      description: Yup.string().required('Description is required'),
+      departmentDate: Yup.date().required('Department Date is required'),
+      status: Yup.string().required('Status is required'),
     }),
     onSubmit: (values) => {
       const updateDta = {
         department_id: department?.departmentEdit?.department_id,
         clinic_id: department?.departmentEdit?.clinic_id,
-        department_name: values.departmentName
+        department_name: values.departmentName,
+        department_head:values?.departmentHead,
+        description:values?.description,
+        status:values?.status == "Active" ?1:0,
+        created_at: values?.departmentDate
       }
 
       dispatch(updateDepartmentAction(updateDta)).then((res) => {
@@ -93,7 +97,7 @@ const EditDepartment = () => {
                       ) : null}
                     </div>
                   </div>
-                  {/* <div className="col-12 col-md-6 col-xl-6">
+                  <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
                         Department Head <span className="login-danger">*</span>
@@ -129,7 +133,7 @@ const EditDepartment = () => {
                         <div className="text-danger">{formik.errors.description}</div>
                       ) : null}
                     </div>
-                  </div> */}
+                  </div>
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms ">
                       <label>
@@ -146,7 +150,7 @@ const EditDepartment = () => {
                       ) : null}
                     </div>
                   </div>
-                  {/* <div className="col-12 col-md-6 col-xl-6">
+                  <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block select-gender">
                       <label className="gen-label">
                         Status <span className="login-danger">*</span>
@@ -183,23 +187,24 @@ const EditDepartment = () => {
                         <div className="text-danger">{formik.errors.status}</div>
                       ) : null}
                     </div>
-                  </div> */}
+                  </div>
                   <div className="col-12">
                     <div className="doctor-submit text-end">
-                      <button
-                        type="submit"
-                        className="btn btn-primary submit-form me-2"
-                      >
-                        Save Changes
-                      </button>
+                      
                       <button
                        onClick={() =>{
                         navigate('/departments')
                       }}
                         type="button"
-                        className="btn btn-primary cancel-form"
+                        className="btn btn-primary cancel-form me-2"
                       >
                         Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn btn-primary submit-form "
+                      >
+                        Save Changes
                       </button>
                     </div>
                   </div>

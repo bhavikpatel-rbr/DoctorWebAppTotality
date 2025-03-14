@@ -5,7 +5,7 @@ export const loginWithEmailAsync = async (loginRequest) => {
   try {
     const response = await axiosInstance.post(`/login`, loginRequest);
     console.log('=================response?.data===================');
-    console.log(response?.data);
+    console.log(response);
     console.log('===================response?.data=================');
     setUser(response?.data?.access_token);
     return response;

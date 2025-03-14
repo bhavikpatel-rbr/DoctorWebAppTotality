@@ -19,7 +19,7 @@ import { getAppointmentListAction } from '../../../reduxtool/app/middleware';
 
 const AppointmentList = () => {
   const Appointment = useSelector(appSelector)
-  const rowsPerPage = 8;
+  const rowsPerPage = 25;
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
   const router = useNavigate()
