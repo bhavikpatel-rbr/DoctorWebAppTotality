@@ -72,6 +72,15 @@ export const allDoctorsUsersAsync = async () => {
   }
 };
 
+export const allDoctorsUsersWhenSignupAsync = async () => {
+  try {
+    const response = await axiosInstance.get(`/alldoctorsuserslist`);
+    return response;
+  } catch (err) {
+    return isAxiosError(err);
+  }
+};
+
 export const getdepartmentlistAsync = async () => {
   try {
     const response = await axiosInstance.post(`/getdepartmentlist`);

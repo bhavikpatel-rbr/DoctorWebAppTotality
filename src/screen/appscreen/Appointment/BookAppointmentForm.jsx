@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight } from 'react-feather';
+import { ChevronRight, FileText } from 'react-feather';
 
 const BookAppointmentForm = () => {
   const [formData, setFormData] = useState({
@@ -17,7 +17,17 @@ const BookAppointmentForm = () => {
     notes: '',
     avatar: null,
   });
+  const [selectedLanguage, setSelectedLanguage] = useState('');
 
+  const languagePDFs = {
+    english: '/pdfs/dummy.pdf',
+    gujarati: '/pdfs/dummy.pdf',
+    hindi: '/pdfs/dummy.pdf',
+  };
+
+  const handleLanguageChange = (e) => {
+    setSelectedLanguage(e.target.value);
+  };
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === 'file') {
@@ -285,31 +295,31 @@ const BookAppointmentForm = () => {
                     </div>
                   </div>
 
-                  <div className="col-12 col-md-6 col-xl-6">
-                    <div className="input-block local-top-form">
-                      <label className="local-top">Avatar <span className="login-danger">*</span></label>
-                      <div className="settings-btn upload-files-avator">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          name="avatar"
-                          id="file"
-                          onChange={handleChange}
-                          className="hide-input"
-                        />
-                        <label htmlFor="file" className="upload">Choose File</label>
-                      </div>
-                      {formData.avatar &&
-                      <div className="upload-images upload-size">
-                        {formData.avatar && <img src={URL.createObjectURL(formData.avatar)} alt="Avatar" />}
-                        <div href="javascript:void(0);" className="btn-icon logo-hide-btn">
-                          <i className="feather-x-circle"></i>
-                        </div>
-                      </div>
-}
-                    </div>
-                  </div>
+                 
+                  <div>
+      <div className="form-heading">
+        <h4>Select Language for PDF Form</h4>
+      </div>
 
+      <div className="input-block local-forms">
+        <label>Select Language</label>
+        <select className="form-control" value={selectedLanguage} onChange={handleLanguageChange}>
+          <option value="">Choose Language</option>
+          <option value="english">English</option>
+          <option value="gujarati">Gujarati</option>
+          <option value="hindi">Hindi</option>
+        </select>
+      </div>
+
+      {selectedLanguage && (
+         <div className="pdf-container mt-3 text-center">
+         <a href={languagePDFs[selectedLanguage]} download className="pdf-download">
+           <FileText size={50} color="red" /> {/* Small PDF icon */}
+           <p>Download PDF</p>
+         </a>
+       </div>
+      )}
+    </div>
                   <div className="col-12">
                     <div className="doctor-submit text-end">
                       <button type="submit" className="btn btn-primary submit-form me-2">
@@ -325,6 +335,7 @@ const BookAppointmentForm = () => {
             </div>
           </div>
         </div>
+        
       </div>
     </div>
   );

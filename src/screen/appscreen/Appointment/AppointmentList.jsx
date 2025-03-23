@@ -78,24 +78,21 @@ const AppointmentList = () => {
                       <h3>Appointment</h3>
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
-                          <form>
-                            <input
+                        <form>
+                          <input
                               type="text"
                               className="form-control"
                               placeholder="Search here"
+                              value={searchQuery}
+                              onChange={handleSearchChange}
                             />
-                            <div className="btn">
-                              <img
-                                src={searchnormal}
-                                alt="Search"
-                              />
-                            </div>
+                           
                           </form>
                         </div>
                         <div className="add-group">
-                          <div href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
-                          <img src={plus} alt="" />
-                          </div>
+                        <Link to="/bookappointment" className="btn btn-primary add-pluss ms-2">
+                            <img src={plus} alt="" />
+                          </Link>
                           <div href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
                           <img src={refresh} alt="" />
                           </div>
@@ -147,7 +144,10 @@ const AppointmentList = () => {
                           <button 
                             className="btn btn-sm btn-danger me-2" 
                             style={{ backgroundColor: '#2e37a4', borderColor: '#2e37a4' }}
-                            
+                             onClick={() => {
+                                                          router('/editappointment');
+                                                          
+                                                        }}
                           >
                             <FaPen />
                           </button>

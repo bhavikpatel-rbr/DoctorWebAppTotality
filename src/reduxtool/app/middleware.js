@@ -52,6 +52,7 @@ import {
   getbloglistlistAsync,
   getschedulelistAsync,
   getMedicallistlistAsync,
+  allDoctorsUsersWhenSignupAsync,
 } from "./service";
 import { useNavigate } from "react-router-dom";
 
@@ -251,6 +252,41 @@ export const  allDoctorsUsersAction = createAsyncThunk(
     dispatch(showLoader({ loading: true, message: "happening" }));
     try {
       const response = await allDoctorsUsersAsync();
+      if (response?.data) {
+        dispatch(hideLoader());
+        // dispatch(
+        //   showMessage({
+        //     ...defaultMessageObj,
+        //     type: "success",
+        //     messageText: response?.data?.message,
+        //   })
+        // );
+       
+        return response?.data;
+      }
+      dispatch(
+        showMessage({
+          ...defaultMessageObj,
+          type: "error",
+          messageText: response?.data?.message,
+        })
+      );
+      return rejectWithValue(response);
+    } catch (error) {
+      dispatch(hideLoader());
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const  allDoctorsUsersWhenSignupAction = createAsyncThunk(
+  "auth/allDoctorsUsersWhenSignup",
+  async (_, { rejectWithValue, dispatch }) => {
+    dispatch(showLoader({ loading: true, message: "happening" }));
+    try {
+      const response = await allDoctorsUsersWhenSignupAsync();
+      console.log("response",response);
+      
       if (response?.data) {
         dispatch(hideLoader());
         // dispatch(

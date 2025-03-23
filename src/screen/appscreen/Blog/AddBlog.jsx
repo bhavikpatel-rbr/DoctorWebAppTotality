@@ -123,13 +123,13 @@ const AddBlogPage = () => {
                     </div>
                   </div>
 
-                  {/* <div className="col-12 col-md-6 col-xl-6">
+                  <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>Blog Category <span className="login-danger">*</span></label>
                       <select 
                         className="form-control select"
-                        value={blogCategory}
-                        onChange={(e) => setBlogCategory(e.target.value)}
+                        // value={blogCategory}
+                        // onChange={(e) => setBlogCategory(e.target.value)}
                       >
                         <option>Choose Blog Category</option>
                         <option>Health Care</option>
@@ -137,22 +137,22 @@ const AddBlogPage = () => {
                         <option>Safety</option>
                       </select>
                     </div>
-                  </div> */}
+                  </div>
 
-                  {/* <div className="col-12 col-md-6 col-xl-6">
+                  <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>Blog Sub Category <span className="login-danger">*</span></label>
                       <select 
                         className="form-control select"
-                        value={blogSubCategory}
-                        onChange={(e) => setBlogSubCategory(e.target.value)}
+                        // value={blogSubCategory}
+                        // onChange={(e) => setBlogSubCategory(e.target.value)}
                       >
                         <option>Choose Sub Blog Category</option>
                         <option>Health Care</option>
                         <option>Corona Virus</option>
                       </select>
                     </div>
-                  </div> */}
+                  </div>
 
                   {/* <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">

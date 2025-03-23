@@ -201,18 +201,15 @@ const ChiefCompaint = () => {
                       <h3>Patient List</h3>
                       <div className="doctor-search-blk">
                         <div className="top-nav-search table-search-blk">
-                          <form>
-                            <input
+                        <form>
+                          <input
                               type="text"
                               className="form-control"
                               placeholder="Search here"
+                              // value={searchQuery}
+                              // onChange={handleSearchChange}
                             />
-                            <div className="btn">
-                              <img
-                                src={searchnormal}
-                                alt="Search"
-                              />
-                            </div>
+                           
                           </form>
                         </div>
                         <div className="add-group">
@@ -266,13 +263,13 @@ const ChiefCompaint = () => {
                           >
                             <FaPen />
                           </button>
-                          <button 
+                          {/* <button 
                             className="btn btn-sm btn-danger " 
                             style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
                             
                           >
                             <FaTrash />
-                          </button>
+                          </button> */}
                         </td>
             </tr>
           ))}

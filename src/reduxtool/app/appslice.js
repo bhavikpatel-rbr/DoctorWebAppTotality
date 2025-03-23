@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   allClinicsUsersAction,
   allDoctorsUsersAction,
+  allDoctorsUsersWhenSignupAction,
   allPatientsUsersAction,
   allStaffUsersAction,
   getAllUserAction,
@@ -79,6 +80,10 @@ const appSlice = createSlice({
       ...state,
     }));
     builder.addCase(allDoctorsUsersAction.fulfilled, (state, { payload }) => ({
+      ...state,
+      doctorList: payload?.data
+    }));
+    builder.addCase(allDoctorsUsersWhenSignupAction.fulfilled, (state, { payload }) => ({
       ...state,
       doctorList: payload?.data
     }));

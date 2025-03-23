@@ -35,7 +35,6 @@ const EditDepartment = () => {
         department_id: department?.departmentEdit?.department_id,
         clinic_id: department?.departmentEdit?.clinic_id,
         department_name: values.departmentName,
-        department_head:values?.departmentHead,
         description:values?.description,
         status:values?.status == "Active" ?1:0,
         created_at: values?.departmentDate
@@ -79,7 +78,7 @@ const EditDepartment = () => {
                       <h4>Edit Department</h4>
                     </div>
                   </div>
-                  <div className="col-12 col-md-6 col-xl-6">
+                  <div className="col-12 col-md-6 col-xl-10">
                     <div className="input-block local-forms">
                       <label>
                         Department Name <span className="login-danger">*</span>
@@ -97,7 +96,7 @@ const EditDepartment = () => {
                       ) : null}
                     </div>
                   </div>
-                  <div className="col-12 col-md-6 col-xl-6">
+                  {/* <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
                         Department Head <span className="login-danger">*</span>
@@ -112,6 +111,22 @@ const EditDepartment = () => {
                       />
                       {formik.touched.departmentHead && formik.errors.departmentHead ? (
                         <div className="text-danger">{formik.errors.departmentHead}</div>
+                      ) : null}
+                    </div>
+                  </div> */}
+                  <div className="col-12 col-md-6 col-xl-2">
+                    <div className="input-block local-forms ">
+                      <label>
+                        Department Date <span className="login-danger">*</span>
+                      </label>
+                      <DatePicker
+                        selected={formik.values.departmentDate}
+                        onChange={(date) => formik.setFieldValue('departmentDate', date)}
+                        dateFormat="yyyy/MM/dd"
+                        className="form-control "
+                      />
+                      {formik.touched.departmentDate && formik.errors.departmentDate ? (
+                        <div className="text-danger">{formik.errors.departmentDate}</div>
                       ) : null}
                     </div>
                   </div>
@@ -134,22 +149,7 @@ const EditDepartment = () => {
                       ) : null}
                     </div>
                   </div>
-                  <div className="col-12 col-md-6 col-xl-6">
-                    <div className="input-block local-forms ">
-                      <label>
-                        Department Date <span className="login-danger">*</span>
-                      </label>
-                      <DatePicker
-                        selected={formik.values.departmentDate}
-                        onChange={(date) => formik.setFieldValue('departmentDate', date)}
-                        dateFormat="yyyy/MM/dd"
-                        className="form-control "
-                      />
-                      {formik.touched.departmentDate && formik.errors.departmentDate ? (
-                        <div className="text-danger">{formik.errors.departmentDate}</div>
-                      ) : null}
-                    </div>
-                  </div>
+                  
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block select-gender">
                       <label className="gen-label">

@@ -111,7 +111,6 @@ const DepartmentList = () => {
                     <tr>
 
                       <th  style={{textAlign:"left"}}>Department</th>
-                      <th>Department Head</th>
                       <th>Description</th>
                       <th>Date</th>
                       <th>Status</th>
@@ -122,7 +121,6 @@ const DepartmentList = () => {
                     {currentRows?.map(department => (
                       <tr key={department.id}>
                         <td style={{textAlign:"left"}}>{department.department_name}</td>
-                        <td>{department.department_head}</td>
                         <td>{department.description}</td>
                         <td>{department.created_at}</td>
                         <td>

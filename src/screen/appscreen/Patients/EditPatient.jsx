@@ -61,11 +61,7 @@ const EditPatient = () => {
       confirmPassword: Yup.string()
         .oneOf([Yup.ref('password')], 'Passwords must match')
         .required('Confirm Password is required'),
-      specialization: Yup.string().required('Specialization is required'),
-      license_number: Yup.string().required('License Number is required'),
-      years_of_experience: Yup.number().min(1, 'Experience must be greater than 0').required('Experience is required'),
-      education: Yup.string().required('Education is required'),
-      designation: Yup.string().required('Designation is required'),
+      
       address_line_1: Yup.string().required('Address Line 1 is required'),
       city: Yup.string().required('City is required'),
       state: Yup.string().required('State is required'),
@@ -211,7 +207,7 @@ const EditPatient = () => {
                                   </div>
                                 </div>
               
-                                <div className="col-12 col-md-6 col-xl-6">
+                                <div className="col-12 col-md-6 col-xl-5">
                                   <div className="input-block local-forms">
                                     <label>
                                       email <span className="login-danger">*</span>
@@ -229,7 +225,7 @@ const EditPatient = () => {
                                     ) : null}
                                   </div>
                                 </div>
-                                <div className="col-12 col-md-6 col-xl-6">
+                                <div className="col-12 col-md-6 col-xl-5">
                                   <div className="input-block local-forms">
                                     <label>
                                       Mobile Number <span className="login-danger">*</span>
@@ -249,6 +245,25 @@ const EditPatient = () => {
                                     ) : null}
                                   </div>
                                 </div>
+
+                                <div className="col-12 col-md-6 col-xl-2">
+                                  <div className="input-block local-forms ">
+                                    <label>
+                                      birth date <span className="login-danger">*</span>
+                                    </label>
+                                    <DatePicker
+                                      selected={formik.values.birth_date}
+                                      onChange={(date) => formik.setFieldValue('birth_date', date)}
+                                      dateFormat="yyyy/MM/dd"
+                                      className="form-control"
+              
+                                    />
+                                    {formik.touched.birth_date && formik.errors.birth_date ? (
+                                      <div className="text-danger">{formik.errors.birth_date}</div>
+                                    ) : null}
+                                  </div>
+                                </div>
+              
               
                                 <div className="col-12 col-md-6 col-xl-6">
                                   <div className="input-block local-forms">
@@ -288,7 +303,7 @@ const EditPatient = () => {
                                   </div>
                                 </div>
               
-                                <div className="col-12 col-md-6 col-xl-4">
+                                {/* <div className="col-12 col-md-6 col-xl-4">
                                   <div className="input-block local-forms">
                                     <label>
                                       Specialization <span className="login-danger">*</span>
@@ -305,9 +320,9 @@ const EditPatient = () => {
                                       <div className="text-danger">{formik.errors.specialization}</div>
                                     ) : null}
                                   </div>
-                                </div>
+                                </div> */}
               
-                                <div className="col-12 col-md-6 col-xl-4">
+                                {/* <div className="col-12 col-md-6 col-xl-4">
                                   <div className="input-block local-forms">
                                     <label>
                                       License Number <span className="login-danger">*</span>
@@ -325,8 +340,8 @@ const EditPatient = () => {
                                     ) : null}
                                   </div>
                                 </div>
-              
-                                <div className="col-12 col-md-6 col-xl-4">
+               */}
+                                {/* <div className="col-12 col-md-6 col-xl-4">
                                   <div className="input-block local-forms">
                                     <label>
                                       Experience (Years) <span className="login-danger">*</span>
@@ -343,9 +358,9 @@ const EditPatient = () => {
                                       <div className="text-danger">{formik.errors.years_of_experience}</div>
                                     ) : null}
                                   </div>
-                                </div>
+                                </div> */}
               
-                                <div className="col-12 col-md-6 col-xl-3">
+                                {/* <div className="col-12 col-md-6 col-xl-3">
                                   <div className="input-block local-forms">
                                     <label>
                                       Education <span className="login-danger">*</span>
@@ -362,9 +377,9 @@ const EditPatient = () => {
                                       <div className="text-danger">{formik.errors.education}</div>
                                     ) : null}
                                   </div>
-                                </div>
+                                </div> */}
               
-                                <div className="col-12 col-md-6 col-xl-3">
+                                {/* <div className="col-12 col-md-6 col-xl-3">
                                   <div className="input-block local-forms">
                                     <label>
                                       Designation <span className="login-danger">*</span>
@@ -381,8 +396,8 @@ const EditPatient = () => {
                                       <div className="text-danger">{formik.errors.designation}</div>
                                     ) : null}
                                   </div>
-                                </div>
-                                <div className="col-12 col-md-6 col-xl-4">
+                                </div> */}
+                                {/* <div className="col-12 col-md-6 col-xl-4">
                                   <div className="input-block local-forms">
                                     <label>
                                       Department <span className="login-danger">*</span>
@@ -400,25 +415,8 @@ const EditPatient = () => {
                                     ) : null}
                                   </div>
                                 </div>
-              
-                                <div className="col-12 col-md-6 col-xl-2">
-                                  <div className="input-block local-forms ">
-                                    <label>
-                                      birth date <span className="login-danger">*</span>
-                                    </label>
-                                    <DatePicker
-                                      selected={formik.values.birth_date}
-                                      onChange={(date) => formik.setFieldValue('birth_date', date)}
-                                      dateFormat="yyyy/MM/dd"
-                                      className="form-control"
-              
-                                    />
-                                    {formik.touched.birth_date && formik.errors.birth_date ? (
-                                      <div className="text-danger">{formik.errors.birth_date}</div>
-                                    ) : null}
-                                  </div>
-                                </div>
-              
+               */}
+                               
               
                                 <div className="col-12 col-md-6 col-xl-12">
                                   <div className="input-block local-forms">

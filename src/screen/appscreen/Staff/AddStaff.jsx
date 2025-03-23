@@ -55,8 +55,8 @@ const [avatar, setAvatar] = useState(null);
       confirmPassword: Yup.string()
        .oneOf([Yup.ref('password')], 'Passwords must match')
        .required('Confirm Password is required'),
-      specialization: Yup.string().required('Specialization is required'),
-     license_number: Yup.string().required('License Number is required'),
+   
+     
       years_of_experience: Yup.number().min(1, 'Experience must be greater than 0').required('Experience is required'),
       education: Yup.string().required('Education is required'),
       designation: Yup.string().required('Designation is required'),
@@ -315,7 +315,7 @@ const [avatar, setAvatar] = useState(null);
                                  </div>
                                </div>
              
-                               <div className="col-12 col-md-6 col-xl-4">
+                               {/* <div className="col-12 col-md-6 col-xl-4">
                                  <div className="input-block local-forms">
                                    <label>
                                    Specialization <span className="login-danger">*</span>
@@ -333,9 +333,9 @@ const [avatar, setAvatar] = useState(null);
                                      <div className="text-danger">{formik.errors.specialization}</div>
                                    ) : null}
                                  </div>
-                               </div>
+                               </div> */}
              
-                               <div className="col-12 col-md-6 col-xl-4">
+                               {/* <div className="col-12 col-md-6 col-xl-4">
                                  <div className="input-block local-forms">
                                    <label>
                                    License Number <span className="login-danger">*</span>
@@ -353,9 +353,9 @@ const [avatar, setAvatar] = useState(null);
                                      <div className="text-danger">{formik.errors.license_number}</div>
                                    ) : null}
                                  </div>
-                               </div>
+                               </div> */}
              
-                               <div className="col-12 col-md-6 col-xl-4">
+                               <div className="col-12 col-md-6 col-xl-2">
                                  <div className="input-block local-forms">
                                    <label>
                                    Experience (Years) <span className="login-danger">*</span>
@@ -375,7 +375,7 @@ const [avatar, setAvatar] = useState(null);
                                  </div>
                                </div>
              
-                               <div className="col-12 col-md-6 col-xl-3">
+                               <div className="col-12 col-md-6 col-xl-2">
                                  <div className="input-block local-forms">
                                    <label>
                                    Education <span className="login-danger">*</span>
@@ -395,7 +395,7 @@ const [avatar, setAvatar] = useState(null);
                                  </div>
                                </div>
              
-                               <div className="col-12 col-md-6 col-xl-3">
+                               <div className="col-12 col-md-6 col-xl-2">
                                  <div className="input-block local-forms">
                                    <label>
                                    Designation <span className="login-danger">*</span>

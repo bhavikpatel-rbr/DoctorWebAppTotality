@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
+import plus from '../../../img/icons/plus.svg'
+import refresh from '../../../img/icons/re-fresh.svg'
 import axios from "axios";
+import DatePicker from 'react-datepicker';
 import { MdArrowDropDown, MdMic } from "react-icons/md";
 import { BiPlus } from "react-icons/bi";
+import { ChevronRight } from 'react-feather';
+import { useFormik } from 'formik';
 import {
   FaUser,
   FaBirthdayCake,
@@ -15,7 +20,8 @@ import { BsBook, BsQuestionCircle } from 'react-icons/bs';
 import { Link, useNavigate } from "react-router-dom";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "../../../img/doctor-03.jpg";
-
+import { TextArea } from '@blueprintjs/core';
+import { registerDoctorAction } from '../../../reduxtool/app/middleware';
 import Accordion from "react-bootstrap/Accordion";
 import {
   BsHeart,
@@ -25,12 +31,19 @@ import {
   BsCalendar,
   BsSearch,
 } from "react-icons/bs";
-
+import { FaPen, FaTrash } from 'react-icons/fa';
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
+import * as Yup from 'yup';
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
+import { useSelector } from 'react-redux';
+import { appSelector } from '../../../reduxtool/app/appslice';
+import { allPatientsUsersAction, getAllUserAction } from '../../../reduxtool/app/middleware';
+import { useDispatch } from 'react-redux';
+import { patientEditData } from '../../../reduxtool/editstate/editSlice';
 
+const rowsPerPage = 25;
 const ChiefCompaintInit = ({ patient }) => {
   const [rows, setRows] = useState([
     {
@@ -50,19 +63,157 @@ const ChiefCompaintInit = ({ patient }) => {
     },
   ]);
   const [dropdownOpen, setDropdownOpen] = useState({});
-
+  const handleFileChange = (event) => {
+    // setAvatar(event.target.files[0]);
+  };
+   const formik = useFormik({
+      initialValues: {
+      firstname:"",
+      lastname:'',
+      username: '',
+      email: '',
+      phone: '',
+      password: '',
+      confirmPassword: '',
+      doctor_name: '',
+      specialization: '',
+      license_number: '',
+      years_of_experience: '',
+        gender:'Male',
+      education: '',
+      designation: '',
+      department: '',
+      doctor_phone: '',
+      doctor_email: '',
+      address_line_1: '',
+      address_line_2: '',
+      city: '',
+      state: '',
+      postal_code: '',
+      country: '',
+      operating_hours: '',
+      services: '',
+      latitude: '',
+      longitude: '',
+      doctor_type: '',
+      birth_date:"",
+      status:'Active',
+      },
+      validationSchema: Yup.object({
+        firstname:Yup.string().required('Fistname is required'),
+      lastname:Yup.string().required('Lastname is required'),
+      username: Yup.string().required('Username is required'),
+      email: Yup.string().email('Invalid email format').required('Email is required'),
+      phone: Yup.string().required('Phone is required'),
+       password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+       confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password')], 'Passwords must match')
+        .required('Confirm Password is required'),
+       specialization: Yup.string().required('Specialization is required'),
+      license_number: Yup.string().required('License Number is required'),
+       years_of_experience: Yup.number().min(1, 'Experience must be greater than 0').required('Experience is required'),
+       education: Yup.string().required('Education is required'),
+       designation: Yup.string().required('Designation is required'),
+       address_line_1: Yup.string().required('Address Line 1 is required'),
+       city: Yup.string().required('City is required'),
+      state: Yup.string().required('State is required'),
+      postal_code: Yup.string().required('Postal Code is required'),
+      country: Yup.string().required('Country is required'),
+      birth_date:Yup.string().required('BithDate is required')
+     
+      }),
+      onSubmit: (values) => {
+        console.log("values",values);
+        const payload = {
+          email: values?.email,
+          username: values?.username,
+          phone: values?.phone,
+          password: values?.password,
+          doctor_name:values?.firstname,
+          specialization: values?.specialization,
+          license_number: values?.license_number,
+          years_of_experience:  parseInt(values?.years_of_experience),
+          clinic_id: 1,
+          firstname:values?.firstname,
+          lastname: values?.lastname,
+          gender:values?.gender,
+          birth_date: values?.birth_date,
+          doctor_phone: "",
+          doctor_email: "",
+          education: values?.education,
+          designation: values?.designation,
+          department: values?.department,
+          address_line_1:values?.address_line_1,
+          address_line_2: "",
+          city: values?.city,
+          state: values?.state,
+          postal_code:  values?.postal_code,
+          country:values?.country,
+          operating_hours: "",
+          services: "",
+          latitude: 40.712776,
+          longitude: -74.005974,
+          doctor_type: "",
+          images: ''
+      }
+      dispatch(registerDoctorAction(payload)).then((res) => {
+              if (res?.payload?.status) {
+                navigate('/doctors')
+              }
+            })
+        //  dispatch(registerDoctorAction(payload))
+      },
+    });
+    
   const [language, setLanguage] = useState("en");
   const [isRecording, setIsRecording] = useState(false);
   const [selectedoptionvalue, setselectedoptionvalue] = useState(false);
   const [selectedtype, setselectedtype] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false); // Toggle modal visibility
-  const [currentPage, setCurrentPage] = useState(0); // Tracks current page
   const [selectedOptions, setSelectedOptions] = useState([]); // Tracks selected options
   const itemsPerPage = 4; // Number of items per page
   const [showOptions, setShowOptions] = useState(true);
   const [focusedIndex, setFocusedIndex] = useState(null);
+  const [mode, setmode] = useState(1);
+  const users = useSelector(appSelector);
+   const [currentPage, setCurrentPage] = useState(1);
+  const dispatch = useDispatch();
 
+  console.log("users",users);
+  console.log('=====================patientList===============');
+    console.log(users?.patientList);
+    console.log('=====================patientList===============');
+   const router = useNavigate();
+   const [searchQuery, setSearchQuery] = useState('');
+
+
+
+  useEffect(() => {
+     dispatch(allPatientsUsersAction());
+   }, [dispatch]);
+
+   const handleSearchChange = (e) => {
+     setSearchQuery(e.target.value);
+     setCurrentPage(1); // Reset to first page on search
+   };
+ 
+   const filteredDoctors = users?.patientList?.filter((doctor) =>
+     `${doctor.firstname} ${doctor.lastname}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     doctor.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     doctor.specialization.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     doctor.education.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     doctor.phone.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     doctor.email.toLowerCase().includes(searchQuery.toLowerCase())
+   );
+ 
+   const indexOfLastRow = currentPage * rowsPerPage;
+   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+   const currentRows = filteredDoctors?.slice(indexOfFirstRow, indexOfLastRow);
+ 
+   const totalPages = Math.ceil(filteredDoctors?.length / rowsPerPage);
+ 
+   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   // Assuming you have an array of 36 items
   const allOptions = Array.from({ length: 36 }, (_, i) => `Option ${i + 1}`);
 
@@ -188,6 +339,14 @@ const ChiefCompaintInit = ({ patient }) => {
     }
   };
 
+  const handleNewCaseClick = () => {
+    setmode(2);
+    // setTimeout(() => {
+    //   navigate("/addCase"); // Navigate after setting mode
+    // }, 0);
+  };
+
+
   return (
     <div >
      
@@ -228,84 +387,327 @@ const ChiefCompaintInit = ({ patient }) => {
         </div>
       </div> */}
 
-      <div class="card-box profile-header">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="profile-view">
-             
-
-              <div class="profile-basic">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="row">
-                      <div className="col-md-1">
-                        <div className="patient_img-wrap">
-                          <a>
-                            <img class="patient_img" src={Avatar} alt="" />
-                          </a>
-                        </div>
-                      </div>
-                      <div
-                        className="col-md-7 pt-2"
-                        style={{ paddingLeft: "30px" }}
-                      >
-                        <ul class="personal-info">
-                          <li>
-                            <span class="title">Name:</span>
-                            <span class="text">
-                              <div href>Tushar Joshi</div>
-                            </span>
-                          </li>
-                          <li>
-                            <span class="title">Phone:</span>
-                            <span class="text">
-                              <div href>770-889-6484</div>
-                            </span>
-                          </li>
-
-                          <li>
-                            <span class="title">Gender:</span>
-                            <span class="text">Male</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div className="col-md-4 d-flex flex-column align-items-end pt-2">
-      <div className="mb-2">
-        <a
-          className={`btn btn-${isRecording ? "danger" : "primary-StartRecording"} btn-rounded`}
-          onClick={toggleRecording}
-        >
-          {isRecording ? (
-            <BsMicMute size={25} style={{ paddingRight: "10px" }} />
-          ) : (
-            <BsMicFill size={25} style={{ paddingRight: "10px" }} />
-          )}
-          {isRecording ? "Stop Recording" : "Start Recording"}
-        </a>
-      </div>
-
-      <div>
-        <Link
-          to="/addPatientDetails"
-          className={`btn btn-primary-StartRecording btn-rounded`}
-        >
-          <BsPlus size={25} />
-          {"Add Patient Details"}
-        </Link>
-      </div>
-    </div>
-                    </div>
+<div className="card-box profile-header">
+  <div className="row">
+    <div className="col-md-12">
+      <div className="profile-view">
+        <div className="profile-basic">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="row">
+                <div className="col-md-1">
+                  <div className="patient_img-wrap">
+                    <a>
+                      <img className="patient_img" src={Avatar} alt="" />
+                    </a>
                   </div>
+                </div>
+                <div
+                  className="col-md-7 pt-2"
+                  style={{ paddingLeft: "30px" }}
+                >
+                  <ul className="personal-info">
+                    <li>
+                      <span className="title">Name:</span>
+                      <span className="text">
+                        <div>Tushar Joshi</div>
+                      </span>
+                    </li>
+                    <li>
+                      <span className="title">Phone:</span>
+                      <span className="text">
+                        <div>770-889-6484</div>
+                      </span>
+                    </li>
+
+                    <li>
+                      <span className="title">Gender:</span>
+                      <span className="text">Male</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="col-md-4 d-flex flex-column align-items-end pt-2">
+                <div className="mb-2">
+      <button
+        onClick={handleNewCaseClick}
+        className="btn btn-success btn-rounded"
+      >
+        <BsPlus size={25} />
+        New Case
+      </button>
+    </div>
+
+                  <div className="mb-2">  {/* Added mb-2 for spacing */}
+                    <Link
+                      to="/addPatientDetails"
+                      className={`btn btn-primary-StartRecording btn-rounded`}
+                    >
+                      <BsPlus size={25} />
+                      {"Add Patient Details"}
+                    </Link>
+                  </div>
+                    
+                 
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+ 
+ {mode == 1 &&
+     <div className="row mt-2">
+     <div className="col-sm-12">
+       <div className="card card-table show-entire">
+         <div className="card-body">
+           <div className="page-table-header mb-2">
+             <div className="row align-items-center">
+               <div className="col">
+                 <div className="doctor-table-blk">
+                   <h3>Patient Old Case Record List</h3>
+                   <div className="doctor-search-blk">
+                     <div className="top-nav-search table-search-blk">
+                     <form>
+                         <input
+                           type="text"
+                           className="form-control"
+                           placeholder="Search here"
+                           value={searchQuery}
+                           onChange={handleSearchChange}
+                         />
+                         
+                       </form>
+                     </div>
+                     <div className="add-group">
+                     {/* <Link to="/addpatient" className="btn btn-primary add-pluss ms-2">
+                         <img src={plus} alt="" />
+                       </Link> */}
+                       <div
+                         onClick={() => dispatch(allPatientsUsersAction())}
+                         className="btn btn-primary doctor-refresh ms-2"
+                       >
+                         <img src={refresh} alt="Refresh" />
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+             </div>
+           </div>
+
+           <div className="table-responsive">
+             <table className="table border-0 custom-table comman-table datatable mb-0">
+               <thead>
+                 <tr>
+
+                   
+                   <th>case record title</th>
+                   <th>doctor_notes</th>
+                   <th>others_notes</th>
+                   <th>case record date</th>
+                   
+                 </tr>
+               </thead>
+               <tbody>
+                 {currentRows?.map(doctor => (
+                   <tr key={doctor.id}>
+
+                   
+                     <td>Flu Treatment</td>
+                     <td>Monitor for fever</td>
+                     <td>Patient needs rest</td>
+                    
+                   
+                     <td><div href={`mailto:${doctor.email}`} >23/03/2023</div></td>
+                    
+                     <td className="text-end">
+                       <button
+                         className="btn btn-sm btn-danger me-2"
+                         style={{ backgroundColor: '#2e37a4', borderColor: '#2e37a4' }}
+                        onClick={() => {
+                                                        // router('/editpatient');
+                                                        // dispatch(patientEditData(doctor));
+                                                      }}
+                       >
+                         <FaPen />
+                       </button>
+                       {/* <button
+                         className="btn btn-sm btn-danger "
+                         style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
+                         onClick={() => console.log('Delete', doctor.id)}
+                       >
+                         <FaTrash />
+                       </button> */}
+                     </td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table>
+           </div>
+           <nav>
+             <ul className="pagination justify-content-center" style={{ marginTop: '20px' }}>
+               {Array.from({ length: totalPages }, (_, index) => (
+                 <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`} style={{ margin: '0 5px' }}>
+                   <div
+                     className="page-link"
+                     href="#"
+                     onClick={() => paginate(index + 1)}
+                     style={{
+                       border: '1px solid #2e37a4',
+                       color: currentPage === index + 1 ? '#fff' : '#2e37a4',
+                       backgroundColor: currentPage === index + 1 ? '#2e37a4' : '#fff',
+                       borderRadius: '4px',
+                       padding: '6px 12px',
+                       cursor: 'pointer',
+                     }}
+                   >
+                     {index + 1}
+                   </div>
+                 </li>
+               ))}
+             </ul>
+           </nav>
+         </div>
+       </div>
+     </div>
+   </div>
+
+      
 
      
+    }
+  {mode == 2 &&
+   <div >
+        
+  
+        <div className="row mt-2">
+          <div className="col-sm-12">
+            <div className="card">
+              <div className="card-body">
+              <form onSubmit={formik.handleSubmit}>
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="form-heading">
+                        <h4>Add Case record</h4>
+                      </div>
+                    </div>
+                    
+                    <div className="col-12 col-md-6 col-xl-6">
+                      <div className="input-block local-forms">
+                        <label>
+                        Case record title <span className="login-danger">*</span>
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="firstname"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.firstname}
+                          onKeyPress={(e) => handleKeyPress(e, 'firstname')}
+                        />
+                        {formik.touched.firstname && formik.errors.firstname ? (
+                          <div className="text-danger">{formik.errors.firstname}</div>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-6 col-xl-6">
+                      <div className="input-block local-forms">
+                        <label>
+                        Doctor notes <span className="login-danger">*</span>
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="firstname"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.firstname}
+                          onKeyPress={(e) => handleKeyPress(e, 'firstname')}
+                        />
+                        {formik.touched.firstname && formik.errors.firstname ? (
+                          <div className="text-danger">{formik.errors.firstname}</div>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-6 col-xl-6">
+                      <div className="input-block local-forms">
+                        <label>
+                        Other notes <span className="login-danger">*</span>
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="firstname"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.firstname}
+                          onKeyPress={(e) => handleKeyPress(e, 'firstname')}
+                        />
+                        {formik.touched.firstname && formik.errors.firstname ? (
+                          <div className="text-danger">{formik.errors.firstname}</div>
+                        ) : null}
+                      </div>
+                    </div>
 
-      <div className="mt-4">
+                    <div className="col-12 col-md-6 col-xl-6">
+                      <div className="input-block local-forms ">
+                        <label>
+                        birth date <span className="login-danger">*</span>
+                        </label>
+                        <DatePicker
+                          selected={formik.values.birth_date}
+                          onChange={(date) => formik.setFieldValue('birth_date', date)}
+                          dateFormat="yyyy/MM/dd"
+                          className="form-control"
+                          onKeyPress={(e) => handleKeyPress(e, 'birth_date')}
+                          
+                        />
+                        {formik.touched.birth_date && formik.errors.birth_date ? (
+                          <div className="text-danger">{formik.errors.birth_date}</div>
+                        ) : null}
+                      </div>
+                    </div>
+  
+                   
+                    
+                    <div className="col-12">
+                      <div className="doctor-submit text-end">
+                      <button
+                        // onClick={()=>{
+                        //   navigate('/doctors')
+                        // }}
+                          type="button"
+                          className="btn btn-primary cancel-form me-2"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                           onClick={()=>{
+                         setmode(3)
+                        }}
+                          type="submit"
+                          className="btn btn-primary submit-form "
+                        >
+                          Save
+                        </button>
+                       
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+}
+{mode == 3 &&
+    <div className="mt-4">
         <div className="patient__Menu card p-3">
           <Tab.Container id="left-tabs-example" defaultActiveKey="CaseRecord">
             <Row>
@@ -839,114 +1241,9 @@ const ChiefCompaintInit = ({ patient }) => {
           </Tab.Container>
         </div>
       </div>
-
-      {isModalVisible && (
-        <div
-          className="modal-backdrop modal fade show align-items-center justify-content-center"
-          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-          tabIndex="-1"
-          role="dialog"
-        >
-          <div className="modal-dialog modal-dialog-scrollable" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title Modal_main__Title">
-                  {selectedtype} - {selectedoptionvalue}
-                </h5>
-                {/* <button
-                  type="button"
-                  className="close"
-                  onClick={() => setIsModalVisible(false)}
-                >
-                  <span>&times;</span>
-                </button> */}
-
-                <button
-                  type="button"
-                  class="btn-close"
-                  onClick={() => setIsModalVisible(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                {selectedOptions.length > 0 && (
-                  <div>
-                    <p>Selected Options:</p>
-                    <ul className="Optionitemlist">
-                      {selectedOptions.map((option, index) => (
-                        <li className="selectedOptionsList" key={index}>
-                          {option}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                <ul className="list-group custom-list ">
-                  {currentOptions.map((option, index) => (
-                    <li
-                      key={index}
-                      className="list-group-item d-flex align-items-center justify-content-between"
-                      onClick={() => handleOptionSelect(option)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <p className="mb-0">{option}</p>
-                      <input
-                        type="checkbox"
-                        checked={selectedOptions.includes(option)}
-                        onChange={() => handleOptionSelect(option)}
-                        onClick={(e) => e.stopPropagation()}
-                        className="form-check-input me-2"
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              {/* <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={handlePrevious}
-                  disabled={currentPage === 0}
-                >
-                  Previous
-                </button>
-
-                {(currentPage + 1) * itemsPerPage >= allOptions.length ? (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => {
-                      // Handle save action
-                      // For example, save data or perform any action needed
-                      setIsModalVisible(false);
-                    }}
-                  >
-                    Save
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={handleNext}
-                    disabled={
-                      (currentPage + 1) * itemsPerPage >= allOptions.length
-                    }
-                  >
-                    Next
-                  </button>
-                )}
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setIsModalVisible(false)}
-                >
-                  Close
-                </button>
-              </div> */}
-            </div>
-          </div>
-        </div>
-      )}
+}
     </div>
+    
   );
 };
 

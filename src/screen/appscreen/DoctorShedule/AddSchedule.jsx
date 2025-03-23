@@ -28,11 +28,18 @@ const AddSchedule = () => {
       doctor_id: 1,
       clinic_id: 1,
       day_of_week: '',
+      from_date: null,
+      to_date: null,
       start_time: null,
       end_time: null
     },
     validationSchema: Yup.object({
       day_of_week: Yup.string().required('Day is required'),
+      from_date: Yup.date().nullable().required('From Date is required'),
+      to_date: Yup.date()
+        .nullable()
+        .required('To Date is required')
+        .min(Yup.ref('from_date'), 'To Date must be after From Date'),
       start_time: Yup.date().nullable().required('Start Time is required'),
       end_time: Yup.date().nullable().required('End Time is required')
     }),
@@ -41,7 +48,9 @@ const AddSchedule = () => {
         doctor_id: 1,
         clinic_id: 1,
         day_of_week: values.day_of_week,
-        start_time: values.start_time.toISOString().split('T')[1].slice(0, 5), // Extract HH:MM format
+        from_date: values.from_date.toISOString().split('T')[0], // Format: YYYY-MM-DD
+        to_date: values.to_date.toISOString().split('T')[0],
+        start_time: values.start_time.toISOString().split('T')[1].slice(0, 5), // Format: HH:MM
         end_time: values.end_time.toISOString().split('T')[1].slice(0, 5)
       };
 
@@ -83,36 +92,64 @@ const AddSchedule = () => {
                     </div>
                   </div>
 
-                {/* Day Picker */}
-<div className="col-12 col-md-6 col-xl-4">
-  <div className="input-block local-forms">
-    <label>Day <span className="login-danger">*</span></label>
-    <Select
-      options={daysOptions}
-      value={daysOptions.find(option => option.value === formik.values.day_of_week)}
-      onChange={(selectedOption) => formik.setFieldValue('day_of_week', selectedOption.value)}
-      // className="form-control"
-      // classNamePrefix="select"
-      styles={{
-        control: (provided) => ({
-          ...provided,
-          minHeight: '45px',
-          borderRadius: '10px',
-          border: '2px solid rgba(46, 55, 164, 0.1)',
-          boxShadow: 'none',
-          fontSize: '14px',
-          fontFamily: 'inherit',
-         
-        
-        }),
-      }}
-    />
-    {formik.touched.day_of_week && formik.errors.day_of_week ? (
-      <div className="text-danger">{formik.errors.day_of_week}</div>
-    ) : null}
-  </div>
-</div>
+                  {/* Day Picker */}
+                  <div className="col-12 col-md-6 col-xl-4">
+                    <div className="input-block local-forms">
+                      <label>Day <span className="login-danger">*</span></label>
+                      <Select
+                        options={daysOptions}
+                        value={daysOptions.find(option => option.value === formik.values.day_of_week)}
+                        onChange={(selectedOption) => formik.setFieldValue('day_of_week', selectedOption.value)}
+                        styles={{
+                          control: (provided) => ({
+                            ...provided,
+                            minHeight: '45px',
+                            borderRadius: '10px',
+                            border: '2px solid rgba(46, 55, 164, 0.1)',
+                            boxShadow: 'none',
+                            fontSize: '14px',
+                            fontFamily: 'inherit'
+                          }),
+                        }}
+                      />
+                      {formik.touched.day_of_week && formik.errors.day_of_week ? (
+                        <div className="text-danger">{formik.errors.day_of_week}</div>
+                      ) : null}
+                    </div>
+                  </div>
 
+                  {/* From Date Picker */}
+                  <div className="col-12 col-md-6 col-xl-2">
+                    <div className="input-block local-forms">
+                      <label>From Date <span className="login-danger">*</span></label>
+                      <DatePicker
+                        selected={formik.values.from_date}
+                        onChange={(date) => formik.setFieldValue('from_date', date)}
+                        dateFormat="yyyy-MM-dd"
+                        className="form-control"
+                      />
+                      {formik.touched.from_date && formik.errors.from_date ? (
+                        <div className="text-danger">{formik.errors.from_date}</div>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {/* To Date Picker */}
+                  <div className="col-12 col-md-6 col-xl-2">
+                    <div className="input-block local-forms">
+                      <label>To Date <span className="login-danger">*</span></label>
+                      <DatePicker
+                        selected={formik.values.to_date}
+                        onChange={(date) => formik.setFieldValue('to_date', date)}
+                        dateFormat="yyyy-MM-dd"
+                        className="form-control"
+                        minDate={formik.values.from_date} // Ensures To Date is after From Date
+                      />
+                      {formik.touched.to_date && formik.errors.to_date ? (
+                        <div className="text-danger">{formik.errors.to_date}</div>
+                      ) : null}
+                    </div>
+                  </div>
 
                   {/* Start Time Picker */}
                   <div className="col-12 col-md-6 col-xl-2">
@@ -156,18 +193,24 @@ const AddSchedule = () => {
 
                 </div>
                 <div className="col-12">
-                  <div className="doctor-submit text-end">
-                  <button 
-                      onClick={() => navigate('/schedulelist')}
-                      type="button" className="btn btn-primary cancel-form me-2">
-                      Cancel
-                    </button>
-                    <button type="submit" className="btn btn-primary submit-form ">
-                      Create Schedule
-                    </button>
-                   
+                    <div className="doctor-submit text-end">
+                     
+                      <button type="button" className="btn btn-primary cancel-form me-2">
+                        Cancel
+                      </button>
+                      <button type="submit" className="btn btn-primary submit-form "onClick={() => navigate('/schedulelist')}>
+                        Submit
+                      </button>
+                    </div>
                   </div>
-                </div>
+                {/* <div className="col-12 text-end">
+                  <button onClick={() => navigate('/schedulelist')} type="button" className="btn btn-primary me-2">
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary">
+                    Create Schedule
+                  </button>
+                </div> */}
               </form>
             </div>
           </div>

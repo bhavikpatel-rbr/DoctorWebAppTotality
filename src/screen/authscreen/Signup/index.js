@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -6,10 +6,15 @@ import login from "./img/login-02.png";
 import "./../../../assest/commoncss.css";
 import { useDispatch } from "react-redux";
 import { registerAdminByEmailAction } from "../../../reduxtool/auth/middleware";
+import { allDoctorsUsersAction, allDoctorsUsersWhenSignupAction } from "../../../reduxtool/app/middleware";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+      dispatch(allDoctorsUsersWhenSignupAction());
+    }, [dispatch]);
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .trim()
@@ -44,9 +49,6 @@ const SignUp = () => {
       .oneOf([true], "You must accept the Terms and Privacy Policy")
       .required("You must accept the Terms and Privacy Policy"),
   });
-
-  const dispatch = useDispatch();
-
   const handleSubmit = (values) => {
     dispatch(
       registerAdminByEmailAction({
@@ -58,7 +60,11 @@ const SignUp = () => {
       })
     );        
   };
-
+  const doctors = [
+    { id: "doctor1", name: "Dr. John Doe" },
+    { id: "doctor2", name: "Dr. Jane Smith" },
+    { id: "doctor3", name: "Dr. Robert Brown" },
+  ];
   return (
     <div className="main-wrapper login-body">
       <div className="container-fluid px-0">
@@ -188,6 +194,27 @@ const SignUp = () => {
                               className="invalid-feedback"
                             />
                           </div>
+
+                        
+                          <div className="input-block">
+  <label htmlFor="doctor">
+    Doctors <span className="login-danger">*</span>
+  </label>
+  <Field
+  as="select"
+  id="doctor"
+  name="doctor"
+  className={`form-control ${errors.doctor && touched.doctor ? "is-invalid" : ""}`}
+>
+  <option value="" disabled>Select a doctor</option>
+  {doctors.map((doctor) => (
+    <option key={doctor.id} value={doctor.id}>
+      {doctor.name}
+    </option>
+  ))}
+</Field>
+<ErrorMessage name="doctor" component="div" className="invalid-feedback" />
+</div>
 
                           <div className="forgotpass">
   <div className="remember-me">

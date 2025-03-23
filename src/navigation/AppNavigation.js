@@ -69,6 +69,10 @@ import AddLeave from '../screen/appscreen/Staff/AddLeave';
 import EditLeave from '../screen/appscreen/Staff/EditLeave';
 import VoiceCall from '../screen/appscreen/Call/VoiceCall';
 import VideoCall from '../screen/appscreen/Call/VideoCall';
+import ArticleList from '../screen/appscreen/Article/ArticleList';
+import AddArticle from '../screen/appscreen/Article/AddArticle';
+import EditArticle from '../screen/appscreen/Article/EditArticle';
+
 
 const AppNavigation = () => {
 
@@ -192,10 +196,15 @@ const AppNavigation = () => {
                         {/* Call Routes */}
                         <Route path="/voicecall" element={<VoiceCall />} />
                         <Route path="/videocall" element={<VideoCall />} />
+{/* Article Routes */}
+<Route path="/articlelist" element={<ArticleList />} />
+<Route path="/addarticle" element={<AddArticle />} />
+<Route path="/editarticle" element={<EditArticle />} />
+                        {/* <Route path="/videocall" element={<VideoCall />} /> */}
 
                         {/* ProfilePage Routes */}
                         <Route path="/profilepage" element={<ProfilePage />} />
-
+                        
 
                         {/* Redirect to Dashboard if route not found */}
                         <Route path="*" element={<Navigate to="/" replace />} />

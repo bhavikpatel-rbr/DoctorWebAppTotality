@@ -5,6 +5,7 @@ import searchnormal from '../../../img/icons/search-normal.svg'
 import plus from '../../../img/icons/plus.svg'
 import refresh from '../../../img/icons/re-fresh.svg'
 import { FaPen, FaTrash } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 const data = [
   {
     id: 1,
@@ -130,7 +131,7 @@ const LeaveRequest = () => {
     e.preventDefault();
     // Implement search functionality
   };
-
+ const router = useNavigate();
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1); // Reset to first page on search
@@ -172,9 +173,9 @@ const LeaveRequest = () => {
                           </form>
                         </div>
                         <div className="add-group">
-                          <div href="add-doctor.html" className="btn btn-primary add-pluss ms-2">
-                          <img src={plus} alt="" />
-                          </div>
+                           <Link to="/addleave" className="btn btn-primary add-pluss ms-2">
+                                                      <img src={plus} alt="" />
+                                                    </Link>
                           <div href="javascript:;" className="btn btn-primary doctor-refresh ms-2">
                           <img src={refresh} alt="" />
                           </div>
@@ -307,7 +308,10 @@ const LeaveRequest = () => {
                           <button 
                             className="btn btn-sm btn-danger me-2" 
                             style={{ backgroundColor: '#2e37a4', borderColor: '#2e37a4' }}
-                            onClick={() => console.log('Edit', request.id)}
+                            onClick={() => {
+                                                           router('/editleave');
+                                                          //  dispatch(doctorEditData(doctor));
+                                                         }}
                           >
                             <FaPen />
                           </button>

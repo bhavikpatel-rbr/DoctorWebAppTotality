@@ -25,7 +25,6 @@ const AddDepartment = () => {
     },
     validationSchema: Yup.object({
       departmentName: Yup.string().required('Department Name is required'),
-       departmentHead: Yup.string().required('Department Head is required'),
       description: Yup.string().required('Description is required'),
       departmentDate: Yup.date().required('Department Date is required'),
       status: Yup.string().required('Status is required'),
@@ -78,7 +77,7 @@ const AddDepartment = () => {
                       <h4>Add Department</h4>
                     </div>
                   </div>
-                  <div className="col-12 col-md-6 col-xl-6">
+                  <div className="col-12 col-md-6 col-xl-10">
                     <div className="input-block local-forms">
                       <label>
                         Department Name <span className="login-danger">*</span>
@@ -96,7 +95,23 @@ const AddDepartment = () => {
                       ) : null}
                     </div>
                   </div>
-                  <div className="col-12 col-md-6 col-xl-6">
+                  <div className="col-12 col-md-6 col-xl-2">
+                    <div className="input-block local-forms ">
+                      <label>
+                        Department Date <span className="login-danger">*</span>
+                      </label>
+                      <DatePicker
+                        selected={formik.values.departmentDate}
+                        onChange={(date) => formik.setFieldValue('departmentDate', date)}
+                        dateFormat="yyyy/MM/dd"
+                        className="form-control "
+                      />
+                      {formik.touched.departmentDate && formik.errors.departmentDate ? (
+                        <div className="text-danger">{formik.errors.departmentDate}</div>
+                      ) : null}
+                    </div>
+                  </div>
+                  {/* <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block local-forms">
                       <label>
                         Department Head <span className="login-danger">*</span>
@@ -113,7 +128,7 @@ const AddDepartment = () => {
                         <div className="text-danger">{formik.errors.departmentHead}</div>
                       ) : null}
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-12 col-sm-12">
                     <div className="input-block local-forms">
                       <label>
@@ -133,22 +148,7 @@ const AddDepartment = () => {
                       ) : null}
                     </div>
                   </div>
-                  <div className="col-12 col-md-6 col-xl-6">
-                    <div className="input-block local-forms ">
-                      <label>
-                        Department Date <span className="login-danger">*</span>
-                      </label>
-                      <DatePicker
-                        selected={formik.values.departmentDate}
-                        onChange={(date) => formik.setFieldValue('departmentDate', date)}
-                        dateFormat="yyyy/MM/dd"
-                        className="form-control "
-                      />
-                      {formik.touched.departmentDate && formik.errors.departmentDate ? (
-                        <div className="text-danger">{formik.errors.departmentDate}</div>
-                      ) : null}
-                    </div>
-                  </div>
+                  
                   <div className="col-12 col-md-6 col-xl-6">
                     <div className="input-block select-gender">
                       <label className="gen-label">
