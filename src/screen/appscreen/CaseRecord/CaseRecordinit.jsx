@@ -1,411 +1,3207 @@
-import React, { useRef, useState,useEffect } from "react";
-// import Tab from "react-bootstrap/Tab";
-// import Tabs from "react-bootstrap/Tabs";
-import { ChevronRight } from 'react-feather';
-import { Tabs, Tab } from 'react-bootstrap'; 
+// CaseRecordinit.js
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import { ChevronRight, ChevronLeft, Search as SearchIcon } from "react-feather";
+import { Tabs, Tab, Nav } from "react-bootstrap";
+import { MdArrowDropDown, MdClose } from "react-icons/md";
+import { FaPlus } from "react-icons/fa";
 
-import { MdArrowDropDown } from "react-icons/md";
-import PatientSection from "./CommonRender/PatientSection";
+//=========================================================
+// Configuration Helper Function (Define BEFORE component)
+//=========================================================
+
+const customTabStyles = `
+  /* Style for the container holding all tab rows */
+  .tabs-container-styled {
+    padding: 0.5rem; /* Add padding around the tab area */
+    background-color: #f8f9fa; /* Example: Light background for the whole area */
+  }
+
+  /* Style for each row (Nav component) */
+  .tab-row {
+    margin-bottom: 0.25rem; /* Add space between rows of tabs */
+  }
+
+   /* Style for individual tab links */
+  .custom-tab-link {
+    /* Define base properties and transitions */
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    border-radius: 0.3rem 0.3rem 0 0 !important; /* Rounded top corners */
+    margin-right: 2px; /* Optional: tiny space between tabs */
+    border: 1px solid transparent; /* Start with transparent border */
+    border-bottom: 1px solid #dee2e6; /* Default bottom border */
+    padding: 0.5rem 1rem; /* Ensure consistent padding (Bootstrap default) */
+  }
+
+  /* ---- NEW: Default style for INACTIVE tabs (not hovered) ---- */
+  .custom-tab-link:not(.active) {
+    
+     color: white !important; /* WHITE TEXT for default inactive */
+  }
+  /* ---- End NEW ---- */
 
 
+  /* Hover effect for INACTIVE tabs - Overrides the default inactive style */
+  .custom-tab-link:not(.active):hover {
+    background-color: #e9ecef; /* Slightly darker background on hover */
+    border-color: #dee2e6 #dee2e6 #dee2e6 !important; /* Match default border color */
+    color: #0d6efd !important; /* Blue text on hover - OVERRIDES white */
+  }
 
+  /* Enhanced style for the ACTIVE tab - Overrides the default inactive style */
+  .custom-tab-link.active {
+    font-weight: 600; /* Make active tab text bolder */
+    background-color: #ffffff !important; /* Ensure white background */
+    color: #0d6efd !important; /* Bootstrap primary blue text color for active */
+    border-color: #dee2e6 #dee2e6 #ffffff !important; /* Standard border except bottom matches background */
+  }
+  .comment-input {
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    font-weight: normal; /* Default: normal weight */
+    font-style: normal;  /* Default: normal style */
+    text-transform: none; /* Default: no text transformation */
+  }
 
+  /* Priority 1 Style */
+  .comment-input.priority-1 {
+     border-color: #6ea8fe;
+     font-weight: normal;     /* Ensure normal weight */
+     font-style: normal;      /* Ensure normal style */
+     text-transform: none;      /* Ensure no transformation */
+     /* background-color: rgba(13, 110, 253, 0.03); */
+  }
+
+  /* Priority 2 Style (Warning, Italic, Capitalize) */
+  .comment-input.priority-2 {
+     border-color: #ffda6a;
+     background-color: rgba(255, 193, 7, 0.05);
+     font-weight: normal;     /* Ensure normal weight */
+     font-style: italic;      /* <<< Make input text italic */
+     text-transform: capitalize; /* <<< Make first letter capital (per word) */
+  }
+
+  /* Priority 3 Style (Danger/High, Bold, Uppercase) */
+  .comment-input.priority-3 {
+     border-color: #f1737f;
+     background-color: rgba(220, 53, 69, 0.05);
+     font-weight: bold;       /* <<< Make input text bold */
+     font-style: normal;      /* Ensure normal style */
+     text-transform: uppercase; /* <<< Make ALL letters uppercase */
+  }
+
+  /* Focus style - does not override font-weight, font-style, or text-transform */
+  .comment-input:focus {
+    border-color: #0d6efd !important;
+    background-color: #fff !important;
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.25);
+  }
+  /* ---- End Priority Effect Styles ---- */
+`;
+// Initialize the base structure
+const baseTabSectionOptions = {
+  APPEARANCE: [],
+  DIGESTION: [],
+  ELIMINATIONS: [],
+  MENSTRUAL_FUNCTION: [],
+  SEXUAL_FUNCTION: [],
+  PATIENTS_OBSTETRIC_HISTORY: [],
+  DEVELOPMENTAL_LANDMARKS_PROBLEMS: [], // Note: Potential typo, maybe "DEVELOPMENTAL"?
+  REACTION_PHYSICAL_FACTORS: [],
+  FERVER_TOTALITY: [],
+  // Add more tabs here if needed initially
+};
+
+/**
+ * Helper function to add a section/subsection definition.
+ * Modifies the baseTabSectionOptions object directly.
+ * @param {string} tabKey - The key of the tab (e.g., 'APPEARANCE').
+ * @param {string | null} parentKey - The key of the parent section, or null/undefined for top-level.
+ * @param {string} newKey - The unique key for the new section.
+ * @param {string} newTitle - The display title for the new section.
+ */
+const addSectionDefinition = (tabKey, parentKey, newKey, newTitle) => {
+  if (!baseTabSectionOptions[tabKey]) {
+    console.warn(
+      `addSectionDefinition: Tab key "${tabKey}" not found. Adding new tab.`
+    );
+    baseTabSectionOptions[tabKey] = []; // Create the tab if it doesn't exist
+  }
+
+  const newSection = { key: newKey, title: newTitle };
+  let targetArray = baseTabSectionOptions[tabKey]; // Default to top-level of the tab
+
+  // If a parentKey is specified, find the parent object recursively
+  if (parentKey) {
+    let parentFound = false;
+    const findAndAdd = (options) => {
+      if (parentFound || !options) return;
+      for (let i = 0; i < options.length; i++) {
+        const item = options[i];
+        if (item.key === parentKey) {
+          // Found the parent
+          if (!item.subOptions) {
+            item.subOptions = []; // Create subOptions array if it doesn't exist
+          }
+          // Check if key already exists in subOptions to prevent duplicates
+          if (!item.subOptions.some((sub) => sub.key === newKey)) {
+            item.subOptions.push(newSection);
+          } else {
+            console.warn(
+              `addSectionDefinition: Key "${newKey}" already exists under parent "${parentKey}" in tab "${tabKey}". Skipping.`
+            );
+          }
+          parentFound = true;
+          return;
+        }
+        // Recurse into subOptions
+        if (item.subOptions) {
+          findAndAdd(item.subOptions);
+        }
+      }
+    };
+
+    findAndAdd(baseTabSectionOptions[tabKey]);
+
+    if (!parentFound) {
+      console.error(
+        `addSectionDefinition: Parent key "${parentKey}" not found in tab "${tabKey}" for new key "${newKey}". Cannot add.`
+      );
+      return; // Stop if parent wasn't found
+    }
+    // If parent was found and item added, we're done with this call
+    return;
+  }
+
+  // If no parentKey, add to the top level of the tab (if not already present)
+  if (!targetArray.some((item) => item.key === newKey)) {
+    targetArray.push(newSection);
+  } else {
+    console.warn(
+      `addSectionDefinition: Key "${newKey}" already exists at the top level of tab "${tabKey}". Skipping.`
+    );
+  }
+};
+
+//=========================================================
+// DEVELOPER: Add your keywords here using addSectionDefinition
+//=========================================================
+
+// --- APPEARANCE Tab ---
+addSectionDefinition(
+  "APPEARANCE",
+  null,
+  "PHYSICAL_DESC",
+  "PHYSICAL DESCRIPTION"
+);
+addSectionDefinition("APPEARANCE", "PHYSICAL_DESC", "LEAN", "LEAN");
+addSectionDefinition("APPEARANCE", "PHYSICAL_DESC", "STOCKY", "STOCKY");
+addSectionDefinition("APPEARANCE", "PHYSICAL_DESC", "OBESE", "OBESE");
+addSectionDefinition("APPEARANCE", "PHYSICAL_DESC", "PARTIAL", "PARTIAL");
+addSectionDefinition("APPEARANCE", "PHYSICAL_DESC", "GENERAL", "GENERAL");
+addSectionDefinition(
+  "APPEARANCE",
+  "PHYSICAL_DESC",
+  "WATER_LOGGING",
+  "WATER-LOGGING"
+);
+addSectionDefinition(
+  "APPEARANCE",
+  "PHYSICAL_DESC",
+  "UMBILICUS-ABOVE",
+  "UMBILICUS-ABOVE"
+);
+addSectionDefinition(
+  "APPEARANCE",
+  "PHYSICAL_DESC",
+  "UMBILICUS-BELOW",
+  "UMBILICUS-BELOW"
+);
+addSectionDefinition("APPEARANCE", "PHYSICAL_DESC", "EMACIATION", "EMACIATION");
+
+addSectionDefinition("APPEARANCE", null, "WEIGHT", "WEIGHT");
+addSectionDefinition("APPEARANCE", "WEIGHT", "WEIGHT_GAIN", "Gain");
+addSectionDefinition("APPEARANCE", "WEIGHT", "WEIGHT_LOSS", "Loss");
+
+addSectionDefinition("APPEARANCE", null, "PERIOD", "PERIOD");
+addSectionDefinition("APPEARANCE", null, "SHORT", "SHORT");
+addSectionDefinition("APPEARANCE", null, "TALL", "TALL");
+addSectionDefinition(
+  "APPEARANCE",
+  null,
+  "FACIAL_CONFIG_EXPR",
+  "FACIAL CONFIGURATATION & EXPRESSION"
+);
+addSectionDefinition("APPEARANCE", null, "CHIN", "CHIN");
+addSectionDefinition("APPEARANCE", null, "JAW", "JAW");
+addSectionDefinition("APPEARANCE", null, "NOSE", "NOSE");
+addSectionDefinition("APPEARANCE", null, "MOUTH_LIPS", "MOUTH & LIPS");
+addSectionDefinition("APPEARANCE", null, "OUTLINE_LINES", "OUTLINE & LINES");
+addSectionDefinition("APPEARANCE", null, "HAND", "HAND");
+addSectionDefinition("APPEARANCE", "HAND", "FINGER", "FINGER");
+addSectionDefinition("APPEARANCE", "HAND", "PALMS", "PALMS");
+addSectionDefinition("APPEARANCE", "HAND", "LINES", "LINES");
+addSectionDefinition("APPEARANCE", null, "CARRIAGE_GAIT", "CARRIAGE & GAIT");
+addSectionDefinition("APPEARANCE", null, "DEFORMITIES", "DEFORMITIES");
+addSectionDefinition("APPEARANCE", null, "SKIN", "SKIN");
+addSectionDefinition(
+  "APPEARANCE",
+  "SKIN",
+  "COMPLEXION_TEXTURE",
+  "COMPLEXION & TEXTURE"
+);
+addSectionDefinition("APPEARANCE", "SKIN", "DISCOLOURATION", "DISCOLOURATION");
+addSectionDefinition("APPEARANCE", "SKIN", "ERUPTIONS", "ERUPTIONS");
+addSectionDefinition("APPEARANCE", "SKIN", "GROWTHS", "GROWTHS");
+addSectionDefinition(
+  "APPEARANCE",
+  "COMPLEXION_TEXTURE",
+  "CALLOSITIES",
+  "CALLOSITIES"
+);
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "CLEAN", "CLEAN");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "CLEAR", "CLEAR");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "COARSE", "COARSE");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "CRACKS", "CRACKS");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "DARK", "DARK");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "DIRTY", "DIRTY");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "DRY", "DRY");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "FAIR", "FAIR");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "FINE", "FINE");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "GREASY", "GREASY");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "ROUGH", "ROUGH");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "RUDDY", "RUDDY");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "SCARS", "SCARS");
+addSectionDefinition(
+  "APPEARANCE",
+  "COMPLEXION_TEXTURE",
+  "SHRIVELLED",
+  "SHRIVELLED"
+);
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "THICK", "THICK");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "THIN", "THIN");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "TOUGH", "TOUGH");
+addSectionDefinition(
+  "APPEARANCE",
+  "COMPLEXION_TEXTURE",
+  "UNWASHED",
+  "UNWASHED"
+);
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "WHEATY", "WHEATY");
+addSectionDefinition("APPEARANCE", "COMPLEXION_TEXTURE", "WOUNDS", "WOUNDS");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "GENERAL", "GENERAL");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "PARTIAL", "PARTIAL");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "SPOTS", "SPOTS");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "BLACK", "BLACK");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "BROWN", "BROWN");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "COPPERY", "COPPERY");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "GREENISH", "GREENISH");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "RED", "RED");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "WHITE", "WHITE");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "YELLOW", "YELLOW");
+addSectionDefinition(
+  "APPEARANCE",
+  "DISCOLOURATION",
+  "ECCHYMOSIS",
+  "ECCHYMOSIS"
+);
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "MOLES", "MOLES");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "NAEVI", "NAEVI");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "PETECHIAE", "PETECHIAE");
+addSectionDefinition("APPEARANCE", "DISCOLOURATION", "STRIAK", "STRIAK");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "ANNULAL", "ANNULAL");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "OVEL", "OVEL");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "FIGURATE", "FIGURATE");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "ACNE", "ACNE");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "BOILS", "BOILS");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "BULLAE", "BULLAE");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "BUNIONS", "BUNIONS");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "CHAPS", "CHAPS");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "CANDYLOMATA", "CANDYLOMATA");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "CORNS", "CORNS");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "CYSTS", "CYSTS");
+addSectionDefinition(
+  "APPEARANCE",
+  "ERUPTIONS",
+  "DERMOGRAPHISM",
+  "DERMOGRAPHISM"
+);
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "DERMOID", "DERMOID");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "ECZEMA", "ECZEMA");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "EXCORIATION", "EXCORIATION");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "EXCRESCENCES", "EXCRESCENCES");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "FOLDS", "FOLDS");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "FURUNCLES", "FURUNCLES");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "GOOSE-FLESH", "GOOSE-FLESH");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "INTERTRIGO", "INTERTRIGO");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "IRRITATION", "IRRITATION");
+addSectionDefinition(
+  "APPEARANCE",
+  "ERUPTIONS",
+  "LICHENIFICATION",
+  "LICHENIFICATION"
+);
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "MACULE", "MACULE");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "PAPULE", "PAPULE");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "PLAQUE", "PLAQUE");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "PUSTULES", "PUSTULES");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "SCALY", "SCALY");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "VESICLE", "VESICLE");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "SUPPURATIONS", "SUPPURATIONS");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "ULCERATIONS", "ULCERATIONS");
+addSectionDefinition("APPEARANCE", "ERUPTIONS", "URTICARIA", "URTICARIA");
+addSectionDefinition("APPEARANCE", "GROWTHS", "BURSAE", "BURSAE");
+addSectionDefinition("APPEARANCE", "GROWTHS", "GANGLION", "GANGLION");
+addSectionDefinition("APPEARANCE", "GROWTHS", "KELOIDS", "KELOIDS");
+addSectionDefinition("APPEARANCE", "GROWTHS", "NODULES", "NODULES");
+addSectionDefinition("APPEARANCE", "GROWTHS", "TOPHI", "TOPHI");
+addSectionDefinition("APPEARANCE", "GROWTHS", "TUMORS", "TUMORS");
+addSectionDefinition("APPEARANCE", "GROWTHS", "WARTS", "WARTS");
+
+addSectionDefinition("APPEARANCE", null, "HAIR", "HAIR");
+addSectionDefinition("APPEARANCE", "HAIR", "ABNORMAL", "ABNORMAL");
+addSectionDefinition("APPEARANCE", "HAIR", "GROWTH", "GROWTH");
+addSectionDefinition("APPEARANCE", "HAIR", "BROKEN", "BROKEN");
+addSectionDefinition("APPEARANCE", "HAIR", "BRITTLE", "BRITTLE");
+addSectionDefinition("APPEARANCE", "HAIR", "DANDRUFF", "DANDRUFF");
+addSectionDefinition("APPEARANCE", "HAIR", "DRY", "DRY");
+addSectionDefinition("APPEARANCE", "HAIR", "GROWTH LOSS", "GROWTH LOSS");
+addSectionDefinition("APPEARANCE", "HAIR", "LUSTRE", "LUSTRE");
+addSectionDefinition("APPEARANCE", "HAIR", "OILY", "OILY");
+addSectionDefinition("APPEARANCE", "HAIR", "ROUGH", "ROUGH");
+addSectionDefinition("APPEARANCE", "HAIR", "TANGLED", "TANGLED");
+addSectionDefinition("APPEARANCE", "HAIR", "TEXTURE", "TEXTURE");
+addSectionDefinition("APPEARANCE", "HAIR", "COLOUR", "COLOUR");
+addSectionDefinition("APPEARANCE", "COLOUR", "BLACK", "BLACK");
+addSectionDefinition("APPEARANCE", "COLOUR", "BROWN", "BROWN");
+addSectionDefinition("APPEARANCE", "COLOUR", "GOLDEN", "GOLDEN");
+addSectionDefinition("APPEARANCE", "COLOUR", "GRAY", "GRAY");
+addSectionDefinition("APPEARANCE", "COLOUR", "RED", "RED");
+addSectionDefinition("APPEARANCE", null, "NAILS", "NAILS");
+addSectionDefinition("APPEARANCE", "NAILS", "BITTEN", "BITTEN");
+addSectionDefinition("APPEARANCE", "NAILS", "BRITTLE", "BRITTLE");
+addSectionDefinition("APPEARANCE", "NAILS", "BROKEN", "BROKEN");
+addSectionDefinition("APPEARANCE", "NAILS", "CLUBBING", "CLUBBING");
+addSectionDefinition("APPEARANCE", "NAILS", "COLOR", "COLOR");
+addSectionDefinition("APPEARANCE", "NAILS", "CRUMBLING", "CRUMBLING");
+addSectionDefinition("APPEARANCE", "NAILS", "DEFORMED", "DEFORMED");
+addSectionDefinition("APPEARANCE", "NAILS", "DISCOLOURED", "DISCOLOURED");
+addSectionDefinition("APPEARANCE", "NAILS", "EXFOLLATIONG", "EXFOLLATIONG");
+addSectionDefinition("APPEARANCE", "NAILS", "FALLING", "FALLING");
+addSectionDefinition("APPEARANCE", "NAILS", "FUNGUS", "FUNGUS");
+addSectionDefinition("APPEARANCE", "NAILS", "HAND-NAILS", "HAND-NAILS");
+addSectionDefinition("APPEARANCE", "NAILS", "HEMORRHAGES", "HEMORRHAGES");
+addSectionDefinition("APPEARANCE", "NAILS", "INGROWN", "INGROWN");
+addSectionDefinition("APPEARANCE", "NAILS", "MOONS", "MOONS");
+addSectionDefinition("APPEARANCE", "NAILS", "PARONYCHIA", "PARONYCHIA");
+addSectionDefinition("APPEARANCE", "NAILS", "RIBBED", "RIBBED");
+addSectionDefinition("APPEARANCE", "NAILS", "RIDGED", "RIDGED");
+addSectionDefinition("APPEARANCE", "NAILS", "ROUGH", "ROUGH");
+addSectionDefinition("APPEARANCE", "NAILS", "SENSITIVE", "SENSITIVE");
+addSectionDefinition("APPEARANCE", "NAILS", "SERRATED", "SERRATED");
+addSectionDefinition("APPEARANCE", "NAILS", "SPLITTING", "SPLITTING");
+addSectionDefinition("APPEARANCE", "NAILS", "SPOON", "SPOON");
+addSectionDefinition("APPEARANCE", "NAILS", "SPOTS", "SPOTS");
+addSectionDefinition("APPEARANCE", "NAILS", "SUPPURATION", "SUPPURATION");
+addSectionDefinition("APPEARANCE", "NAILS", "THICK", "THICK");
+addSectionDefinition("APPEARANCE", "NAILS", "THIN", "THIN");
+addSectionDefinition("APPEARANCE", "NAILS", "UNCLERATED", "UNCLERATED");
+addSectionDefinition("APPEARANCE", null, "FACE", "FACE");
+addSectionDefinition("APPEARANCE", null, "EYES", "EYES");
+addSectionDefinition("APPEARANCE", null, "VISION", "VISION");
+addSectionDefinition("APPEARANCE", null, "EARS", "EARS");
+addSectionDefinition("APPEARANCE", null, "HEARING", "HEARING");
+addSectionDefinition("APPEARANCE", null, "MOUTH", "MOUTH");
+addSectionDefinition("APPEARANCE", null, "LIPS", "LIPS");
+addSectionDefinition("APPEARANCE", null, "TONGUE", "TONGUE");
+addSectionDefinition("APPEARANCE", null, "TEETH", "TEETH");
+addSectionDefinition("APPEARANCE", "TEETH", "No", "No");
+addSectionDefinition("APPEARANCE", "TEETH", "CARIES", "CARIES");
+addSectionDefinition("APPEARANCE", "TEETH", "DISCOLOURATION", "DISCOLOURATION");
+addSectionDefinition("APPEARANCE", "TEETH", "GUMS", "GUMS");
+addSectionDefinition("APPEARANCE", null, "COLDNESS", "COLDNESS");
+addSectionDefinition("APPEARANCE", "COLDNESS", "GENERAL", "GENERAL");
+addSectionDefinition("APPEARANCE", "COLDNESS", "PARTIAL", "PARTIAL");
+addSectionDefinition("APPEARANCE", null, "HEAT", "HEAT");
+addSectionDefinition("APPEARANCE", "HEAT", "GENERAL", "GENERAL");
+addSectionDefinition("APPEARANCE", "HEAT", "PARTIAL", "PARTIAL");
+addSectionDefinition("APPEARANCE", null, "WARMTH", "WARMTH");
+addSectionDefinition("APPEARANCE", "WARMTH", "GENERAL", "GENERAL");
+addSectionDefinition("APPEARANCE", "WARMTH", "PARTIAL", "PARTIAL");
+addSectionDefinition("APPEARANCE", null, "ANAEMIA", "ANAEMIA");
+addSectionDefinition("APPEARANCE", null, "OEDEMA", "OEDEMA");
+addSectionDefinition("APPEARANCE", "OEDEMA", "GENERAL", "GENERAL");
+addSectionDefinition("APPEARANCE", "OEDEMA", "PARTIAL", "PARTIAL");
+addSectionDefinition("APPEARANCE", null, "PERSPRIRATION", "PERSPRIRATION");
+addSectionDefinition("APPEARANCE", "PERSPRIRATION", "GENERAL", "GENERAL");
+addSectionDefinition("APPEARANCE", "PERSPRIRATION", "PARTIAL", "PARTIAL");
+addSectionDefinition("APPEARANCE", null, "ABSENT", "ABSENT");
+addSectionDefinition("APPEARANCE", null, "ACRID", "ACRID");
+addSectionDefinition("APPEARANCE", null, "BLOODY", "BLOODY");
+addSectionDefinition("APPEARANCE", null, "BURNING", "BURNING");
+addSectionDefinition("APPEARANCE", null, "CLAMMY", "CLAMMY");
+addSectionDefinition("APPEARANCE", null, "COLD", "COLD");
+addSectionDefinition("APPEARANCE", null, "DIMMISHED", "DIMMISHED");
+addSectionDefinition("APPEARANCE", null, "EXCESSIVE", "EXCESSIVE");
+addSectionDefinition("APPEARANCE", null, "ODORS", "ODORS");
+addSectionDefinition("APPEARANCE", null, "OILY", "OILY");
+addSectionDefinition("APPEARANCE", null, "STAINING", "STAINING");
+addSectionDefinition("APPEARANCE", "STAINING", "COLOUR", "COLOUR");
+addSectionDefinition("APPEARANCE", null, "FAST", "FAST");
+addSectionDefinition("APPEARANCE", null, "STICKY", "STICKY");
+addSectionDefinition("APPEARANCE", null, "SUPPESSED", "SUPPESSED");
+addSectionDefinition("APPEARANCE", null, "WARM", "WARM");
+// addSectionDefinition("APPEARANCE", null, "WARM", "WARM"); // Duplicate found & removed
+addSectionDefinition(
+  "APPEARANCE",
+  null,
+  "GENERAL_IMPRESSION_TYPE", // Changed key to be more standard
+  "GENERAL IMPRESSION & TYPE"
+);
+
+// --- DIGESTION Tab ---
+addSectionDefinition("DIGESTION", null, "ACIDITY", "ACIDITY");
+addSectionDefinition("DIGESTION", null, "APPETITE", "APPETITE");
+addSectionDefinition("DIGESTION", null, "BILIOUSNESS", "BILIOUSNESS");
+addSectionDefinition("DIGESTION", null, "COLICS", "COLICS");
+addSectionDefinition("DIGESTION", null, "DRYNESS", "DRYNESS");
+addSectionDefinition("DIGESTION", null, "ERUCTATIONS", "ERUCTATIONS");
+addSectionDefinition("DIGESTION", null, "FLATULENCE", "FLATULENCE");
+addSectionDefinition("DIGESTION", null, "HUNGER", "HUNGER");
+addSectionDefinition("DIGESTION", null, "NAUSEA", "NAUSEA");
+addSectionDefinition("DIGESTION", null, "SALIVATION", "SALIVATION");
+addSectionDefinition(
+  "DIGESTION",
+  null,
+  "SORE_MOUTH_THROAT", // Changed key
+  "SORE MOUTH & THROAT"
+);
+addSectionDefinition("DIGESTION", null, "TASTE", "TASTE");
+addSectionDefinition("DIGESTION", null, "THIRST", "THIRST");
+addSectionDefinition("DIGESTION", null, "VOMITING", "VOMITING"); // Corrected spelling
+addSectionDefinition(
+  "DIGESTION",
+  null,
+  "AVERSIONS_CRAVINGS", // Changed key
+  "AVERSIONS (A) & CRAVINGS (C)"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "ACIDS", "ACIDS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "ALCOHOL", "ALCOHOL");
+addSectionDefinition(
+  "DIGESTION",
+  "ALCOHOL", // Parent should be ALCOHOL if specifying type
+  "ALCOHOL_SPECIFY",
+  "SPECIFY"
+);
+addSectionDefinition(
+  "DIGESTION",
+  "ALCOHOL", // Parent should be ALCOHOL
+  "ALCOHOL_BEER",
+  "BEER"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "ALMONDS", "ALMONDS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "APPLES", "APPLES");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "BACON", "BACON");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "BANANAS", "BANANAS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "BEEF", "BEEF");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "BISCUITS", "BISCUITS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "BITTER", "BITTER");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "BREAD", "BREAD");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "BUTTER", "BUTTER");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "CEREALS", "CEREALS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "CHEESE", "CHEESE");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "CHERRIES", // Corrected spelling
+  "CHERRIES"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "CHICKEN", "CHICKEN");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "CHOCOLATE", // Corrected spelling
+  "CHOCOLATE"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "COFFEE", "COFFEE");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "COLD_TEMP", // Differentiate from COLD illness
+  "COLD"
+);
+addSectionDefinition("DIGESTION", "COLD_TEMP", "COLD_DRINK", "DRINK");
+addSectionDefinition("DIGESTION", "COLD_TEMP", "COLD_FOOD", "FOOD");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "CUCUMBERS",
+  "CUCUMBERS"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "CURD", "CURD");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "DELICACIES", // Corrected spelling
+  "DELICACIES"
+);
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "DRY_FOOD", // Changed key
+  "DRY FOOD"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "EGG", "EGG");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "FARINACEOUS",
+  "FARINACEOUS"
+);
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "FAT_RICH_FOODS", // Changed key
+  "FAT & RICH FOODS"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "FISH", "FISH");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "FLOUR", // Corrected spelling
+  "FLOUR"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "FRIED", "FRIED");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "FRUIT", "FRUIT");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "GARLIC", "GARLIC");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "GRUEL", "GRUEL");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "HAM", "HAM");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "HERRING", "HERRING");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "HIGHLY_SEASONED", // Consolidated key
+  "HIGHLY SEASONED"
+);
+// Removed redundant SEASONED
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "HONEY", // Simplified key
+  "HONEY"
+);
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "HOT_TEMP", // Differentiate from spicy
+  "HOT"
+);
+addSectionDefinition("DIGESTION", "HOT_TEMP", "HOT_DRINK", "HOT :DRINK");
+addSectionDefinition("DIGESTION", "HOT_TEMP", "HOT_FOOD", "HOT :FOOD");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "ICE", "ICE");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "ICE_CREAM",
+  "ICE CREAM"
+);
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "INDIGESTIBLE_THINGS", // Consolidated key
+  "INDIGESTIBLE THINGS"
+);
+// Removed redundant THINGS
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "INDISTINCT",
+  "INDISTINCT"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "JUICY", "JUICY");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "LEMON", "LEMON");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "LEMONADE", "LEMONADE");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "LIQUID_SOFT", // Changed key
+  "LIQUID(SOFT)"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "MEAT", "MEAT");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "MILK", "MILK");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "NUTS", "NUTS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "ONIONS", "ONIONS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "ORANGE", "ORANGE");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "OYSTERS", "OYSTERS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "PASTRY", "PASTRY");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "PEPPER", "PEPPER");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "PICA", "PICA");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "PICKLES", "PICKLES");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "PLUMS", "PLUMS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "PORK", "PORK");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "POTATOES", "POTATOES");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "PUDDING", "PUDDING");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "PUNGENT_SPICY", // Changed key
+  "PUNGENT(SPICY)"
+);
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "RAW_FOODS",
+  "RAW FOODS"
+);
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "REFRESHING",
+  "REFRESHING"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "RICE", "RICE");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "SALAD", "SALAD");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "SALT", "SALT");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "SALTY_THINGS", // Consolidated key
+  "SALTY THINGS"
+);
+// Removed redundant THINGS
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "SARDINES", "SARDINES");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "SHELLFISH",
+  "SHELLFISH"
+);
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "SMOKED_THINGS",
+  "SMOKED THINGS"
+);
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "SOLID_FOODS",
+  "SOLID FOODS"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "SOUR", "SOUR");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "STARCH", "STARCH");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "STRANGE", "STRANGE");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "SUGAR", // Corrected spelling
+  "SUGAR"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "SWEETS", "SWEETS");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "TEA", "TEA");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "TOBACCO", "TOBACCO");
+addSectionDefinition("DIGESTION", "TOBACCO", "TOBACCO_SMOKING", "SMOKING");
+addSectionDefinition("DIGESTION", "TOBACCO", "TOBACCO_CHEWING", "CHEWING"); // Corrected spelling
+addSectionDefinition("DIGESTION", "TOBACCO", "TOBACCO_SNUFF", "SNUFF");
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "TOMATOES", "TOMATOES");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "VEGETABLES",
+  "VEGETABLES"
+);
+addSectionDefinition("DIGESTION", "AVERSIONS_CRAVINGS", "VINEGAR", "VINEGAR");
+addSectionDefinition(
+  "DIGESTION",
+  "AVERSIONS_CRAVINGS",
+  "WARM_TEMP", // Differentiate
+  "WARM"
+);
+addSectionDefinition("DIGESTION", "WARM_TEMP", "WARM_DRINK", "DRINK");
+addSectionDefinition("DIGESTION", "WARM_TEMP", "WARM_FOOD", "FOOD");
+
+// --- ELIMINATIONS Tab ---
+addSectionDefinition("ELIMINATIONS", null, "STOOL", "STOOL");
+addSectionDefinition("ELIMINATIONS", "STOOL", "STOOL_COLOUR", "COLOUR");
+addSectionDefinition(
+  "ELIMINATIONS",
+  "STOOL",
+  "STOOL_CONSISTENCY",
+  "CONSISTENCY"
+);
+addSectionDefinition("ELIMINATIONS", "STOOL", "STOOL_ODOUR", "ODOUR");
+addSectionDefinition("ELIMINATIONS", "STOOL", "STOOL_FREQUENCY", "FREQUENCY");
+addSectionDefinition("ELIMINATIONS", "STOOL", "STOOL_ACRIDITY", "ACRIDITY");
+addSectionDefinition("ELIMINATIONS", "STOOL", "STOOL_URGING", "URGING");
+addSectionDefinition(
+  "ELIMINATIONS",
+  "STOOL",
+  "STOOL_SATISFACTION",
+  "SATISFACTION"
+);
+addSectionDefinition("ELIMINATIONS", null, "URINE", "URINE");
+addSectionDefinition("ELIMINATIONS", "URINE", "URINE_FREQUENCY", "FREQUENCY");
+addSectionDefinition("ELIMINATIONS", "URINE", "URINE_DAY_NIGHT", "D/N");
+// Corrected URGNIG/DIFFICULTY/CONTROL/COLOUR/PAIN which were incorrectly nested under FREQUENCY
+addSectionDefinition("ELIMINATIONS", "URINE", "URINE_URGING", "URGING");
+addSectionDefinition("ELIMINATIONS", "URINE", "URINE_DIFFICULTY", "DIFFICULTY");
+addSectionDefinition("ELIMINATIONS", "URINE", "URINE_CONTROL", "CONTROL");
+addSectionDefinition("ELIMINATIONS", "URINE", "URINE_COLOUR", "COLOUR");
+addSectionDefinition("ELIMINATIONS", "URINE", "URINE_PAIN", "PAIN");
+addSectionDefinition(
+  "ELIMINATIONS",
+  null,
+  "DISCHARGES_ABNORMAL", // Changed key
+  "DISCHARGES(ABNORMAL)"
+);
+
+// --- MENSTRUAL_FUNCTION Tab --- // Note: Potential typo, maybe "MENSTRUAL"?
+addSectionDefinition("MENSTRUAL_FUNCTION", null, "FMP", "F.M.P.");
+addSectionDefinition("MENSTRUAL_FUNCTION", null, "LMP", "L.M.P.");
+addSectionDefinition("MENSTRUAL_FUNCTION", null, "MENARCHE", "MENARCHE");
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MENARCHE",
+  "MENARCHE_EARLY",
+  "EARLY"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", "MENARCHE", "MENARCHE_LATE", "LATE");
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MENARCHE",
+  "AMENORRHOEA_PRIMARY", // Changed key
+  "AMENORRHOEA - PRIMARY"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MENARCHE",
+  "AMENORRHOEA_SECONDARY", // Changed key
+  "AMENORRHOEA - SECONDARY"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", null, "MENOPAUSE", "MENOPAUSE");
+addSectionDefinition("MENSTRUAL_FUNCTION", null, "MANSES", "MANSES"); // Assuming MENSES?
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES",
+  "MANSES_REGULAR",
+  "REGULAR"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES",
+  "MANSES_IRREGULAR",
+  "IRREGULAR"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES",
+  "MANSES_CONTINUOUS",
+  "CONTINUOUS"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES",
+  "MANSES_INTERMITTENT",
+  "INTERMITTENT"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", "MANSES", "MANSES_CYCLE", "CYCLE");
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES",
+  "MANSES_DURATION",
+  "DURATION"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", "MANSES", "MANSES_FLOW", "FLOW");
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES",
+  "MANSES_QUANTITY",
+  "QUANTITY"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", "MANSES", "MANSES_COLOUR", "COLOUR");
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES_COLOUR",
+  "COLOUR_BLACK",
+  "BLACK"
+); // Make color options sub-options
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES_COLOUR",
+  "COLOUR_BROWN",
+  "BROWN"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES_COLOUR",
+  "COLOUR_DARK_RED",
+  "DARK RED"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES_COLOUR",
+  "COLOUR_PALE",
+  "PALE"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES_COLOUR",
+  "COLOUR_PINK",
+  "PINK"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", "MANSES", "MANSES_CLOTS", "CLOTS");
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES",
+  "MANSES_CONSISTENCY",
+  "CONSISTENCY"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", "MANSES", "MANSES_ODOUR", "ODOUR");
+addSectionDefinition("MENSTRUAL_FUNCTION", "MANSES", "MANSES_STAINS", "STAINS");
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES_STAINS",
+  "STAINS_COLOUR",
+  "COLOUR"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES_STAINS",
+  "STAINS_FAST",
+  "FAST"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", "MANSES", "MANSES_BEFORE", "BEFORE");
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "MANSES",
+  "MANSES_BEGINNING",
+  "BEGINNING"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", "MANSES", "MANSES_DURING", "DURING");
+addSectionDefinition("MENSTRUAL_FUNCTION", "MANSES", "MANSES_AFTER", "AFTER");
+// Duplicate AFTER removed
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  null,
+  "CHANGES_IN_MENSTRUAL_FUNCTION", // Changed key
+  "CHANGES IN MENSTRUAL FUNCTION"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "CHANGES_IN_MENSTRUAL_FUNCTION",
+  "CHANGES_MARRIAGE_BEFORE",
+  "MARRIAGE BEFORE"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "CHANGES_IN_MENSTRUAL_FUNCTION",
+  "CHANGES_MARRIAGE_AFTER",
+  "MARRIAGE AFTER"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "CHANGES_IN_MENSTRUAL_FUNCTION",
+  "CHANGES_PREGNANCY_AFTER",
+  "PREGNANCY(IES) AFTER"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "CHANGES_IN_MENSTRUAL_FUNCTION",
+  "CHANGES_RECENT",
+  "RECENT"
+);
+addSectionDefinition("MENSTRUAL_FUNCTION", null, "CLIMACTERIC", "CLIMACTERIC");
+addSectionDefinition("MENSTRUAL_FUNCTION", null, "LEUCORRHOEA", "LEUCORRHOEA");
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA",
+  "LEUCORRHOEA_ONSET",
+  "ONSET"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA",
+  "LEUCORRHOEA_DURATION",
+  "DURATION"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA",
+  "LEUCORRHOEA_CHARACTER",
+  "CHARACTER"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_CHARACTER",
+  "CHARACTER_ACRID",
+  "ACRID"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_CHARACTER",
+  "CHARACTER_BLOODY",
+  "BLOODY"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_CHARACTER",
+  "CHARACTER_COLOUR",
+  "COLOUR"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE_COITION_A",
+  "COITION A."
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE_MENSES_B",
+  "MENSES B."
+);
+// Duplicate MENSES B. removed
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE_DURING", // Renamed D. for clarity
+  "D."
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE_AFTER", // Renamed A. for clarity
+  "A."
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE_DEBILITY",
+  "DEBILITY"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE_EXERTION",
+  "EXERTION"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE_MASTURBATION",
+  "MASTURBATION"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE_SEX_DESIRE",
+  "SEX DESIRE"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_OCCURRENCE",
+  "OCCURRENCE_WORMS",
+  "WORMS"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA",
+  "LEUCORRHOEA_EFFECTS",
+  "EFFECTS"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_EFFECTS",
+  "EFFECTS_SORENESS",
+  "SORENESS"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_EFFECTS",
+  "EFFECTS_ITCHING",
+  "ITCHING"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_EFFECTS",
+  "EFFECTS_BURNING",
+  "BURNING"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA",
+  "LEUCORRHOEA_PAIN",
+  "PAIN"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_PAIN",
+  "PAIN_BACK",
+  "BACK"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_PAIN",
+  "PAIN_ABDOMEN",
+  "ABDOMEN"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_PAIN",
+  "PAIN_RADIATING",
+  "RADIATING"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_PAIN",
+  "PAIN_EXTREMITIES",
+  "EXTREMITIES"
+);
+addSectionDefinition(
+  "MENSTRUAL_FUNCTION",
+  "LEUCORRHOEA_PAIN",
+  "PAIN_URINARY",
+  "URINARY"
+);
+
+// --- SEXUAL_FUNCTION Tab ---
+addSectionDefinition("SEXUAL_FUNCTION", null, "DESIRE", "DESIRE");
+addSectionDefinition("SEXUAL_FUNCTION", "DESIRE", "DESIRE_HOMO", "HOMO");
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "DESIRE",
+  "DESIRE_HETERO", // Changed key
+  "HETERO-SEXUAL"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "DESIRE",
+  "DESIRE_OTHER", // Changed key
+  "OTHER"
+);
+addSectionDefinition("SEXUAL_FUNCTION", "DESIRE_OTHER", "DESIRE_OTHER_N", "N"); // Nested under OTHER
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "DESIRE_OTHER",
+  "DESIRE_OTHER_SUPPRESSED", // Nested under OTHER, corrected spelling
+  "SUPPRESSED"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "DESIRE_OTHER",
+  "DESIRE_OTHER_ABSENT", // Nested under OTHER
+  "ABSENT"
+);
+addSectionDefinition("SEXUAL_FUNCTION", null, "MASTURBATION", "MASTURBATION");
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "MASTURBATION",
+  "MASTURBATION_FREQUENCY",
+  "FREQUENCY"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "MASTURBATION",
+  "MASTURBATION_NOCTURNAL_EMISSION",
+  "NOCTURNAL EMISSION"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "MASTURBATION",
+  "MASTURBATION_PROSTATORRHOEA",
+  "PROSTATORRHOEA"
+);
+addSectionDefinition("SEXUAL_FUNCTION", null, "SEX_HISTORY", "SEX"); // Renamed key for clarity
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "SEX_HISTORY",
+  "SEX_MARITAL",
+  "MARITAL"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "SEX_HISTORY",
+  "SEX_PRE_MARITAL",
+  "PRE - MARITAL"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "SEX_HISTORY",
+  "SEX_EXTRA_MARITAL",
+  "EXTRA - MARITAL"
+);
+addSectionDefinition("SEXUAL_FUNCTION", "SEX_HISTORY", "SEX_OTHERS", "OTHERS");
+addSectionDefinition("SEXUAL_FUNCTION", null, "COITION", "COITION");
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "COITION",
+  "COITION_FREQUENCY", // Corrected spelling
+  "FREQUENCY"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "COITION",
+  "COITION_FOREPLAY",
+  "FOREPLAY"
+); // Corrected spelling
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "COITION",
+  "COITION_POSITIONS",
+  "POSITION / S"
+);
+addSectionDefinition("SEXUAL_FUNCTION", null, "EXCITEMENT", "EXCITEMENT");
+addSectionDefinition("SEXUAL_FUNCTION", "EXCITEMENT", "EXCITEMENT_N", "N");
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "EXCITEMENT",
+  "EXCITEMENT_EARLY",
+  "EARLY"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "EXCITEMENT",
+  "EXCITEMENT_FANTASY",
+  "FANTASY"
+);
+addSectionDefinition("SEXUAL_FUNCTION", null, "ERECTION", "ERECTION");
+addSectionDefinition("SEXUAL_FUNCTION", "ERECTION", "ERECTION_N", "N");
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "ERECTION",
+  "ERECTION_INCOMPLETE",
+  "INCOMPLETE"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "ERECTION",
+  "ERECTION_ABSENT",
+  "ABSENT"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "ERECTION",
+  "ERECTION_PAINFUL",
+  "PAINFUL"
+);
+addSectionDefinition("SEXUAL_FUNCTION", null, "INSERTION", "INSERTION");
+addSectionDefinition("SEXUAL_FUNCTION", null, "EJACULATION", "EJACULATION");
+addSectionDefinition("SEXUAL_FUNCTION", "EJACULATION", "EJACULATION_N", "N");
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "EJACULATION",
+  "EJACULATION_PREMATURE", // Corrected spelling
+  "PREMATURE"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "EJACULATION",
+  "EJACULATION_INVOLUNTARY",
+  "INVOLUNTARY"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "EJACULATION",
+  "EJACULATION_ABSENT",
+  "ABSENT"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "EJACULATION",
+  "EJACULATION_RETARDED",
+  "RETARDED"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "EJACULATION",
+  "EJACULATION_PAINFUL", // Corrected spelling
+  "PAINFUL"
+);
+addSectionDefinition("SEXUAL_FUNCTION", null, "ORGASM", "ORGASM");
+addSectionDefinition("SEXUAL_FUNCTION", "ORGASM", "ORGASM_N", "N");
+addSectionDefinition("SEXUAL_FUNCTION", "ORGASM", "ORGASM_ABSENT", "ABSENT");
+addSectionDefinition("SEXUAL_FUNCTION", null, "PREPUCE", "PREPUCE");
+addSectionDefinition("SEXUAL_FUNCTION", "PREPUCE", "PREPUCE_CRACKS", "CRACKS");
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "PREPUCE",
+  "PREPUCE_INFECTION",
+  "INFECTION"
+);
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "PREPUCE",
+  "PREPUCE_RETRACTION_DIFFICULT",
+  "RETRACTION DIFFICULT"
+);
+addSectionDefinition("SEXUAL_FUNCTION", null, "VAGINA", "VAGINA");
+addSectionDefinition("SEXUAL_FUNCTION", "VAGINA", "VAGINA_N", "N");
+addSectionDefinition("SEXUAL_FUNCTION", "VAGINA", "VAGINA_DRYNESS", "DRYNESS");
+addSectionDefinition("SEXUAL_FUNCTION", "VAGINA", "VAGINA_SPASM", "SPASM");
+addSectionDefinition(
+  "SEXUAL_FUNCTION",
+  "VAGINA",
+  "VAGINA_NUMBNESS",
+  "NUMBNESS"
+);
+addSectionDefinition("SEXUAL_FUNCTION", "VAGINA", "VAGINA_CRACKS", "CRACKS");
+
+// --- PATIENTS_OBSTETRIC_HISTORY Tab --- // Note: Potential typo, maybe "OBSTETRIC"?
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "PREGNANCIES",
+  "PREGNANCIES"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "PREGNANCIES",
+  "PREG_GRAVIDA",
+  "GRAVIDA"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "PREGNANCIES",
+  "PREG_PARA",
+  "PARA"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "ABORTIONS",
+  "ABORTIONS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ABORTIONS",
+  "ABORTION_NATURAL",
+  "NATURAL"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ABORTIONS",
+  "ABORTION_INDUCED",
+  "INDUCED"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ABORTIONS",
+  "ABORTION_HABITUAL",
+  "HABITUAL"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ABORTIONS",
+  "ABORTION_THREATENED",
+  "THREATENED"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "ANTENATAL_PERIOD",
+  "ANTENATAL PERIOD"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_PERIOD",
+  "ANTENATAL_AGE_CONCEPTION",
+  "AGE AT THE TIME OF CONCEPTION"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_PERIOD",
+  "ANTENATAL_PLANNED_PREGNANCY",
+  "PLANNED PREGNANCY"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_PERIOD",
+  "ANTENATAL_UNPLANNED_PREGNANCY",
+  "UNPLANNED PREGNANCY"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_PERIOD",
+  "ANTENATAL_DESIRE_MF_CHILD",
+  "DESIRE FOR M/F CHILD"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "ANTENATAL_HISTORY",
+  "ANTENATAL HISTORY"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_WEIGHT_GAIN",
+  "WEIGHT GAIN"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_MORNING_SICKNESS",
+  "MORNING SICKNESS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_PYROSIS", // Corrected spelling
+  "PYROSIS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_PICA",
+  "PICA"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_BACKACHE",
+  "BACKACHE"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_FOETAL_MOVEMENTS",
+  "FOETAL MOVEMENTS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_OEDEMA",
+  "OEDEMA"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_PROTEINURIA",
+  "PROTEINURIA"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_BP",
+  "B.P."
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_CONVULSIONS",
+  "CONVULSIONS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_SKIN_PIGM",
+  "SKIN PIGM"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_PILES_VEINS", // Assuming PILES?
+  "PILES VEINS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_VARICOSE_VEINS",
+  "VARICOSE VEINS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_BLEEDING_VOMIT", // VOMITING?
+  "BLEEDING VOMIT"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_APH", // Antepartum haemorrhage?
+  "A.P.H"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_INFECTIONS",
+  "INFECTIONS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_TORCH",
+  "TORCH"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_DRUGS",
+  "DRUGS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ANTENATAL_HISTORY",
+  "ANTENATAL_MENTAL_STATE", // Corrected spelling, consolidated key
+  "MENTAL STATE PREGNANCY DURING"
+);
+addSectionDefinition("PATIENTS_OBSTETRIC_HISTORY", null, "LABOUR", "LABOUR");
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "LABOUR",
+  "LABOUR_UTERINE_INERTIA",
+  "UTERINE INTERTIA"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "LABOUR",
+  "LABOUR_RIGID_OS",
+  "RIGID OS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "LABOUR",
+  "LABOUR_PPH", // Postpartum haemorrhage?
+  "P.P.H"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "LABOUR",
+  "LABOUR_PLACENTA",
+  "PLACENTA"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "DELIVERY",
+  "DELIVERY"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "DELIVERY",
+  "DELIVERY_FTND", // Full term normal delivery?
+  "F.T.N.D."
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "DELIVERY",
+  "DELIVERY_FORCEPS",
+  "FORCEPS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "DELIVERY",
+  "DELIVERY_VACUUM_SUCTION", // Corrected spelling
+  "VACUUM SUCTION"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "DELIVERY",
+  "DELIVERY_CAESAR", // Corrected spelling
+  "CAESAR"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "DELIVERY",
+  "DELIVERY_VERSION", // Corrected spelling
+  "VERSION"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "DELIVERY",
+  "DELIVERY_INDUCED",
+  "INDUCED"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "DELIVERY",
+  "DELIVERY_PREMATURE",
+  "PREMATURE"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "DELIVERY",
+  "DELIVERY_POST_MATURE",
+  "POST MATURE"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "BIRTH_WEIGHT",
+  "BIRTH WEIGHT"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "NEONATAL",
+  "NEONATAL"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "NEONATAL",
+  "NEONATAL_PROBLEMS",
+  "PROBLEMS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "NEONATAL",
+  "NEONATAL_ASPHYXIA",
+  "ASPHYXIA"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "NEONATAL",
+  "NEONATAL_JAUNDICE",
+  "JAUNDICE"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "NEONATAL",
+  "NEONATAL_SEPSIS", // Corrected spelling
+  "SEPSIS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "NEONATAL",
+  "NEONATAL_CORD_INFECTION",
+  "CORD INFECTION"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "NEONATAL",
+  "NEONATAL_CORD_BLEEDING",
+  "CORD BLEEDING"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "POST_PARTUM",
+  "POST PARTUM"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "POST_PARTUM",
+  "POSTPARTUM_LOCHIA",
+  "LOCHIA"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "POST_PARTUM",
+  "POSTPARTUM_SEPSIS",
+  "SEPSIS"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "POST_PARTUM",
+  "POSTPARTUM_LACTATION", // Corrected spelling
+  "LACTATION"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "POST_PARTUM",
+  "POSTPARTUM_MENTAL_STATE", // Corrected spelling, consolidated key
+  "MENTAL STATE POST PARTUM"
+);
+// Removed redundant STATE, POST, PARTUM
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "MOTHER_FOETUS_BOND",
+  "MOTHER FOETUS BOND"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "MOTHER_FOETUS_BOND",
+  "BOND_ATTACHMENT",
+  "ATTACHMENT"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "MOTHER_FOETUS_BOND",
+  "BOND_AMBIVALENT",
+  "AMBIVALENT"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "MOTHER_FOETUS_BOND",
+  "BOND_REJECTION",
+  "REJECTION"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "MOTHER_FOETUS_BOND",
+  "BOND_DELAY_ISOLATION", // Corrected spelling
+  "DELAY(ISOLATION)"
+);
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  null,
+  "RH_INCOMPATIBILITIES", // Corrected spelling
+  "RH INCOMPATIBILITIES"
+);
+addSectionDefinition("PATIENTS_OBSTETRIC_HISTORY", null, "ADOPTED", "ADOPTED");
+addSectionDefinition(
+  "PATIENTS_OBSTETRIC_HISTORY",
+  "ADOPTED",
+  "ADOPTED_AGE_AT_TIME",
+  "AGE AT THE TIME OF ADOPTION"
+);
+
+// --- DEVELOPMENTAL_LANDMARKS_PROBLEMS Tab --- // Note: Potential typo in tab key "BEVELOPMENTAL"? Keeping as is unless asked to change.
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null,
+  "PROBLEMS",
+  "PROBLEMS"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "PROBLEMS",
+  "DEV_PHYSICAL",
+  "PHYSICAL DEVELOPMENT"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "PROBLEMS",
+  "DEV_MENTAL", // Corrected spelling
+  "MENTAL DEVELOPMENT"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null, // Should this be under PROBLEMS or top-level? Assuming top-level based on structure.
+  "GROWTH_INCREASE",
+  "INCREASE"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "GROWTH_INCREASE",
+  "INCREASE_WEIGHT",
+  "WEIGHT"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "GROWTH_INCREASE",
+  "INCREASE_HEIGHT",
+  "HEIGHT"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null, // Assuming top-level
+  "RECOGNITION",
+  "RECOGNITION"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "RECOGNITION",
+  "RECOG_OBJECT",
+  "OBJECT"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "RECOGNITION",
+  "RECOG_PERSON", // Corrected spelling
+  "PERSON"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "RECOGNITION",
+  "RECOG_SOCIAL_SMILE",
+  "SOCIAL SMILE"
+);
+// The following seem like milestones, maybe group under "MILESTONES"?
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null,
+  "MILESTONES_GROSS_MOTOR",
+  "Gross Motor"
+); // Example grouping
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "HEAD_CIRCUMFERENCE", // Example - was HEAD
+  "HEAD CIRCUMFERENCE"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "ABDOMEN_CIRCUMFERENCE", // Example - was ABDOMEN
+  "ABDOMEN CIRCUMFERENCE"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "FONTANELLAE_CLOSURE",
+  "FONTANELLAE (CLOSURE)"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "DENTITION",
+  "DENTITION"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "HEAD_HOLDING",
+  "HEAD HOLDING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "TURNING_PRONE",
+  "TURNING PRONE"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "SITTING",
+  "SITTING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "CRAWLING",
+  "CRAWLING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "STANDING",
+  "STANDING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_GROSS_MOTOR",
+  "WALKING",
+  "WALKING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null,
+  "MILESTONES_FINE_MOTOR",
+  "Fine Motor / Self Help"
+); // Example grouping
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_FINE_MOTOR",
+  "OBJECT_GRASP",
+  "OBJECT GRASP"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_FINE_MOTOR",
+  "HAND_TO_HAND_TRANSFER",
+  "HAND TO HAND TRANSFER"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_FINE_MOTOR",
+  "PINCER_MOVEMENT", // Corrected spelling
+  "PINCER MOVEMENT"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_FINE_MOTOR",
+  "REMOVE_CLOTHES", // Corrected spelling
+  "REMOVE CLOTHES"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_FINE_MOTOR",
+  "REMOVE_SHOES", // Corrected spelling
+  "REMOVE SHOES"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_FINE_MOTOR",
+  "PUTS_ON_CLOTHES", // Corrected spelling
+  "PUTS ON CLOTHES"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "MILESTONES_FINE_MOTOR",
+  "PUTS_ON_SHOES", // Corrected spelling
+  "PUTS ON SHOES"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null, // Assuming top-level
+  "SPEECH",
+  "SPEECH"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "SPEECH",
+  "SPEECH_BABBLING",
+  "BABBLING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "SPEECH",
+  "SPEECH_WORDS",
+  "WORDS"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "SPEECH",
+  "SPEECH_SENTENCES", // Corrected spelling
+  "SENTENCES"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "SPEECH",
+  "SPEECH_RETARDED", // Corrected spelling
+  "RETARDED"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "SPEECH",
+  "SPEECH_LISPING",
+  "LISPING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "SPEECH",
+  "SPEECH_STAMMERING",
+  "STAMMERING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null, // Assuming top-level
+  "SOCIALIZATION", // Corrected spelling
+  "SOCIALIZATION"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null, // Assuming top-level
+  "TOILET_CONTROL", // Renamed for clarity
+  "CONTROL"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "TOILET_CONTROL",
+  "CONTROL_BLADDER_D",
+  "BLADDER D"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "TOILET_CONTROL",
+  "CONTROL_BLADDER_N",
+  "BLADDER N"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "TOILET_CONTROL",
+  "CONTROL_BOWEL", // Corrected spelling
+  "BOWEL"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null, // Assuming top-level
+  "FEEDING_HISTORY", // Renamed for clarity
+  "FEEDING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_HISTORY",
+  "FEEDING_BREAST",
+  "BREAST"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_HISTORY",
+  "FEEDING_TOP_DILUTION",
+  "TOP:DILUTION"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_HISTORY",
+  "FEEDING_BOTTLE", // Corrected spelling
+  "BOTTLE"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_HISTORY",
+  "FEEDING_SOLIDS",
+  "SOLIDS"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  null, // Assuming top-level
+  "FEEDING_PROBLEMS",
+  "FEEDING PROBLEMS"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_PROBLEMS",
+  "FEEDING_PROB_COLIC",
+  "COLIC"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_PROBLEMS",
+  "FEEDING_PROB_UNDER",
+  "UNDER FEEDING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_PROBLEMS",
+  "FEEDING_PROB_OVER",
+  "OVER FEEDING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_PROBLEMS",
+  "FEEDING_PROB_REGURGITATION_VOMITING", // Corrected spelling
+  "REGURGITATION & VOMITING"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_PROBLEMS",
+  "FEEDING_PROB_LOOSE_STOOLS",
+  "LOOSE STOOLS"
+);
+addSectionDefinition(
+  "DEVELOPMENTAL_LANDMARKS_PROBLEMS",
+  "FEEDING_PROBLEMS",
+  "FEEDING_PROB_CONSTIPATION",
+  "CONSTIPATION"
+);
+
+// --- REACTION_PHYSICAL_FACTORS Tab ---
+// (No sections defined yet in the original code)
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "TIME", "TIME");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "PERIODICITY",
+  "PERIODICITY"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "MOTION", "MOTION");
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "POSITION", "POSITION");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "TEMPERATURE",
+  "TEMPERATURE"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "WEATHER", "WEATHER");
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "SEASONS", "SEASONS");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "CHANGE WEATHER",
+  "CHANGE WEATHER"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "CHANGE TEMPERATURE",
+  "CHANGE TEMPERATURE"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "CHANGE SEASONS",
+  "CHANGE SEASONS"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "AIR", "AIR");
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "WET", "WET");
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "GETTING", "GETTING");
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "COVERING", "COVERING");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "UNCOVERING",
+  "UNCOVERING"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "BATH", "BATH");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "SENSORY INPUTS",
+  "SENSORY INPUTS"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "DIAGESTION",
+  "DIAGESTION"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "FOOD+DRINK",
+  "FOOD + DRINK"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "ELIMINATIONS",
+  "ELIMINATIONS"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "SLEEP", "SLEEP");
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "SEX", "SEX");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "DISCHARGES&ERUPTIONS",
+  "DISCHARGES & ERUPTIONS"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "EPOCHS", "EPOCHS");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null,
+  "ADAPTATION-STRESS",
+  "ADAPTATION-STRESS"
+);
+
+addSectionDefinition("FERVER_TOTALITY", null, "ONSET", "ONSET");
+addSectionDefinition("FERVER_TOTALITY", "ONSET", "SUDDEN", "SUDDEN");
+addSectionDefinition("FERVER_TOTALITY", "ONSET", "INSIDIOUS", "INSIDIOUS");
+addSectionDefinition("FERVER_TOTALITY", null, "TYPE", "TYPE");
+addSectionDefinition("FERVER_TOTALITY", "TYPE", "CONTINUES", "CONTINUES");
+addSectionDefinition("FERVER_TOTALITY", "TYPE", "INTERMITTENT", "INTERMITTENT");
+addSectionDefinition("FERVER_TOTALITY", "TYPE", "LADDER", "LADDER");
+addSectionDefinition("FERVER_TOTALITY", "TYPE", "REMITTENT", "REMITTENT");
+addSectionDefinition("FERVER_TOTALITY", "TYPE", "SWINGING", "SWINGING");
+addSectionDefinition("FERVER_TOTALITY", "TYPE", "SIMPLE", "SIMPLE");
+addSectionDefinition("FERVER_TOTALITY", "TYPE", "COMPOUND", "COMPOUND");
+addSectionDefinition("FERVER_TOTALITY", null, "COURSE", "COURSE");
+addSectionDefinition("FERVER_TOTALITY", "COURSE", "ACUTE", "ACUTE");
+addSectionDefinition("FERVER_TOTALITY", "COURSE", "SUB-ACUTE", "SUB-ACUTE");
+addSectionDefinition("FERVER_TOTALITY", "COURSE", "CHRONIC", "CHRONIC");
+addSectionDefinition("FERVER_TOTALITY", "COURSE", "PERIODIC", "PERIODIC");
+addSectionDefinition("FERVER_TOTALITY", "COURSE", "FULMINANT", "FULMINANT");
+addSectionDefinition(
+  "FERVER_TOTALITY",
+  null,
+  "CHILL&COLDNESS",
+  "CHILL & COLDNESS"
+);
+addSectionDefinition(
+  "FERVER_TOTALITY",
+  "CHILL&COLDNESS",
+  "CHARACTER",
+  "CHARACTER"
+);
+addSectionDefinition("FERVER_TOTALITY", "CHILL&COLDNESS", "TIME", "TIME");
+addSectionDefinition(
+  "FERVER_TOTALITY",
+  "CHILL&COLDNESS",
+  "CONCOMITANTS",
+  "CONCOMITANTS"
+);
+addSectionDefinition("FERVER_TOTALITY", null, "FEVER&HEAT", "FEVER & HEAT");
+addSectionDefinition("FERVER_TOTALITY", "FEVER&HEAT", "CHARACTER", "CHARACTER");
+addSectionDefinition("FERVER_TOTALITY", "CHILL&HEAT", "TIME", "TIME");
+addSectionDefinition(
+  "FERVER_TOTALITY",
+  "CHILL&HEAT",
+  "CONCOMITANTS",
+  "CONCOMITANTS"
+);
+addSectionDefinition("FERVER_TOTALITY", null, "PERSPIRATION", "PERSPIRATION");
+addSectionDefinition(
+  "FERVER_TOTALITY",
+  "PERSPIRATION",
+  "CHARACTER",
+  "CHARACTER"
+);
+addSectionDefinition("FERVER_TOTALITY", "PERSPIRATION", "TIME", "TIME");
+addSectionDefinition(
+  "FERVER_TOTALITY",
+  "PERSPIRATION",
+  "CONCOMITANTS",
+  "CONCOMITANTS"
+);
+addSectionDefinition(
+  "FERVER_TOTALITY",
+  null,
+  "COMPOUND FEVERS",
+  "COMPOUND FEVERS"
+);
+addSectionDefinition(
+  "FERVER_TOTALITY",
+  null,
+  "INTERVAL APYREXIA",
+  "INTERVAL APYREXIA"
+);
+
+//=========================================================
+// PatientSection Component (Memoized for Performance)
+//=========================================================
+const PatientSection = React.memo(
+  ({
+    sectionKey,
+    sectionData,
+    level = 1,
+    dropdownOpen,
+    toggleDropdown,
+    handlers,
+  }) => {
+    //   console.log(`Rendering PatientSection: ${sectionKey}`); // Optional: Debug render
+
+    // --- Inline Style Calculations ---
+    const getIndentStyle = (lvl) => {
+      const baseStyle = {};
+      if (lvl === 2) baseStyle.marginLeft = "1.5rem";
+      else if (lvl === 3) baseStyle.marginLeft = "2.5rem";
+      // Add more levels if needed
+      return baseStyle;
+    };
+    const indentStyle = useMemo(() => getIndentStyle(level), [level]);
+
+    const getHeadingStyle = (lvl) => ({ fontWeight: "bold" });
+    const headingStyle = useMemo(() => getHeadingStyle(level), [level]);
+
+    // --- Helper functions for Comment Text ---
+    const transformCommentText = (text, priority) => {
+      if (!text) return "";
+      if (priority === "2") {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+      }
+      return text;
+    };
+
+    const getPriorityInputClass = (priorityValue) => {
+      if (!priorityValue) return ""; // No priority set yet
+      return `priority-${priorityValue}`; // Returns 'priority-1', 'priority-2', or 'priority-3'
+    };
+    const priorityClass = useMemo(
+      () => getPriorityInputClass(sectionData.locationValue),
+      [sectionData.locationValue]
+    );
+    const getCommentStyle = (priority) => {
+      const style = {
+        textAlign: "left",
+        // Optional: Set base font size or style for priority 1 if needed
+        // fontSize: priority === '1' ? '0.9em' : 'inherit', // Example: slightly smaller for priority 1
+      };
+      if (priority === "2") {
+        style.fontStyle = "italic";
+        // Capitalization is handled by transformCommentText
+      } else if (priority === "3") {
+        style.fontWeight = "bold"; // Add bold
+        style.fontStyle = "italic"; // Keep italic
+      }
+      // Priority '1' gets default styles (or specific styles if added above)
+      return style;
+    };
+
+    // Destructure handlers
+    const {
+      handleInputChange,
+      handleDropdownSelect,
+      handleAddItem,
+      handleRemoveItem,
+      toggleCommentsVisibility,
+    } = handlers;
+
+    return (
+      <>
+        <div className={`Patient_Person_Add`}>
+          {/* Section Header */}
+          <div
+            className="d-flex justify-content-between align-items-center mb-2"
+            style={indentStyle}
+          >
+            <h3 className={`h6 mb-0`} style={headingStyle}>
+              <span>{sectionData.title}</span>
+            </h3>
+            <button
+              type="button"
+              className="btn btn-sm btn-link text-secondary p-0"
+              onClick={() => toggleCommentsVisibility(sectionKey)}
+              aria-label="Toggle comments visibility"
+            >
+              <MdArrowDropDown
+                size={20}
+                style={{
+                  transform: sectionData.showComments
+                    ? "rotate(0deg)"
+                    : "rotate(-90deg)",
+                  transition: "transform 0.2s ease-in-out",
+                }}
+              />
+            </button>
+          </div>
+
+          {/* Input Row */}
+          <div
+            className="Patient_Textinput-main d-flex align-items-center"
+            style={indentStyle}
+          >
+            <div className="Patient_Textinput flex-grow-1">
+              <div className="p-1">
+                <div className="d-flex">
+                  <div className="flex-grow-1 position-relative">
+                    <input
+                      type="text"
+                      className={`form-control form-control-sm comment-input ${priorityClass}`}
+                      value={sectionData.inputValue}
+                      onChange={(e) =>
+                        handleInputChange(sectionKey, e.target.value)
+                      }
+                      placeholder="Enter Comment / Observation"
+                    />
+                    <button
+                      type="button"
+                      className="btn position-absolute top-50 end-0 translate-middle-y p-0 border-0 me-2 text-secondary"
+                      onClick={() => toggleDropdown(sectionKey)}
+                      aria-label="Set Priority"
+                    >
+                      {sectionData.locationValue ? (
+                        <span
+                          className={`badge bg-${
+                            sectionData.locationValue === "3"
+                              ? "danger"
+                              : sectionData.locationValue === "2"
+                              ? "warning text-dark"
+                              : "secondary"
+                          }`}
+                        >
+                          {sectionData.locationValue}
+                        </span>
+                      ) : (
+                        <MdArrowDropDown size={24} />
+                      )}
+                    </button>
+                    {dropdownOpen && (
+                      <div
+                        className="dropdown-menu show position-absolute end-0 mt-1 shadow-sm"
+                        style={{ zIndex: 1060, minWidth: "50px" }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <button
+                          className="dropdown-item small text-center p-1"
+                          onClick={() =>
+                            handleDropdownSelect(
+                              sectionKey,
+                              "locationValue",
+                              "1"
+                            )
+                          }
+                        >
+                          1
+                        </button>
+                        <button
+                          className="dropdown-item small text-center p-1"
+                          onClick={() =>
+                            handleDropdownSelect(
+                              sectionKey,
+                              "locationValue",
+                              "2"
+                            )
+                          }
+                        >
+                          2
+                        </button>
+                        <button
+                          className="dropdown-item small text-center p-1"
+                          onClick={() =>
+                            handleDropdownSelect(
+                              sectionKey,
+                              "locationValue",
+                              "3"
+                            )
+                          }
+                        >
+                          3
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  <div className="ms-2">
+                    <button
+                      className="btn btn-primary btn-sm submit-form" // Added btn-sm
+                      onClick={() => handleAddItem(sectionKey)}
+                      aria-label="Add item"
+                      disabled={!sectionData.inputValue.trim()}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Comments List Table */}
+        {sectionData.showComments && (
+          <div className={`comments-list mt-2 mb-3`} style={indentStyle}>
+            {sectionData.rows.length > 0 ? (
+              <table className={`table table-sm table-hover small border-top`}>
+                <tbody>
+                  {sectionData.rows.map((row, index) => {
+                    const commentStyle = getCommentStyle(row.locationValue);
+                    const transformedText = transformCommentText(
+                      row.location,
+                      row.locationValue
+                    );
+                    return (
+                      <tr key={`${sectionKey}-row-${index}`}>
+                        {" "}
+                        {/* More specific key */}
+                        <td style={commentStyle} className="ps-2 align-middle">
+                          {transformedText}
+                        </td>
+                        <td
+                          className="text-end pe-2 align-middle"
+                          style={{ width: "80px" }}
+                        >
+                          <span
+                            className={`badge me-2 text-white bg-${
+                              row.locationValue === "3"
+                                ? "danger"
+                                : row.locationValue === "2"
+                                ? "warning text-dark"
+                                : "secondary"
+                            }`}
+                            style={{ minWidth: "20px" }}
+                          >
+                            {row.locationValue}
+                          </span>
+                          <button
+                            className="btn btn-xs btn-outline-danger border-0 p-0"
+                            onClick={() => handleRemoveItem(sectionKey, index)}
+                            aria-label="Remove item"
+                          >
+                            <MdClose size={18} />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <div className="text-muted ps-2 small fst-italic">
+                No comments added yet.
+              </div>
+            )}
+          </div>
+        )}
+        {/* Separator Line */}
+        {level === 1 && sectionData.showComments && (
+          <hr className="my-2 border-light" />
+        )}
+      </>
+    );
+  }
+);
+PatientSection.displayName = "PatientSection"; // For React DevTools
+
+//=========================================================
+// CaseRecordinit Component (Main component - Optimized State)
+//=========================================================
 const CaseRecordinit = () => {
-  const [showWeightSections, setShowWeightSections] = useState(false);
-  const [showfecialSections, setshowfecialSections] = useState(false);
-  const [showphysicalDescription, setshowphysicalDescription] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState({});
-  const [physicalDescription, setPhysicalDescription] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [FACIALCONFIGURATATIONEXPRESSION, setFACIALCONFIGURATATIONEXPRESSION] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [WEIGHT, setWEIGHT] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [weightGain, setWeightGain] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [weightLoss, setWeightLoss] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [period, setPeriod] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [height, setHeight] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [facialConfiguration, setFacialConfiguration] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [facialExpression, setFacialExpression] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [chin, setChin] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [lean, setlean] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [stocky, setstocky] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [obese, setobese] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [partial, setpartial] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [general, setgeneral] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [waterlogging, setwaterlogging] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [umbilicusabove, setumbilicusabove] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [below, setbelow] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [emaciation, setemaciation] = useState({ inputValue: '', locationValue: '', rows: [], showComments: true });
-  const [inputValue, setInputValue] = useState("");
-  const [dropdownValue, setDropdownValue] = useState(""); // To store the selected dropdown value
-  const [showComments, setShowComments] = useState(false); // Initial state to show comments
-  const [locationValue, setLocationValue] = useState(null); // Tracks the selected locationValue
+  // --- Use the populated configuration object ---
 
-  const [activeTab, setActiveTab] = useState('Appearance');
-  const tabContainerRef = useRef(null);
-  const tabRefs = useRef({});
+  const tabSectionOptions = useMemo(() => baseTabSectionOptions, []);
 
-  const handleTabSelect = (key) => {
-    setActiveTab(key);
+  const chunkArray = (array, size) => {
+    const chunkedArr = [];
+    for (let i = 0; i < array.length; i += size) {
+      chunkedArr.push(array.slice(i, i + size));
+    }
+    return chunkedArr;
   };
+  const tabKeys = useMemo(
+    () => Object.keys(tabSectionOptions),
+    [tabSectionOptions]
+  );
+  const chunkSize = 5;
+  const chunkedTabKeys = useMemo(
+    () => chunkArray(tabKeys, chunkSize),
+    [tabKeys, chunkSize]
+  );
 
-  useEffect(() => {
-    // Scroll selected tab to the center
-    if (tabContainerRef.current && tabRefs.current[activeTab]) {
-      const tabElement = tabRefs.current[activeTab];
-      const containerWidth = tabContainerRef.current.offsetWidth;
-      const tabOffsetLeft = tabElement.offsetLeft;
-      const tabWidth = tabElement.offsetWidth;
+  // --- Helper to generate initial state AND calculate levels ---
+  const generateInitialState = useCallback(() => {
+    const initialState = {};
+    // Recursive function to process options
+    const processOptions = (options, level, parentTitle = null) => {
+      // Takes parentTitle
+      if (!options || options.length === 0) return;
+      options.forEach((item) => {
+        if (item.key) {
+          // *** Calculate the full title including the parent path ***
+          const fullTitle = parentTitle
+            ? `${parentTitle} - ${item.title}` // Prepend parent if it exists
+            : item.title; // Otherwise, use item's title
 
-      // Scroll to center the active tab
-      tabContainerRef.current.scrollTo({
-        left: tabOffsetLeft - containerWidth / 2 + tabWidth / 2,
-        behavior: 'smooth',
+          if (!initialState[item.key]) {
+            initialState[item.key] = {
+              key: item.key,
+              title: fullTitle, // *** STORE THE FULL TITLE HERE ***
+              inputValue: "",
+              locationValue: "",
+              rows: [],
+              showComments: true,
+              level: level,
+            };
+          } else {
+            console.warn(
+              `Duplicate key definition found: ${item.key}. Using first encountered title/level.`
+            );
+          }
+        } else {
+          console.warn(
+            `Item found without a key, only a title: "${item.title}". This item cannot be added as a section.`
+          );
+        }
+
+        // Recurse for subOptions, passing the *current item's original title*
+        if (item.subOptions && item.subOptions.length > 0) {
+          // Pass item.title (segment title), not fullTitle
+          processOptions(item.subOptions, level + 1, item.title);
+        }
       });
+    };
+
+    // Initial call for each tab
+    Object.values(tabSectionOptions).forEach((tabOptionsArray) => {
+      processOptions(tabOptionsArray, 1); // Start level 1, no parent title
+    });
+    return initialState;
+  }, [tabSectionOptions]);
+
+  // --- Consolidated State ---
+  const [sectionsData, setSectionsData] = useState(generateInitialState);
+
+  // --- UI State ---
+  const [activeTab, setActiveTab] = useState("APPEARANCE"); // Default to first tab
+  const tabRefs = useRef({});
+  const tabContainerRef = useRef(null);
+  const [visibleSectionsByTab, setVisibleSectionsByTab] = useState({});
+  const [openTabDropdownKey, setOpenTabDropdownKey] = useState(null);
+  const [expandedPath, setExpandedPath] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [openInnerDropdownKey, setOpenInnerDropdownKey] = useState(null);
+
+  // --- Effects ---
+  // Effect to set initial active tab based on available tabs
+  useEffect(() => {
+    const firstTabKey = Object.keys(tabSectionOptions)[0];
+    if (firstTabKey) {
+      setActiveTab(firstTabKey);
+    }
+  }, [tabSectionOptions]); // Run only when tab options change
+
+  // Effect to scroll active tab into view
+  useEffect(() => {
+    const activeTabElement = tabRefs.current[activeTab];
+    if (activeTabElement && tabContainerRef.current) {
+      const tabRect = activeTabElement.getBoundingClientRect();
+      const containerRect = tabContainerRef.current.getBoundingClientRect();
+      if (
+        tabRect.left < containerRect.left ||
+        tabRect.right > containerRect.right
+      ) {
+        activeTabElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
     }
   }, [activeTab]);
 
+  // --- Generic State Update Handler ---
+  const updateSectionState = useCallback((sectionKey, updatedData) => {
+    setSectionsData((prev) => {
+      if (!prev[sectionKey]) {
+        console.warn(`Attempted to update non-existent section: ${sectionKey}`);
+        return prev;
+      }
+      return { ...prev, [sectionKey]: updatedData };
+    });
+  }, []);
 
- 
-  // Handle the selection of dropdown value
-  const handleDropdownSelect = (section, setSection, key, value) => {
-    if (key === "locationValue") {
-      setSection({ ...section, locationValue: value });
+  // --- Specific Handlers (Memoized) ---
+  const handleInputChange = useCallback(
+    (sectionKey, value) => {
+      const section = sectionsData[sectionKey];
+      if (section) {
+        let newLocationValue = section.locationValue; // Keep current value by default
+
+        // --- NEW LOGIC ---
+        // If user starts typing (value is not empty) AND no priority is currently set
+        if (value.trim() !== "" && !section.locationValue) {
+          newLocationValue = "1"; // Default to priority '1'
+        }
+        // --- END NEW LOGIC ---
+
+        // Update state with new input value and potentially defaulted locationValue
+        updateSectionState(sectionKey, {
+          ...section,
+          inputValue: value,
+          locationValue: newLocationValue, // Use the calculated newLocationValue
+        });
+      }
+    },
+    [sectionsData, updateSectionState] // Dependencies remain the same
+  );
+
+  const handleInnerDropdownSelect = useCallback(
+    (sectionKey, fieldKey, value) => {
+      const section = sectionsData[sectionKey];
+      if (section && fieldKey === "locationValue") {
+        updateSectionState(sectionKey, { ...section, locationValue: value });
+      }
+      setOpenInnerDropdownKey(null);
+    },
+    [sectionsData, updateSectionState] // sectionsData needed
+  );
+
+  const toggleInnerDropdown = useCallback((sectionKey) => {
+    setOpenInnerDropdownKey((prev) =>
+      prev === sectionKey ? null : sectionKey
+    );
+  }, []);
+
+  const toggleCommentsVisibility = useCallback(
+    (sectionKey) => {
+      const section = sectionsData[sectionKey];
+      if (section) {
+        updateSectionState(sectionKey, {
+          ...section,
+          showComments: !section.showComments,
+        });
+      }
+    },
+    [sectionsData, updateSectionState] // sectionsData needed
+  );
+
+  const handleAddItem = useCallback(
+    (sectionKey) => {
+      const section = sectionsData[sectionKey];
+      if (section && section.inputValue.trim()) {
+        const priorityValue = section.locationValue || "1";
+        const newItem = {
+          location: section.inputValue,
+          locationValue: priorityValue,
+        };
+        updateSectionState(sectionKey, {
+          ...section,
+          rows: [...section.rows, newItem],
+          inputValue: "",
+          locationValue: "",
+        });
+        setOpenInnerDropdownKey(null);
+      }
+    },
+    [sectionsData, updateSectionState] // sectionsData needed
+  );
+
+  const handleRemoveItem = useCallback(
+    (sectionKey, indexToRemove) => {
+      const section = sectionsData[sectionKey];
+      if (section) {
+        const newRows = section.rows.filter((_, i) => i !== indexToRemove);
+        updateSectionState(sectionKey, { ...section, rows: newRows });
+      }
+    },
+    [sectionsData, updateSectionState] // sectionsData needed
+  );
+
+  // --- Handlers for Tabs and "Add Section" Dropdown ---
+  const handleTabSelect = (key) => {
+    setActiveTab(key);
+    setOpenTabDropdownKey(null);
+    setExpandedPath([]);
+    setSearchTerm("");
+  };
+
+  const toggleTabDropdown = (tabKey) => {
+    setOpenTabDropdownKey((prev) => {
+      const isOpening = prev !== tabKey;
+      setExpandedPath([]);
+      if (!isOpening) setSearchTerm("");
+      return isOpening ? tabKey : null;
+    });
+  };
+
+  // Helper to check if a key is defined in the configuration structure
+  const isKeyDefinedInOptions = useCallback((options, keyToFind) => {
+    if (!options) return false;
+    for (const item of options) {
+      if (item.key === keyToFind) return true;
+      if (
+        item.subOptions &&
+        isKeyDefinedInOptions(item.subOptions, keyToFind)
+      ) {
+        return true;
+      }
     }
-    setDropdownOpen(null);
+    return false;
+  }, []); // No dependency, pure function based on args
+
+  const addSelectedSection = useCallback(
+    (tabKey, sectionKeyToAdd) => {
+      // Check if the key actually exists in the defined structure
+      let isValidKey = false;
+      const currentTabOptions = tabSectionOptions[tabKey] || [];
+      if (isKeyDefinedInOptions(currentTabOptions, sectionKeyToAdd)) {
+        isValidKey = true;
+      }
+
+      if (!isValidKey) {
+        console.warn(
+          `Section key ${sectionKeyToAdd} is not defined for tab ${tabKey}. Cannot add.`
+        );
+        setOpenTabDropdownKey(null);
+        setExpandedPath([]);
+        setSearchTerm("");
+        return;
+      }
+
+      setVisibleSectionsByTab((prev) => {
+        const currentVisible = prev[tabKey] || [];
+        return !currentVisible.includes(sectionKeyToAdd)
+          ? { ...prev, [tabKey]: [...currentVisible, sectionKeyToAdd] }
+          : prev;
+      });
+      setOpenTabDropdownKey(null);
+      setExpandedPath([]);
+      setSearchTerm("");
+    },
+    [tabSectionOptions, isKeyDefinedInOptions] // Dependencies
+  );
+
+  const handleTitleClick = useCallback(
+    (tabKey, item) => {
+      const isActualSection = !!item.key; // Defined in options means it's a section
+      const isVisible = (visibleSectionsByTab[tabKey] || []).includes(item.key);
+      if (isActualSection && !isVisible) {
+        addSelectedSection(tabKey, item.key);
+      }
+    },
+    [visibleSectionsByTab, addSelectedSection] // Dependencies
+  );
+
+  // Helper to get all descendant keys that are actual sections
+  const getAllSelectableKeysRecursive = useCallback((items) => {
+    let keys = [];
+    if (!items) return keys;
+    items.forEach((item) => {
+      if (item.key) keys.push(item.key); // If it has a key, it's selectable
+      if (item.subOptions)
+        keys = keys.concat(getAllSelectableKeysRecursive(item.subOptions));
+    });
+    return [...new Set(keys)];
+  }, []);
+
+  const handleArrowClick = useCallback(
+    (e, tabKey, item) => {
+      e.stopPropagation();
+      const hasSubOptions = item.subOptions && item.subOptions.length > 0;
+      const visibleKeysForThisTab = visibleSectionsByTab[tabKey] || [];
+      const descendantKeys = getAllSelectableKeysRecursive(item.subOptions);
+      const hasAvailableDescendants = descendantKeys.some(
+        (key) => !visibleKeysForThisTab.includes(key)
+      );
+
+      if (hasSubOptions && hasAvailableDescendants) {
+        setExpandedPath((prevPath) => [...prevPath, item.key]);
+        setSearchTerm("");
+      }
+    },
+    [visibleSectionsByTab, getAllSelectableKeysRecursive] // Dependencies
+  );
+
+  const handleDropdownBack = () => {
+    setExpandedPath((prevPath) => prevPath.slice(0, -1));
+    setSearchTerm("");
   };
 
+  const removeVisibleSection = useCallback((tabKey, sectionKeyToRemove) => {
+    setVisibleSectionsByTab((prev) => {
+      const currentVisible = prev[tabKey] || [];
+      return {
+        ...prev,
+        [tabKey]: currentVisible.filter((key) => key !== sectionKeyToRemove),
+      };
+    });
+  }, []);
 
-  // Toggle the dropdown visibility
-  const toggleDropdown = (key) => {
-    setDropdownOpen(dropdownOpen === key ? null : key);
+  // --- Memoize Handlers Object for PatientSection ---
+  const memoizedHandlers = useMemo(
+    () => ({
+      handleInputChange, // Pass the modified handler down
+      handleDropdownSelect: handleInnerDropdownSelect,
+      handleAddItem,
+      handleRemoveItem,
+      toggleCommentsVisibility,
+    }),
+    [
+      handleInputChange, // Add modified handler to dependency array
+      handleInnerDropdownSelect,
+      handleAddItem,
+      handleRemoveItem,
+      toggleCommentsVisibility,
+    ]
+  );
+
+  // --- Render Functions ---
+
+  // Render a single PatientSection component
+  const renderPatientSection = useCallback(
+    (tabKey, sectionKey) => {
+      const sectionData = sectionsData[sectionKey];
+      if (!sectionData) {
+        console.error(
+          `Data missing for section: ${sectionKey} in tab ${tabKey}`
+        );
+        return (
+          <div
+            key={`${tabKey}-${sectionKey}-error`}
+            className="alert alert-danger small p-2 m-2"
+          >
+            Error: Data missing.
+          </div>
+        );
+      }
+      const sectionLevel = sectionData.level ?? 1;
+
+      return (
+        <div
+          key={`${tabKey}-${sectionKey}`}
+          className="Patient_Person_Add_main mb-2"
+        >
+          <div className="Patient_Person_main_1 position-relative border rounded p-2 pt-3 bg-white shadow-sm">
+            <button
+              onClick={() => removeVisibleSection(tabKey, sectionKey)}
+              className="btn btn-xs btn-outline-danger position-absolute top-0 end-0 mt-1 me-1 border-0 p-0"
+              style={{ zIndex: 5, lineHeight: 1 }}
+              aria-label={`Remove ${sectionData.title}`}
+              title={`Remove ${sectionData.title}`}
+            >
+              <MdClose size={18} />
+            </button>
+            <PatientSection
+              sectionKey={sectionKey}
+              sectionData={sectionData}
+              level={sectionLevel}
+              dropdownOpen={openInnerDropdownKey === sectionKey}
+              toggleDropdown={toggleInnerDropdown} // Pass memoized toggle
+              handlers={memoizedHandlers} // Pass memoized handlers object
+            />
+          </div>
+        </div>
+      );
+    },
+    [
+      sectionsData,
+      openInnerDropdownKey, // State
+      removeVisibleSection,
+      toggleInnerDropdown,
+      memoizedHandlers, // Handlers/Memoized Objects
+    ]
+  );
+
+  // Render the content area for the active tab
+  const renderTabContent = useCallback(
+    (tabKey) => {
+      const optionsForThisTab = tabSectionOptions[tabKey] || [];
+      const visibleKeysForThisTab = visibleSectionsByTab[tabKey] || [];
+
+      // --- Navigation Logic ---
+      let currentLevelOptions = optionsForThisTab;
+      let currentParentItem = null;
+      try {
+        expandedPath.forEach((pathKey) => {
+          const parent = currentLevelOptions.find(
+            (item) => item.key === pathKey
+          );
+          if (!parent || !parent.subOptions) throw new Error("Invalid path");
+          currentParentItem = parent;
+          currentLevelOptions = parent.subOptions;
+        });
+      } catch (error) {
+        console.error("Error navigating dropdown path:", expandedPath, error);
+        setExpandedPath([]);
+        currentLevelOptions = optionsForThisTab;
+        currentParentItem = null;
+      }
+
+      // --- Filtering & Button State ---
+      const allPossibleSelectableKeys =
+        getAllSelectableKeysRecursive(optionsForThisTab);
+      const allSectionsAdded =
+        allPossibleSelectableKeys.length > 0 && // Only true if there ARE sections to add
+        allPossibleSelectableKeys.every((key) =>
+          visibleKeysForThisTab.includes(key)
+        );
+      const disableAddButton = allSectionsAdded;
+
+      const getAvailableItemsAtCurrentLevel = (options) => {
+        if (!options) return [];
+        return options.filter((item) => {
+          const isActualSection = !!item.key;
+          const isVisible = visibleKeysForThisTab.includes(item.key);
+          const hasSubOptions = item.subOptions && item.subOptions.length > 0;
+          const descendantKeys = hasSubOptions
+            ? getAllSelectableKeysRecursive(item.subOptions)
+            : [];
+          const hasAvailableDescendants = descendantKeys.some(
+            (key) => !visibleKeysForThisTab.includes(key)
+          );
+          // Item is available if it's a section not yet visible OR it's a category with available descendants
+          return (
+            (isActualSection && !isVisible) ||
+            (hasSubOptions && hasAvailableDescendants)
+          );
+        });
+      };
+      const availableItems =
+        getAvailableItemsAtCurrentLevel(currentLevelOptions);
+      const lowerSearchTerm = searchTerm.toLowerCase();
+      const filteredAvailableItems = availableItems.filter(
+        (item) =>
+          !lowerSearchTerm || item.title.toLowerCase().includes(lowerSearchTerm)
+      );
+      const noSearchResults = searchTerm && filteredAvailableItems.length === 0;
+      const currentLevelTitle = currentParentItem
+        ? `- ${currentParentItem.title}`
+        : "";
+
+      return (
+        <>
+          {/* "Add Section" Dropdown Area */}
+          {/* Only show Add Section if there are *any* configurable options for this tab */}
+          {optionsForThisTab.length > 0 && (
+            <div className="add-section-dropdown-container p-2 mb-3 border-bottom position-relative bg-light">
+              <button
+                className="btn btn-outline-primary btn-sm dropdown-toggle"
+                type="button"
+                onClick={() => toggleTabDropdown(tabKey)}
+                disabled={disableAddButton}
+                aria-haspopup="true"
+                aria-expanded={openTabDropdownKey === tabKey}
+                title={disableAddButton ? "All sections added" : "Add section"}
+              >
+                <FaPlus className="me-1" /> Add Section {currentLevelTitle}
+              </button>
+
+              {openTabDropdownKey === tabKey && (
+                <div
+                  className="dropdown-menu show position-absolute shadow-sm mt-1"
+                  style={{
+                    zIndex: 1050,
+                    minWidth: "300px",
+                    maxHeight: "60vh",
+                    overflowY: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Search Input */}
+                  <div className="p-2 border-bottom mb-1">
+                    <div className="input-group input-group-sm">
+                      <span className="input-group-text bg-light border-0">
+                        <SearchIcon size={14} />
+                      </span>
+                      <input
+                        type="search"
+                        className="form-control form-control-sm border-0"
+                        placeholder="Search sections..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        autoFocus
+                      />
+                    </div>
+                  </div>
+                  {/* Scrollable Item List */}
+                  <div style={{ overflowY: "auto", flexGrow: 1 }}>
+                    {expandedPath.length > 0 && (
+                      <>
+                        <button
+                          className="dropdown-item small d-flex align-items-center fw-semibold text-primary"
+                          onClick={handleDropdownBack}
+                        >
+                          <ChevronLeft size={16} className="me-1" /> Back
+                        </button>
+                        <div className="dropdown-divider my-1"></div>
+                      </>
+                    )}
+                    {filteredAvailableItems.map((item) => {
+                      const isActualSection = !!item.key;
+                      const isVisible = visibleKeysForThisTab.includes(
+                        item.key
+                      );
+                      const hasSubOptions =
+                        item.subOptions && item.subOptions.length > 0;
+                      const descendantKeys = hasSubOptions
+                        ? getAllSelectableKeysRecursive(item.subOptions)
+                        : [];
+                      const hasAvailableDescendants = descendantKeys.some(
+                        (key) => !visibleKeysForThisTab.includes(key)
+                      );
+                      const showArrow =
+                        hasSubOptions && hasAvailableDescendants;
+                      const isTitleClickable = isActualSection && !isVisible;
+                      const titleStyle = !isTitleClickable
+                        ? {
+                            color: "#6c757d", // Gray out non-clickable/already added titles
+                            cursor: "default",
+                            flexGrow: 1,
+                            padding: "0.25rem 0",
+                          }
+                        : {
+                            cursor: "pointer", // Make clickable titles obvious
+                            flexGrow: 1,
+                            padding: "0.25rem 0",
+                          };
+                      const arrowStyle = {
+                        cursor: "pointer",
+                        padding: "0.25rem 0.5rem",
+                        marginLeft: "auto", // Push arrow to the right
+                        flexShrink: 0, // Prevent arrow from shrinking
+                      };
+
+                      return (
+                        <div
+                          key={item.key || `cat-${item.title}`} // Use title as fallback key for categories without key
+                          className="dropdown-item small d-flex justify-content-between align-items-center"
+                          style={{ cursor: "default" }} // Prevent default dropdown item hover
+                          title={
+                            isActualSection && isVisible
+                              ? `${item.title} (Added)`
+                              : isTitleClickable
+                              ? `Add ${item.title}`
+                              : showArrow
+                              ? `Explore ${item.title}`
+                              : item.title // Default title for categories without actions
+                          }
+                        >
+                          <span
+                            onClick={
+                              isTitleClickable
+                                ? () => handleTitleClick(tabKey, item)
+                                : undefined
+                            }
+                            style={titleStyle}
+                          >
+                            {item.title}
+                          </span>
+                          {showArrow && (
+                            <span
+                              onClick={(e) => handleArrowClick(e, tabKey, item)}
+                              style={arrowStyle}
+                              title={`Explore ${item.title}`}
+                              className="text-muted" // Use muted color for arrow
+                            >
+                              <ChevronRight size={16} />
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                    {/* Empty State Messages */}
+                    {noSearchResults && (
+                      <span className="dropdown-item-text small text-muted fst-italic px-3 py-2">
+                        No matching sections found.
+                      </span>
+                    )}
+                    {!noSearchResults &&
+                      filteredAvailableItems.length === 0 &&
+                      !disableAddButton &&
+                      expandedPath.length > 0 && (
+                        <span className="dropdown-item-text small text-muted fst-italic px-3 py-2">
+                          No more sections here. Go 'Back'.
+                        </span>
+                      )}
+                    {/* Message when no items left to add at top level or current sub-level */}
+                    {!noSearchResults &&
+                      filteredAvailableItems.length === 0 &&
+                      !disableAddButton && (
+                        <span className="dropdown-item-text small text-muted fst-italic px-3 py-2">
+                          No available sections to add here.
+                          {expandedPath.length > 0 ? " Go 'Back'." : ""}
+                        </span>
+                      )}
+                    {disableAddButton && (
+                      <span className="dropdown-item-text small text-muted fst-italic px-3 py-2">
+                        All sections for this tab have been added.
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Container for Visible Sections */}
+          <div className="visible-sections-container mt-2 px-2 pb-2">
+            {visibleKeysForThisTab.length > 0
+              ? visibleKeysForThisTab.map((sectionKey) =>
+                  renderPatientSection(tabKey, sectionKey)
+                )
+              : optionsForThisTab.length > 0 && ( // Only show "No sections added yet" if options *exist*
+                  <div className="p-4 text-muted text-center small fst-italic">
+                    No sections added yet for '{tabKey.replace(/_/g, " ")}'.
+                    <br /> Use "Add Section" above.
+                  </div>
+                )}
+            {optionsForThisTab.length === 0 && ( // Show this if the tab is truly empty in config
+              <div className="p-4 text-muted text-center small">
+                No sections configured for '{tabKey.replace(/_/g, " ")}'.
+              </div>
+            )}
+          </div>
+        </>
+      );
+    },
+    [
+      tabSectionOptions,
+      visibleSectionsByTab,
+      expandedPath,
+      searchTerm,
+      openTabDropdownKey, // State
+      getAllSelectableKeysRecursive, // Helpers
+      toggleTabDropdown,
+      handleTitleClick,
+      handleArrowClick,
+      handleDropdownBack,
+      renderPatientSection, // Render func
+      addSelectedSection, // Handler used by handleTitleClick
+    ]
+  );
+
+  // --- Function to Generate Data Output ---
+  const [outputData, setOutputData] = useState(null);
+  const generateOutputData = () => {
+    const result = Object.entries(sectionsData)
+      .map(([key, sectionObject]) => {
+        if (sectionObject.rows && sectionObject.rows.length > 0) {
+          return {
+            key: key,
+            value: sectionObject.rows.map((row) => ({
+              comment: row.location,
+              priority: row.locationValue,
+            })),
+          };
+        }
+        return null;
+      })
+      .filter((item) => item !== null);
+    setOutputData(result);
+    console.log("Generated Output:", JSON.stringify(result, null, 2));
   };
-  const handleDropdownToggle = (doctorId) => {
-    setDropdownOpen((prev) => ({
-      ...prev,
-      [doctorId]: !prev[doctorId],
-    }));
-  };
 
- 
-
-  const toggleCommentsVisibility = (section, setSection) => {
-    setSection({ ...section, showComments: !section.showComments });
-  };
-
-  // Add new item to the list
-  const handleAddItem = (section, setSection) => {
-    const newItem = {
-      location: section.inputValue,
-      locationValue: section.locationValue,
-    };
-    setSection({ ...section, rows: [...section.rows, newItem], inputValue: '', locationValue: '' });
-  };
-
-  const handleRemoveItem = (section, setSection, index) => {
-    const newRows = section.rows.filter((_, i) => i !== index);
-    setSection({ ...section, rows: newRows });
-  };
-  
-  
-
+  // --- Main Return Statement ---
   return (
-    
-    <div >
- <div className="page-header">
-        <div className="row">
-          <div className="col-sm-12">
-            <ul className="breadcrumb">
+    <div className="case-record-init container-fluid p-3 bg-light">
+      <style>{customTabStyles}</style>
+      {/* Breadcrumb */}
+      <div className="row ">
+        <div className="col-sm-12">
+          <nav aria-label="breadcrumb">
+            <ol className="breadcrumb bg-white p-2 px-3 rounded shadow-sm border">
               <li className="breadcrumb-item">
-                <div href="chief_complaint.html">Case Record</div>
+                <a href="#!" className="text-decoration-none text-primary">
+                  Case Record
+                </a>
               </li>
-              <li className="breadcrumb-item">
-                <ChevronRight size={16} style={{ color: 'blue', fontSize: '20px', margin: '0 8px' }} />
+              <li className="breadcrumb-item active" aria-current="page">
+                {/* Handle case where activeTab might be briefly null/undefined */}
+                {activeTab ? activeTab.replace(/_/g, " ") : "Loading..."}
               </li>
-              <li className="breadcrumb-item active">Case Record</li>
-            </ul>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
+      <div className=" shadow-sm border-0 mb-2">
+        {/* Tab Headers - MODIFIED SECTION */}
+        <div className="card-header p-0 border-bottom-0">
+          {/* Apply styles to the container */}
+          <div
+            className="tabs-container-styled" // Use the new class for container styling
+            ref={tabContainerRef}
+          >
+            {chunkedTabKeys.map((rowKeys, rowIndex) => (
+              <Nav
+                key={`tab-row-${rowIndex}`}
+                variant="tabs"
+                activeKey={activeTab}
+                onSelect={handleTabSelect}
+                // Apply styles to the row, remove Bootstrap border if needed via CSS
+                className="custom-tabs nav-tabs-bordered tab-row px-3 justify-content-between"
+              >
+                {rowKeys.map((tabKey) => (
+                  <Nav.Item key={tabKey}>
+                    <Nav.Link
+                      eventKey={tabKey}
+                      // Apply custom class for hover/active effects & keep text-nowrap
+                      className="text-nowrap py-2 px-3 custom-tab-link" // REMOVED the ${...} block
+                      bsPrefix="nav-link" // Keep default prefix
+                    >
+                      {tabKey.replace(/_/g, " ")}
+                    </Nav.Link>
+                  </Nav.Item>
+                ))}
+              </Nav>
+            ))}
           </div>
         </div>
       </div>
-      <div className="card p-2">
-      <div className="tabs-container">
-      <Tabs
-        // ref={tabRef}
-        defaultActiveKey="Appearance"
-        id="elastic-tab-example"
-        className="custom-tabs mb-0"
-        onSelect={handleTabSelect}
-        fill
-      >
-         <Tab eventKey="Appearance" title="APPEARANCE">
-      <>
-      <div className="Patient_Person_Add_main">
-      <div className='Patient_Person_main_1'>
-        <PatientSection
-          title="WEIGHT"
-          section={WEIGHT}
-          setSection={setWEIGHT}
-          dropdownOpen={dropdownOpen}
-          toggleDropdown={toggleDropdown}
-          handleDropdownSelect={handleDropdownSelect}
-          handleAddItem={handleAddItem}
-          handleRemoveItem={handleRemoveItem}
-          toggleCommentsVisibility={toggleCommentsVisibility}
-          ishideshowbutton={true}
-          setShowWeightSections={setShowWeightSections}
-          showWeightSections={showWeightSections}
-        />
 
-{showWeightSections && (
-          <>
-            <PatientSection
-              title="WEIGHT/GAIN"
-              isShowIcon={true}
-              section={weightGain}
-              setSection={setWeightGain}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-            <PatientSection
-              title="WEIGHT/LOSS"
-              isShowIcon={true}
-              section={weightLoss}
-              setSection={setWeightLoss}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-          </>
+      <div className="p-0">
+        {/* Render only the active tab's content for performance */}
+        {/* THIS IS THE KEY CHECK: */}
+        {activeTab && tabSectionOptions[activeTab] !== undefined && (
+          <div key={`${activeTab}-content`} className="tab-pane-content">
+            {/* IT ONLY CALLS renderTabContent WITH the activeTab value */}
+            {renderTabContent(activeTab)}
+          </div>
         )}
+        {/* Optional: Placeholder for when activeTab is not yet set or invalid */}
+        {!activeTab ||
+          (tabSectionOptions[activeTab] === undefined && (
+            <div className="p-4 text-center text-muted">
+              Loading tab content...
+            </div>
+          ))}
+      </div>
 
-        
-        </div>
-        </div>
-
-        <div className="Patient_Person_Add_main">
-      <div className='Patient_Person_main_1'>
-        <PatientSection
-          title="FACIAL CONFIGURATATION & EXPRESSION"
-          section={FACIALCONFIGURATATIONEXPRESSION}
-          setSection={setFACIALCONFIGURATATIONEXPRESSION}
-          dropdownOpen={dropdownOpen}
-          toggleDropdown={toggleDropdown}
-          handleDropdownSelect={handleDropdownSelect}
-          handleAddItem={handleAddItem}
-          handleRemoveItem={handleRemoveItem}
-          toggleCommentsVisibility={toggleCommentsVisibility}
-          ishideshowbutton={true}
-          setShowWeightSections={setshowfecialSections}
-          showWeightSections={showfecialSections}
-        />
-
-{showfecialSections && (
-          <>
-            <PatientSection
-              title="FACIAL CONFIGURATATION"
-              isShowIcon={true}
-              section={facialConfiguration}
-              setSection={setFacialConfiguration}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-            <PatientSection
-              title="FACIAL EXPRESSION"
-              isShowIcon={true}
-              section={facialExpression}
-              setSection={setFacialExpression}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-          </>
-        )}
-
-        
-        </div>
-        </div>
-
-        <div className="Patient_Person_Add_main">
-      <div className='Patient_Person_main_1'>
-        <PatientSection
-          title="PERIOD"
-          section={period}
-          setSection={setPeriod}
-          dropdownOpen={dropdownOpen}
-          toggleDropdown={toggleDropdown}
-          handleDropdownSelect={handleDropdownSelect}
-          handleAddItem={handleAddItem}
-          handleRemoveItem={handleRemoveItem}
-          toggleCommentsVisibility={toggleCommentsVisibility}
-          ishideshowbutton={false}
-          setShowWeightSections={setshowfecialSections}
-          showWeightSections={() => console.log("")
-          }
-        />
-
-
-
-        
-        </div>
-        </div>
-       
-        <div className="Patient_Person_Add_main">
-      <div className='Patient_Person_main_1'>
-        <PatientSection
-          title="PHYSICAL DESCRIPTION"
-          section={physicalDescription}
-          setSection={setPhysicalDescription}
-          dropdownOpen={dropdownOpen}
-          toggleDropdown={toggleDropdown}
-          handleDropdownSelect={handleDropdownSelect}
-          handleAddItem={handleAddItem}
-          handleRemoveItem={handleRemoveItem}
-          toggleCommentsVisibility={toggleCommentsVisibility}
-          ishideshowbutton={true}
-          setShowWeightSections={setshowphysicalDescription}
-          showWeightSections={showphysicalDescription}
-          
-        />
-
-{showphysicalDescription && (
-          <>
-            <PatientSection
-              title="LEAN"
-              isShowIcon={true}
-              section={lean}
-              setSection={setlean}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-            <PatientSection
-              title="STOCKY"
-              isShowIcon={true}
-              section={stocky}
-              setSection={setstocky}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-            <PatientSection
-              title="OBESE"
-              isShowIcon={true}
-              section={obese}
-              setSection={setobese}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-             <PatientSection
-              title="PARTIAL"
-              isShowIcon={true}
-              section={partial}
-              setSection={setpartial}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-             <PatientSection
-              title="GENERAL"
-              isShowIcon={true}
-              section={general}
-              setSection={setgeneral}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-             <PatientSection
-              title="WATER-LOGGING"
-              isShowIcon={true}
-              section={waterlogging}
-              setSection={setwaterlogging}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-            <PatientSection
-              title="WATER-LOGGING"
-              isShowIcon={true}
-              section={waterlogging}
-              setSection={setwaterlogging}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-             <PatientSection
-              title="WATER-LOGGING"
-              isShowIcon={true}
-              section={waterlogging}
-              setSection={setwaterlogging}
-              dropdownOpen={dropdownOpen}
-              toggleDropdown={toggleDropdown}
-              handleDropdownSelect={handleDropdownSelect}
-              handleAddItem={handleAddItem}
-              handleRemoveItem={handleRemoveItem}
-              toggleCommentsVisibility={toggleCommentsVisibility}
-            />
-          </>
-        )}
-
-        
-        </div>
-        </div>
-       
-      </>
-    </Tab>
-          <Tab eventKey="profile" title="DIGESTION">
-            Tab content for BIGESPION
-          </Tab>
-          <Tab eventKey="longer-tab" title="ELIMINATIONS">
-            Tab content for Loooonger ELIMINATIONS
-          </Tab>
-          <Tab eventKey="contact" title="MENSPRUALFUNCTION">
-            Tab content for MENSPRUALFUNCTION
-          </Tab>
-          <Tab eventKey="contact1" title="SEXUAL FUNCTION">
-            Tab content for SEXUAL FUNCTION
-          </Tab>
-          <Tab eventKey="contact2" title="PATIENT'S/ MOTHERS OBSTEPRIC HISTORY">
-            Tab content for PATIENT'S/ MOTHERS OBSTEPRIC HISTORY
-          </Tab>
-          <Tab eventKey="contact3" title="BEVELOPMENTAL LANDMARKSAND PROBLEMS">
-            Tab content for Contact
-          </Tab>
-        </Tabs>
-
+      {/* Output Data Section */}
+      <div className="row mt-4">
+        <div className="col-12">
+          <button className="btn btn-success me-3" onClick={generateOutputData}>
+            Generate Data Output
+          </button>
+          {outputData && (
+            <div className="mt-3 p-3 bg-white border rounded shadow-sm">
+              <h5>Generated Data (JSON):</h5>
+              <pre
+                style={{
+                  maxHeight: "300px",
+                  overflowY: "auto",
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-all",
+                  fontSize: "0.85rem", // Slightly smaller font for pre
+                }}
+              >
+                <code>{JSON.stringify(outputData, null, 2)}</code>
+              </pre>
+            </div>
+          )}
         </div>
       </div>
     </div>

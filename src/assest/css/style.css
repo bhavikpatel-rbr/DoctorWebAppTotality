@@ -615,7 +615,7 @@ p.priority_btn {
 
 .tabs-container {
   position: relative;
-  padding-bottom: 2rem;
+  /* padding-bottom: 2rem; */
 }
 
 .custom-tabs .nav-tabs {
