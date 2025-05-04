@@ -1980,91 +1980,1609 @@ addSectionDefinition(
 
 // --- REACTION_PHYSICAL_FACTORS Tab ---
 // (No sections defined yet in the original code)
+// --- Existing Definitions ---
 addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "TIME", "TIME");
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "TIME", "MORNING", "MORNING");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "TIME",
+  "FORE-NOON",
+  "FORE-NOON"
+); // Note: Using "FORE_NOON" as ID might be safer if hyphens cause issues
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "TIME", "NOON", "NOON");
+
+// --- New Time Definitions ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "TIME",
+  "AFTERNOON",
+  "AFTERNOON"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "TIME", "EVENING", "EVENING");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "TIME",
+  "TWILIGHT",
+  "TWILIGHT"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "TIME",
+  "FOUR_PM_TO_EIGHT_PM",
+  "4PM-8PM"
+); // Using underscores for ID consistency
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "TIME", "NIGHT", "NIGHT");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "TIME",
+  "MID_NIGHT",
+  "MID-NIGHT"
+); // Using underscore for ID
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "TIME", "BEFORE", "BEFORE"); // General time modifier
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "TIME", "AFTER", "AFTER"); // General time modifier
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "TIME",
+  "ONE_TO_TWO_AM",
+  "1-2 AM"
+); // Using underscores for ID
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "TIME", "THREE_AM", "3AM");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "TIME",
+  "FOUR_TO_FIVE_AM",
+  "4-5AM"
+); // Using underscores for ID
+
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
   null,
   "PERIODICITY",
   "PERIODICITY"
 );
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "MOTION", "MOTION");
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "POSITION", "POSITION");
+
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
-  null,
+  "PERIODICITY", // Parent is PERIODICITY
+  "DAILY",
+  "DAILY"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "PERIODICITY",
+  "SAME_HOUR", // ID using underscore
+  "SAME HOUR"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "PERIODICITY",
+  "ALTERNATE_DAY_MENSES", // ID using underscores
+  "ALTERNATE DAY/MENSES"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "PERIODICITY",
+  "WEEKLY",
+  "WEEKLY"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "PERIODICITY",
+  "MONTHLY",
+  "MONTHLY"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "PERIODICITY",
+  "SEASONAL",
+  "SEASONAL"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "PERIODICITY",
+  "YEARLY",
+  "YEARLY"
+);
+
+// --- Define MOON PHASES as a sub-category under PERIODICITY ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "PERIODICITY", // Parent is PERIODICITY
+  "MOON_PHASES", // ID for the sub-category
+  "MOON PHASES"
+);
+
+// --- Define items under MOON PHASES ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOON_PHASES", // Parent is MOON_PHASES
+  "WAXING",
+  "WAXING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOON_PHASES",
+  "FULL",
+  "FULL"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOON_PHASES",
+  "WANING",
+  "WANING"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "MOON_PHASES", "NEW", "NEW");
+
+// --- Define the main container for MOTION & POSITION ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null, // No parent for this container within the section
+  "MOTION_AND_POSITION",
+  "MOTION & POSITION"
+);
+
+// --- Define the MOTION sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION_AND_POSITION", // Parent is MOTION & POSITION container
+  "MOTION",
+  "MOTION"
+);
+
+// --- Items under MOTION ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_BEGINNING",
+  "BEGINNING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_DURING",
+  "DURING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_AFTER",
+  "AFTER"
+);
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_CONTINUED",
+  "CONTINUED"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_SLOW",
+  "SLOW"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_FAST",
+  "FAST"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_CARRIED",
+  "CARRIED"
+);
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_DANCING",
+  "DANCING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_JERKS",
+  "JERKS"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_ROCKING",
+  "ROCKING"
+);
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_WALKING",
+  "WALKING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_HEAD_NODDING",
+  "HEAD-NODDING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_SWAYING_SICKNESS",
+  "SWAYING (MOTION SICKNESS)"
+);
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_AIR",
+  "AIR"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_BOAT",
+  "BOAT"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_BUS",
+  "BUS"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_CAR",
+  "CAR"
+);
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_SWING",
+  "SWING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_EXERTION",
+  "EXERTION"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION",
+  "MOTION_REST",
+  "REST"
+);
+
+// --- Define the POSITION sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "MOTION_AND_POSITION", // Parent is MOTION & POSITION container
+  "POSITION",
+  "POSITION"
+);
+
+// --- Items under POSITION (following visual layout) ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_LYING",
+  "LYING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_LYING_ABDOMEN",
+  "ABDOMEN"
+); // Related to lying
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_LYING_ARMS_APART",
+  "ARMS APART"
+); // Modifier, possibly for lying
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_BACK",
+  "BACK"
+); // Related to lying
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_BUTTOCKS_RAISED",
+  "BUTTOCKS RAISED"
+); // Modifier
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_HEAD_HIGH_LOW",
+  "HEAD : HIGH / LOW"
+); // Modifier
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_KNEE_CHEST",
+  "KNEE-CHEST"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_SIDE",
+  "SIDE"
+); // Sub-category for side
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION_SIDE",
+  "POSITION_SIDE_RIGHT",
+  "RIGHT"
+); // Under SIDE
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION_SIDE",
+  "POSITION_SIDE_LEFT",
+  "LEFT"
+); // Under SIDE
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_PAINFUL",
+  "PAINFUL"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_PAINLESS",
+  "PAINLESS"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_SITTING",
+  "SITTING"
+); // Sub-category for sitting
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION_SITTING",
+  "POSITION_SITTING_BENT_BACKWARD",
+  "BENT BACKWARD"
+); // Under SITTING
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_FORWARD",
+  "FORWARD"
+); // Modifier, maybe related to sitting/stooping
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_HEAD_HIGH_LOW_2",
+  "HEAD:HIGH / LOW"
+); // Duplicate from image, added _2 to ID
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_LEGS_HANGING",
+  "LEGS HANGING"
+); // Modifier, likely related to sitting
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_STOOPING",
+  "STOOPING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_STRAIGHT",
+  "STRAIGHT"
+); // Modifier, relates to posture
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "POSITION",
+  "POSITION_STANDING",
+  "STANDING"
+);
+// --- Define the main container for METEOROLOGICAL ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null, // No parent for this container within the section
+  "METEOROLOGICAL",
+  "METEOROLOGICAL"
+);
+
+// --- Define the TEMPERATURE sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL", // Parent is METEOROLOGICAL container
   "TEMPERATURE",
   "TEMPERATURE"
 );
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "WEATHER", "WEATHER");
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "SEASONS", "SEASONS");
+
+// Items under TEMPERATURE
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
-  null,
-  "CHANGE WEATHER",
-  "CHANGE WEATHER"
+  "TEMPERATURE",
+  "TEMP_HOT",
+  "HOT"
 );
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
-  null,
-  "CHANGE TEMPERATURE",
-  "CHANGE TEMPERATURE"
+  "TEMPERATURE",
+  "TEMP_SUN",
+  "SUN"
 );
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
-  null,
-  "CHANGE SEASONS",
-  "CHANGE SEASONS"
+  "TEMPERATURE",
+  "TEMP_HOT_DAYS_COLD_NIGHTS",
+  "HOT DAYS, COLD NIGHTS"
 );
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "AIR", "AIR");
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "WET", "WET");
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "GETTING", "GETTING");
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "COVERING", "COVERING");
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
-  null,
-  "UNCOVERING",
-  "UNCOVERING"
+  "TEMPERATURE",
+  "TEMP_COLD",
+  "COLD"
 );
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "BATH", "BATH");
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
-  null,
-  "SENSORY INPUTS",
+  "TEMPERATURE",
+  "TEMP_MEDIUM",
+  "MEDIUM"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "TEMPERATURE",
+  "TEMP_HEAT_AND_COLD",
+  "HEAT & COLD"
+);
+
+// --- Define the WEATHER sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL",
+  "WEATHER",
+  "WEATHER"
+);
+
+// Items under WEATHER
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WEATHER",
+  "WEATHER_CLEAR",
+  "CLEAR"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WEATHER",
+  "WEATHER_DRY",
+  "DRY"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WEATHER",
+  "WEATHER_FOGGY",
+  "FOGGY"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WEATHER",
+  "WEATHER_CLOUDY",
+  "CLOUDY"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WEATHER",
+  "WEATHER_HUMID_DAMP_COLD_WARM",
+  "HUMID / DAMP:COLD / WARM"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WEATHER",
+  "WEATHER_STORMS_B",
+  "STORMS: B."
+); // Assuming 'B.' is significant
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "WEATHER", "WEATHER_D", "D."); // As shown on the line
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "WEATHER", "WEATHER_A", "A."); // As shown on the line
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WEATHER",
+  "WEATHER_SEA_SIDE",
+  "SEA-SIDE"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WEATHER",
+  "WEATHER_HILLS",
+  "HILLS"
+);
+
+// --- Define the SEASONS sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL",
+  "SEASONS",
+  "SEASONS"
+);
+
+// Items under SEASONS
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SEASONS",
+  "SEASON_SUMMER",
+  "SUMMER"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SEASONS",
+  "SEASON_SPRING",
+  "SPRING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SEASONS",
+  "SEASON_MONSOONS",
+  "MONSOONS"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SEASONS",
+  "SEASON_WINTER",
+  "WINTER"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SEASONS",
+  "SEASON_AUTUMN",
+  "AUTUMN"
+);
+
+// --- Define the CHANGE sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL",
+  "CHANGE_WEATHER_TEMP_SEASON",
+  "CHANGE : WEATHER / TEMPERATURE / SEASONS"
+);
+
+// Items under CHANGE (with nested GENERAL/LOCAL where applicable)
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "CHANGE_WEATHER_TEMP_SEASON",
+  "CHANGE_COLD_TO_HOT",
+  "COLD --> HOT (HEATED)"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "CHANGE_COLD_TO_HOT",
+  "CHANGE_COLD_TO_HOT_GENERAL",
+  "GENERAL"
+); // Nested under COLD --> HOT
+
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "CHANGE_WEATHER_TEMP_SEASON",
+  "CHANGE_HOT_TO_COLD",
+  "HOT --> COLD (CHILLED)"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "CHANGE_HOT_TO_COLD",
+  "CHANGE_HOT_TO_COLD_LOCAL",
+  "LOCAL"
+); // Nested under HOT --> COLD
+
+// --- Define the AIR sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL",
+  "AIR",
+  "AIR"
+);
+
+// Items under AIR
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "AIR", "AIR_WIND", "WIND");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "AIR",
+  "AIR_BREEZE",
+  "BREEZE"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "AIR", "AIR_FAN", "FAN");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "AIR",
+  "AIR_OPEN",
+  "AIR, OPEN"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "AIR",
+  "AIR_ROOM_CLOSED",
+  "ROOM, CLOSED"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "AIR",
+  "AIR_CONDITIONING",
+  "AIR-CONDITIONING"
+);
+
+// --- Define the WET, GETTING sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL",
+  "WET_GETTING",
+  "WET, GETTING"
+);
+
+// Items under WET, GETTING
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WET_GETTING",
+  "WET_GETTING_GENERAL",
+  "GENERAL"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WET_GETTING",
+  "WET_GETTING_LOCAL",
+  "LOCAL"
+);
+
+// --- Define the INCLINATION MODIFIERS category ---
+// Note: The visual layout suggests this is separate, but related to reactions.
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL", // Placing under METEOROLOGICAL based on proximity
+  "INCLINATION_MODIFIERS",
+  "( INCLINATION, < , > )" // Using the literal text as item name
+);
+
+// Items under INCLINATION MODIFIERS
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "INCLINATION_MODIFIERS",
+  "INCLINATION_GENERAL",
+  "GENERAL"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "INCLINATION_MODIFIERS",
+  "INCLINATION_LOCAL",
+  "LOCAL"
+);
+
+// --- Define the COVERING / UNCOVERING sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL",
+  "COVERING_UNCOVERING",
+  "COVERING / UNCOVERING"
+);
+
+// Items under COVERING / UNCOVERING
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "COVERING_UNCOVERING",
+  "COVERING_GENERAL",
+  "GENERAL"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "COVERING_UNCOVERING",
+  "COVERING_LOCAL",
+  "LOCAL"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL", // Assuming it fits best here, or use null for a new top-level sibling
+  "CLOTHS",
+  "CLOTHS"
+);
+
+// Items under CLOTHS
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "CLOTHS",
+  "CLOTHS_HEAVY",
+  "HEAVY"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "CLOTHS",
+  "CLOTHS_LIGHT",
+  "LIGHT"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "CLOTHS",
+  "CLOTHS_TIGHT",
+  "TIGHT"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "CLOTHS",
+  "CLOTHS_LOOSE",
+  "LOOSE"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "CLOTHS",
+  "CLOTHS_WOOLEN",
+  "WOOLEN"
+);
+
+// --- Define WARMTH sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL", // Assuming it fits best here
+  "WARMTH",
+  "WARMTH"
+);
+
+// Items under WARMTH
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WARMTH",
+  "WARMTH_GENERAL",
+  "GENERAL"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "WARMTH",
+  "WARMTH_LOCAL",
+  "LOCAL"
+);
+
+// --- Define COLD (Sensitivity/Reaction) sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL", // Assuming it fits best here
+  "COLD_REACTION", // Renamed ID to avoid conflict with TEMP_COLD
+  "COLD" // Label as shown
+);
+
+// Items under COLD_REACTION
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "COLD_REACTION",
+  "COLD_REACTION_GENERAL",
+  "GENERAL"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "COLD_REACTION",
+  "COLD_REACTION_LOCAL",
+  "LOCAL"
+);
+
+// --- Define BATH sub-category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL", // Assuming it fits best here
+  "BATH",
+  "BATH"
+);
+
+// Items under BATH
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "BATH",
+  "BATH_DESIRE_AVERSION",
+  "DESIRE / AVERSION / < / >"
+); // Using literal text
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "BATH", "BATH_COLD", "COLD");
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "BATH",
+  "BATH_TEPID",
+  "TEPID"
+);
+addSectionDefinition("REACTION_PHYSICAL_FACTORS", "BATH", "BATH_HOT", "HOT");
+
+// --- Define SEASONAL (Reaction) sub-category ---
+// This seems like a specific reaction type, potentially different from the SEASONS list itself
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL", // Assuming it fits best here
+  "SEASONAL_REACTION",
+  "SEASONAL" // Label as shown
+);
+
+// Items under SEASONAL_REACTION
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SEASONAL_REACTION",
+  "SEASONAL_HOT_EQ_COLD",
+  "HOT == COLD"
+); // Using == as in image
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SEASONAL_REACTION",
+  "SEASONAL_SEA",
+  "SEA"
+);
+
+// --- Define PATIENT Thermal State category ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "METEOROLOGICAL", // Assuming it fits best here
+  "PATIENT_THERMAL_STATE",
+  "PATIENT : HOT / COLD / AMBITHERMAL (STATE DEGREE & DISCREPANCY BETWEEN GENERAL & LOCAL REACTIONS)" // Full label
+);
+// Note: This might be considered a top-level characteristic rather than a sub-item,
+// depending on the data model. If so, change parentId to null.
+// Also, the HOT/COLD/AMBITHERMAL part could be broken into specific selectable items if needed.
+
+// --- Define the new SENSORY INPUTS Section ---
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  null, // New top-level category within the section
+  "SENSORY_INPUTS",
   "SENSORY INPUTS"
 );
+
+// Items under SENSORY INPUTS (grouping based on visual proximity)
+
+// Row 1
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
-  null,
-  "DIAGESTION",
-  "DIAGESTION"
+  "SENSORY_INPUTS",
+  "SENSORY_CINEMA_TV",
+  "CINEMA / T.V."
 );
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
-  null,
-  "FOOD+DRINK",
-  "FOOD + DRINK"
+  "SENSORY_INPUTS",
+  "SENSORY_COLOUR",
+  "COLOUR"
 );
 addSectionDefinition(
   "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_DARK",
+  "DARK"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_HEARING",
+  "HEARING"
+); // Could be a sub-category?
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_HEARING_JARRING",
+  "JARRING"
+); // Assumed related to hearing
+
+// Row 2
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_LIGHT",
+  "LIGHT"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_LIGHTNING",
+  "LIGHTNING"
+); // Note: Different 'LIGHT' items
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_MOONLIGHT",
+  "MOONLIGHT"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_MUSIC",
+  "MUSIC"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_NOISE",
+  "NOISE"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_ODOURS",
+  "ODOURS"
+);
+
+// Row 3
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_PAIN",
+  "PAIN"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_PRESSURE",
+  "PRESSURE"
+); // Could be a sub-category?
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_PRESSURE",
+  "SENSORY_PRESSURE_LIGHT",
+  "LIGHT"
+); // Under PRESSURE
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_PRESSURE",
+  "SENSORY_PRESSURE_HARD",
+  "HARD"
+); // Under PRESSURE
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_PRESSURE",
+  "SENSORY_PRESSURE_BINDING",
+  "BINDING"
+); // Under PRESSURE
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_READING",
+  "READING"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_STORMS",
+  "STORMS"
+); // Related to weather/sensory?
+
+// Row 4
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_TASTE",
+  "TASTE"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_THUNDER",
+  "THUNDER"
+);
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_TOUCH",
+  "TOUCH"
+); // Could be a sub-category?
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_TOUCH",
+  "SENSORY_TOUCH_FIRM",
+  "FIRM"
+); // Under TOUCH
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_TOUCH",
+  "SENSORY_TOUCH_HEAVY",
+  "HEAVY"
+); // Under TOUCH
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_TOUCH",
+  "SENSORY_TOUCH_LIGHT",
+  "LIGHT"
+); // Under TOUCH
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_RUBBING",
+  "RUBBING"
+); // Related to touch?
+
+// Row 5
+addSectionDefinition(
+  "REACTION_PHYSICAL_FACTORS",
+  "SENSORY_INPUTS",
+  "SENSORY_VISION",
+  "VISION"
+);
+
+// ======================================================
+// Section ID for all these items
+const mainSectionId = "REACTION_PHYSICAL_FACTORS";
+// ======================================================
+
+// --- PHYSIOLOGICAL FUNCTIONS (Nested under REACTION_PHYSICAL_FACTORS) ---
+addSectionDefinition(
+  mainSectionId,
   null,
+  "PHYSIOLOGICAL_FUNCTIONS",
+  "PHYSIOLOGICAL FUNCTIONS"
+);
+
+// --- DIGESTION (Nested under PHYSIOLOGICAL_FUNCTIONS) ---
+addSectionDefinition(
+  mainSectionId,
+  "PHYSIOLOGICAL_FUNCTIONS",
+  "DIGESTION",
+  "DIGESTION"
+);
+addSectionDefinition(mainSectionId, "DIGESTION", "DIGESTION_EATING", "EATING");
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION_EATING",
+  "EATING_BEFORE",
+  "BEFORE"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION_EATING",
+  "EATING_DURING",
+  "DURING"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION_EATING",
+  "EATING_AFTER",
+  "AFTER"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION",
+  "DIGESTION_A_LITTLE",
+  "A LITTLE"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION",
+  "DIGESTION_TO_SATIETY",
+  "TO SATIETY"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION",
+  "DIGESTION_OVEREATING",
+  "OVEREATING"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION",
+  "DIGESTION_FASTING",
+  "FASTING"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION",
+  "DIGESTION_FOOD_SIGHT",
+  "FOOD : SIGHT"
+);
+addSectionDefinition(mainSectionId, "DIGESTION", "DIGESTION_SMELL", "SMELL");
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION",
+  "DIGESTION_THOUGHT",
+  "THOUGHT"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION",
+  "DIGESTION_FLATULENCE",
+  "FLATULENCE"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION_FLATULENCE",
+  "FLATULENCE_GASTRIC",
+  "GASTRIC"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION_FLATULENCE",
+  "FLATULENCE_INTESTINAL",
+  "INTESTINAL"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION",
+  "DIGESTION_SWALLOWING",
+  "SWALLOWING"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION_SWALLOWING",
+  "SWALLOWING_EMPTY",
+  "EMPTY"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION_SWALLOWING",
+  "SWALLOWING_LIQUIDS",
+  "LIQUIDS"
+);
+addSectionDefinition(
+  mainSectionId,
+  "DIGESTION_SWALLOWING",
+  "SWALLOWING_SOLIDS",
+  "SOLIDS"
+);
+
+// --- FOOD + DRINKS (Nested under PHYSIOLOGICAL_FUNCTIONS) ---
+addSectionDefinition(
+  mainSectionId,
+  "PHYSIOLOGICAL_FUNCTIONS",
+  "FOOD_PLUS_DRINKS",
+  "FOOD + DRINKS"
+);
+// Page 51 Items
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_ALCOHOL",
+  "ALCOHOL (SPECIFY)"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_ATA", "ATA");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_BACON", "BACON");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_BEANS_PEAS",
+  "BEANS + PEAS"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_BEER", "BEER");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_BREAD", "BREAD");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_BUTTER", "BUTTER");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_CABBAGE",
+  "CABBAGE"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_CARROT", "CARROT");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_CHEESE", "CHEESE");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_CHICKEN",
+  "CHICKEN"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_CHILLIES",
+  "CHILLIES"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_COFFEE", "COFFEE");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_COLD_DRINKS",
+  "COLD : DRINKS"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_CORN", "CORN");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_DRY_FOOD", "DRY");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_EGGS", "EGGS");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_FARINACEOUS",
+  "FARINACEOUS (STARCH, RICE, POTATOES)"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_FAT", "FAT");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_FISH", "FISH");
+addSectionDefinition(mainSectionId, "FD_FISH", "FD_FISH_DRIED", "DRIED");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_FLATULENT_FOOD",
+  "FLATULENT"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_LARGE_MEAL",
+  "LARGE"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_SHELLFISH",
+  "SHELL"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_SMALL_MEAL",
+  "SMALL"
+);
+// Page 52 Items
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_FRIED", "FRIED");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_FROZEN", "FROZEN");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_FRUITS", "FRUITS");
+addSectionDefinition(mainSectionId, "FD_FRUITS", "FD_FRUITS_APPLE", "APPLE");
+addSectionDefinition(mainSectionId, "FD_FRUITS", "FD_FRUITS_BANANA", "BANANA");
+addSectionDefinition(
+  mainSectionId,
+  "FD_FRUITS",
+  "FD_FRUITS_BERRIES",
+  "BERRIES"
+);
+addSectionDefinition(mainSectionId, "FD_FRUITS", "FD_FRUITS_CHIKKU", "CHIKKU");
+addSectionDefinition(mainSectionId, "FD_FRUITS", "FD_FRUITS_CITRUS", "CITRUS");
+addSectionDefinition(mainSectionId, "FD_FRUITS", "FD_FRUITS_GRAPES", "GRAPES");
+addSectionDefinition(mainSectionId, "FD_FRUITS", "FD_FRUITS_MANGO", "MANGO");
+addSectionDefinition(mainSectionId, "FD_FRUITS", "FD_FRUITS_PEACH", "PEACH");
+addSectionDefinition(mainSectionId, "FD_FRUITS", "FD_FRUITS_PEAR", "PEAR");
+addSectionDefinition(mainSectionId, "FD_FRUITS", "FD_FRUITS_PERU", "PERU");
+addSectionDefinition(
+  mainSectionId,
+  "FD_FRUITS",
+  "FD_FRUITS_STRAWBERRIES",
+  "STRAWBERRIES"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_GARLIC", "GARLIC");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_GINGER", "GINGER");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_HONEY", "HONEY");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_HOT_FOOD_DRINK",
+  "HOT"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_LEMONADE",
+  "LEMONADE"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_MEAT", "MEAT");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_MILK", "MILK");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_NUTS", "NUTS");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_ONIONS", "ONIONS");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_OYSTERS",
+  "OYSTERS"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_PANCAKES",
+  "PANCAKES"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_PASTRY", "PASTRY");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_PEPPER", "PEPPER");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_PORK", "PORK");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_POTATOES",
+  "POTATOES"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_RAW_FOOD", "RAW");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_RICH_FOOD", "RICH");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_SALAD", "SALAD");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_SALT", "SALT");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_SAUERKRAUT",
+  "SAUR KRAUT"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_SAUSAGES",
+  "SAUSAGES"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_SMOKED_FOOD",
+  "SMOKED"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_SOUR", "SOUR");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_SPICES", "SPICES");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_SWEETS", "SWEETS");
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_TEA", "TEA");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_TOMATOES",
+  "TOMATOES"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_TURNIPS",
+  "TURNIPS"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_VEAL", "VEAL");
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_VEGETABLES",
+  "VEGETABLES"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_VINEGAR",
+  "VINEGAR"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_WARM_DRINKS",
+  "WARM : DRINKS"
+);
+addSectionDefinition(
+  mainSectionId,
+  "FOOD_PLUS_DRINKS",
+  "FD_FOOD_GENERAL",
+  "FOOD"
+);
+addSectionDefinition(mainSectionId, "FOOD_PLUS_DRINKS", "FD_WHEAT", "WHEAT");
+
+// --- ELIMINATIONS (Nested under PHYSIOLOGICAL_FUNCTIONS, Page 53) ---
+addSectionDefinition(
+  mainSectionId,
+  "PHYSIOLOGICAL_FUNCTIONS",
   "ELIMINATIONS",
   "ELIMINATIONS"
 );
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "SLEEP", "SLEEP");
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "SEX", "SEX");
+// Stools
+addSectionDefinition(mainSectionId, "ELIMINATIONS", "ELIM_STOOLS", "STOOLS");
+addSectionDefinition(mainSectionId, "ELIM_STOOLS", "ELIM_STOOLS_B", "B.");
+addSectionDefinition(mainSectionId, "ELIM_STOOLS", "ELIM_STOOLS_D", "D.");
+addSectionDefinition(mainSectionId, "ELIM_STOOLS", "ELIM_STOOLS_A", "A.");
+// Urine
+addSectionDefinition(mainSectionId, "ELIMINATIONS", "ELIM_URINE", "URINE");
+addSectionDefinition(mainSectionId, "ELIM_URINE", "ELIM_URINE_B", "B.");
+addSectionDefinition(mainSectionId, "ELIM_URINE", "ELIM_URINE_D", "D.");
+addSectionDefinition(mainSectionId, "ELIM_URINE", "ELIM_URINE_A", "A.");
+// Perspiration
 addSectionDefinition(
-  "REACTION_PHYSICAL_FACTORS",
-  null,
-  "DISCHARGES&ERUPTIONS",
+  mainSectionId,
+  "ELIMINATIONS",
+  "ELIM_PERSPIRATION",
+  "PERSPIRATION"
+); // Primary location
+addSectionDefinition(
+  mainSectionId,
+  "ELIM_PERSPIRATION",
+  "ELIM_PERSPIRATION_D",
+  "D."
+);
+addSectionDefinition(
+  mainSectionId,
+  "ELIM_PERSPIRATION",
+  "ELIM_PERSPIRATION_A",
+  "A."
+);
+addSectionDefinition(
+  mainSectionId,
+  "ELIM_PERSPIRATION",
+  "ELIM_PERSPIRATION_CHILLED",
+  "CHILLED"
+);
+// Menses
+addSectionDefinition(mainSectionId, "ELIMINATIONS", "ELIM_MENSES", "MENSES"); // Primary location
+addSectionDefinition(mainSectionId, "ELIM_MENSES", "ELIM_MENSES_B", "B.");
+addSectionDefinition(mainSectionId, "ELIM_MENSES", "ELIM_MENSES_BEG", "BEG.");
+addSectionDefinition(mainSectionId, "ELIM_MENSES", "ELIM_MENSES_D", "D.");
+addSectionDefinition(mainSectionId, "ELIM_MENSES", "ELIM_MENSES_A", "A.");
+// Leucorrhoea
+addSectionDefinition(
+  mainSectionId,
+  "ELIMINATIONS",
+  "ELIM_LEUCORRHOEA",
+  "LEUCORRHOEA"
+); // Primary location
+addSectionDefinition(
+  mainSectionId,
+  "ELIM_LEUCORRHOEA",
+  "ELIM_LEUCORRHOEA_B",
+  "B."
+);
+addSectionDefinition(
+  mainSectionId,
+  "ELIM_LEUCORRHOEA",
+  "ELIM_LEUCORRHOEA_D",
+  "D."
+);
+addSectionDefinition(
+  mainSectionId,
+  "ELIM_LEUCORRHOEA",
+  "ELIM_LEUCORRHOEA_A",
+  "A."
+);
+
+// --- BREATHING (Nested under PHYSIOLOGICAL_FUNCTIONS, Page 53) ---
+addSectionDefinition(
+  mainSectionId,
+  "PHYSIOLOGICAL_FUNCTIONS",
+  "BREATHING",
+  "BREATHING"
+);
+addSectionDefinition(mainSectionId, "BREATHING", "BREATHING_D", "D.");
+addSectionDefinition(mainSectionId, "BREATHING", "BREATHING_INSP", "INSP");
+addSectionDefinition(mainSectionId, "BREATHING", "BREATHING_EXP", "EXP");
+
+// --- SLEEP (Nested under PHYSIOLOGICAL_FUNCTIONS, Page 53) ---
+addSectionDefinition(
+  mainSectionId,
+  "PHYSIOLOGICAL_FUNCTIONS",
+  "SLEEP",
+  "SLEEP"
+);
+addSectionDefinition(
+  mainSectionId,
+  "SLEEP",
+  "SLEEP_BEFORE_FALLING",
+  "BEFORE FALLING TO"
+);
+addSectionDefinition(mainSectionId, "SLEEP", "SLEEP_SHORT", "SHORT");
+addSectionDefinition(mainSectionId, "SLEEP", "SLEEP_LONG", "LONG");
+addSectionDefinition(mainSectionId, "SLEEP", "SLEEP_DURING", "DURING");
+addSectionDefinition(mainSectionId, "SLEEP", "SLEEP_AFTER", "AFTER");
+addSectionDefinition(mainSectionId, "SLEEP", "SLEEP_AWAKENING", "AWAKENING");
+addSectionDefinition(
+  mainSectionId,
+  "SLEEP_AWAKENING",
+  "SLEEP_AWAKENING_MORNING",
+  "MORNING"
+);
+addSectionDefinition(
+  mainSectionId,
+  "SLEEP_AWAKENING",
+  "SLEEP_AWAKENING_AFTERNOON",
+  "AFTER-NOON"
+);
+addSectionDefinition(mainSectionId, "SLEEP", "SLEEP_LOSS_OF", "LOSS OF");
+addSectionDefinition(mainSectionId, "SLEEP", "SLEEP_DREAMS", "DREAMS");
+
+// --- SEX (Nested under PHYSIOLOGICAL_FUNCTIONS, Page 53) ---
+addSectionDefinition(mainSectionId, "PHYSIOLOGICAL_FUNCTIONS", "SEX", "SEX");
+addSectionDefinition(mainSectionId, "SEX", "SEX_MASTURBATION", "MASTURBATION");
+addSectionDefinition(mainSectionId, "SEX", "SEX_EMISSION", "EMISSION");
+addSectionDefinition(mainSectionId, "SEX_EMISSION", "SEX_EMISSION_D", "D.");
+addSectionDefinition(mainSectionId, "SEX_EMISSION", "SEX_EMISSION_A", "A.");
+addSectionDefinition(mainSectionId, "SEX", "SEX_COITION", "COITION");
+addSectionDefinition(mainSectionId, "SEX_COITION", "SEX_COITION_D", "D.");
+addSectionDefinition(mainSectionId, "SEX_COITION", "SEX_COITION_A", "A.");
+addSectionDefinition(mainSectionId, "SEX", "SEX_EJACULATION", "EJACULATION");
+addSectionDefinition(
+  mainSectionId,
+  "SEX_EJACULATION",
+  "SEX_EJACULATION_D",
+  "D."
+);
+addSectionDefinition(
+  mainSectionId,
+  "SEX_EJACULATION",
+  "SEX_EJACULATION_A",
+  "A."
+);
+addSectionDefinition(mainSectionId, "SEX", "SEX_SUPPRESSION", "SUPPRESSION");
+addSectionDefinition(mainSectionId, "SEX", "SEX_INDULGENCE", "INDULGENCE");
+
+// --- DISCHARGES & ERUPTIONS (Nested under PHYSIOLOGICAL_FUNCTIONS, Page 53) ---
+addSectionDefinition(
+  mainSectionId,
+  "PHYSIOLOGICAL_FUNCTIONS",
+  "DISCHARGES_AND_ERUPTIONS",
   "DISCHARGES & ERUPTIONS"
 );
-addSectionDefinition("REACTION_PHYSICAL_FACTORS", null, "EPOCHS", "EPOCHS");
 addSectionDefinition(
-  "REACTION_PHYSICAL_FACTORS",
-  null,
-  "ADAPTATION-STRESS",
-  "ADAPTATION-STRESS"
+  mainSectionId,
+  "DISCHARGES_AND_ERUPTIONS",
+  "DISCHARGE_NOSE",
+  "NOSE"
 );
+
+// --- Top of Page 54 Items (Nested under PHYSIOLOGICAL_FUNCTIONS) ---
+addSectionDefinition(
+  mainSectionId,
+  "PHYSIOLOGICAL_FUNCTIONS",
+  "EARS_SECTION",
+  "EARS"
+);
+addSectionDefinition(
+  mainSectionId,
+  "PHYSIOLOGICAL_FUNCTIONS",
+  "SKIN_SECTION",
+  "SKIN"
+);
+addSectionDefinition(
+  mainSectionId,
+  "SKIN_SECTION",
+  "SKIN_PERSPIRATION",
+  "PERSPIRATION"
+); // Consider linking/relating to ELIM_PERSPIRATION
+addSectionDefinition(
+  mainSectionId,
+  "SKIN_SECTION",
+  "SKIN_EXANTHEMATA",
+  "EXANTHEMATA"
+);
+addSectionDefinition(
+  mainSectionId,
+  "PHYSIOLOGICAL_FUNCTIONS",
+  "UTERINE_SECTION",
+  "UTERINE"
+);
+addSectionDefinition(
+  mainSectionId,
+  "UTERINE_SECTION",
+  "UTERINE_MENSES",
+  "MENSES"
+); // Consider linking/relating to ELIM_MENSES
+addSectionDefinition(
+  mainSectionId,
+  "UTERINE_SECTION",
+  "EXTRA_LEUCORRHOEA",
+  "LEUCORRHOEA"
+); // Consider linking/relating to ELIM_LEUCORRHOEA
+
+// --- EPOCHS (Nested under REACTION_PHYSICAL_FACTORS, Page 54) ---
+addSectionDefinition(mainSectionId, null, "EPOCHS", "EPOCHS");
+addSectionDefinition(mainSectionId, "EPOCHS", "EPOCH_SCHOOLING", "SCHOOLING");
+addSectionDefinition(
+  mainSectionId,
+  "EPOCHS",
+  "EPOCH_ADOLESCENCE",
+  "ADOLESCENCE"
+);
+addSectionDefinition(mainSectionId, "EPOCHS", "EPOCH_MENARCHE", "MENARCHE");
+addSectionDefinition(mainSectionId, "EPOCHS", "EPOCH_MARRIAGE", "MARRIAGE");
+addSectionDefinition(mainSectionId, "EPOCHS", "EPOCH_OCCUPATION", "OCCUPATION");
+addSectionDefinition(mainSectionId, "EPOCHS", "EPOCH_PREGNANCY", "PREGNANCY");
+addSectionDefinition(
+  mainSectionId,
+  "EPOCH_PREGNANCY",
+  "EPOCH_PREGNANCY_LABOUR",
+  "LABOUR"
+);
+addSectionDefinition(
+  mainSectionId,
+  "EPOCH_PREGNANCY",
+  "EPOCH_PUERPERIUM",
+  "PUERPERIUM"
+);
+addSectionDefinition(
+  mainSectionId,
+  "EPOCH_PREGNANCY",
+  "EPOCH_LACTATION",
+  "LACTATION"
+);
+addSectionDefinition(
+  mainSectionId,
+  "EPOCHS",
+  "EPOCH_CLIMACTERIC_INVOLUTION",
+  "CLIMACTERIC & INVOLUTION"
+);
+addSectionDefinition(mainSectionId, "EPOCHS", "EPOCH_SENESCENCE", "SENESCENCE");
+
+// --- ADAPTATION - STRESS (Nested under REACTION_PHYSICAL_FACTORS, Page 54) ---
+addSectionDefinition(
+  mainSectionId,
+  null,
+  "ADAPTATION_STRESS",
+  "ADAPTATION - STRESS"
+);
+// No sub-items listed for this category in the image
 
 addSectionDefinition("FERVER_TOTALITY", null, "ONSET", "ONSET");
 addSectionDefinition("FERVER_TOTALITY", "ONSET", "SUDDEN", "SUDDEN");
