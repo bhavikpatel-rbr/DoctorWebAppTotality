@@ -504,7 +504,7 @@ const ChiefCompaintInit = ({ patient }) => {
                <thead>
                  <tr>
 
-                   
+                   <th>id</th>
                    <th>case record title</th>
                    <th>doctor_notes</th>
                    <th>others_notes</th>
@@ -516,7 +516,7 @@ const ChiefCompaintInit = ({ patient }) => {
                  {currentRows?.map(doctor => (
                    <tr key={doctor.id}>
 
-                   
+                   <td>{doctor.id}</td>
                      <td>Flu Treatment</td>
                      <td>Monitor for fever</td>
                      <td>Patient needs rest</td>
@@ -528,10 +528,9 @@ const ChiefCompaintInit = ({ patient }) => {
                        <button
                          className="btn btn-sm btn-danger me-2"
                          style={{ backgroundColor: '#2e37a4', borderColor: '#2e37a4' }}
-                        onClick={() => {
-                                                        // router('/editpatient');
-                                                        // dispatch(patientEditData(doctor));
-                                                      }}
+                        onClick={()=>{
+                         setmode(3)
+                        }}
                        >
                          <FaPen />
                        </button>
@@ -795,7 +794,7 @@ const ChiefCompaintInit = ({ patient }) => {
                                   <BsClipboard size={20} />
                                 </div>
                                 <div className="doctor-content dash-count flex-grow-1">
-                                  <h5>Case Record</h5>
+                                  <h5>Patient As A Person (Attributes & Function)</h5>
                                 </div>
                               </Link>
                             </div>

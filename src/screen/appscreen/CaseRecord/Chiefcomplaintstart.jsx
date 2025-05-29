@@ -1,42 +1,38 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { MdArrowDropDown, MdMic } from "react-icons/md";
+// import axios from "axios"; // Not used in the provided snippet
+import { MdArrowDropDown } from "react-icons/md"; // MdMic removed as not used
 import { BiPlus } from "react-icons/bi";
 import { BsExclamationTriangleFill } from "react-icons/bs";
-import {
-  FaUser,
-  FaBirthdayCake,
-  FaVenusMars,
-  FaUserCheck,
-} from "react-icons/fa";
-import { BsMicFill, BsMicMute, BsPlus, BsTrash } from "react-icons/bs";
-import { Link, useNavigate } from "react-router-dom";
-import { faL } from "@fortawesome/free-solid-svg-icons";
-import Avatar from "../../../img/doctor-03.jpg";
-import Accordion from "react-bootstrap/Accordion";
-import Col from "react-bootstrap/Col";
-import Nav from "react-bootstrap/Nav";
-import Row from "react-bootstrap/Row";
-import Tab from "react-bootstrap/Tab";
+// FaUser, FaBirthdayCake, FaVenusMars, FaUserCheck removed as not used
+import { BsMicFill, BsMicMute, BsPlus, BsTrash } from "react-icons/bs"; // BsMicFill, BsMicMute not used
+// import { Link, useNavigate } from "react-router-dom"; // Not used
+// import { faL } from "@fortawesome/free-solid-svg-icons"; // Not used
+// import Avatar from "../../../img/doctor-03.jpg"; // Not used
+// import Accordion from "react-bootstrap/Accordion"; // Not used
+// import Col from "react-bootstrap/Col"; // Not used
+// import Nav from "react-bootstrap/Nav"; // Not used
+// import Row from "react-bootstrap/Row"; // Not used
+// import Tab from "react-bootstrap/Tab"; // Not used
 
 const Chiefcomplaintstart = ({ patient }) => {
   const [rows, setRows] = useState([
     {
       location: "",
-      locationValue: "1",
-      locationChecked: false,
+      locationValue: "",
+      locationChecked: false, // This state is not used in UI, consider removing if not planned
       sensation: "",
-      sensationValue: "1",
-      sensationChecked: false,
+      sensationValue: "",
+      sensationChecked: false, // Not used
       modalities: "",
-      modalitiesValue: "1",
-      modalitiesChecked: false,
+      modalitiesValue: "",
+      modalitiesChecked: false, // Not used
       concomitant: "",
-      concomitantValue: "1",
-      concomitantChecked: false,
-      selectedOptions: [],
+      concomitantValue: "",
+      concomitantChecked: false, // Not used
+      selectedOptions: [], // For the modal, seems okay
     },
   ]);
+
   const locationSuggestions = [
     { id: 0, name: "Onset" },
     { id: 0, name: "Duration" },
@@ -103,7 +99,8 @@ const Chiefcomplaintstart = ({ patient }) => {
     { id: 12, name: "Reticuloendothelial System (RES)" },
   ];
 
-  const sensationAndPathology = {
+
+   const sensationAndPathology = {
     1: [
       "Cognitive symptoms",
       "Confusion",
@@ -861,23 +858,79 @@ const Chiefcomplaintstart = ({ patient }) => {
       "histiocytosis", // Lowercase h as provided
     ],
   };
+  // (Keep the full sensationAndPathology data as you have it)
+
+
+  const modalitiesSuggestions = [
+    "Causation (A/F)", "Emotional stress", "anxiety", "grief", "anger", "fear",
+    "Physical Causation", "Injury", "trauma", "surgery", "infection",
+    "Environmental", "Exposure to toxins", "pollution", "Weather change",
+    "Genetic", "Inherited traits", "family history",
+    "Nutritional", "Poor diet", "malnutrition", "food allergies",
+    "Time Modalities", "Worse in the morning", "Worse at night", "Worse in evening",
+    "Worse during the full moon", "Better during the day",
+    "Environmental Modalities", "Worse", "cold weather", "hot weather",
+    "Better", "open air", "enclosed spaces",
+    "Physical Modalities", "movement", "Better with rest", "pressure", "Better with elevation",
+    "Emotional Modalities", "Worse with stress", "Better with relaxation",
+    "Worse with anxiety", "Better with calmness",
+    "cold", "heat", "warmth", "sleep", "<", ">"
+  ];
+
+    const concomitantSuggestions = [
+    // General Physical Symptoms
+    "Fever", "Chills", "Sweating", "Fatigue", "Weakness", "Malaise", "Lethargy", "Lack of motivation",
+    "Headaches", "accompanying symptoms (headache)", "sensitivity to light (headache)", // Grouped headache related
+    "Dizziness", "Pain in other areas", "Swelling",
+    // GI & Appetite
+    "Nausea", "Vomiting", "Diarrhea", "Constipation", "Loss of appetite", "Appetite (changes)",
+    "Weight loss", "Weight gain", "Digestive issues", "Bloating", "Gas",
+    "Thirst", "Cravings", "Aversion", "Tongue (changes)",
+    // Skin
+    "Rash", "Itching", "Skin changes",
+    // Neurological / Sensory
+    "Numbness", "Tingling",
+    // Emotional / Mental
+    "Anxiety", "Restlessness", "Fear", "Apprehension",
+    "Depression", "Sadness", "Hopelessness", "Loss of interest",
+    "Irritability", "Mood swings", "Anger", "Frustration", "Emotional instability",
+    "Weeping", "Euphoria",
+    "Confusion", "Disorientation", "Forgetfulness", "Lack of focus", "Difficulty concentrating", "Distraction",
+    "Memory loss", "Mood changes",
+    // Sleep
+    "Sleep disturbances", "Insomnia", "Difficulty falling asleep", "Sleepiness",
+    "Nightmares", "Sleepwalking", "Restless leg syndrome",
+    // Respiratory / Cardiovascular
+    "Cough", "Shortness of breath", "Palpitations",
+    // Other systems
+    "Urination (changes)", "Bowel changes",
+    // Temporal relationships
+    "Followed by", "Before", "Alternating with",
+    // Appearance
+    "Appearance (changes)",
+    // Categories (can be used as prefixes or standalone)
+    "Physical Concomitant", "Mental Concomitant", "Emotional Concomitants"
+  ];
+
 
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [rowToDelete, setRowToDelete] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState({});
-  const [language, setLanguage] = useState("en");
-  const [isRecording, setIsRecording] = useState(false);
-  const [selectedoptionvalue, setselectedoptionvalue] = useState(false);
-  const [selectedtype, setselectedtype] = useState(false);
-  const [modalContent, setModalContent] = useState("");
+  const [language, setLanguage] = useState("en"); // Not used for speech in this version
+  const [isRecording, setIsRecording] = useState(false); // For Add Row button styling
+  const [selectedoptionvalue, setselectedoptionvalue] = useState(""); // For modal context
+  const [selectedtype, setselectedtype] = useState(""); // For modal context
+  const [modalContent, setModalContent] = useState(""); // For modal display
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]); // For options inside modal
   const itemsPerPage = 4;
-  const [showOptions, setShowOptions] = useState(true);
-  const [focusedIndex, setFocusedIndex] = useState(null);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  // const [showOptions, setShowOptions] = useState(true); // Seems related to modal, not input suggestions
+  const [focusedIndex, setFocusedIndex] = useState(null); // For modal context
+  
+  const [showSuggestions, setShowSuggestions] = useState({}); // e.g. { 0: {location: true, sensation: false}, 1: ... }
+  const [filteredSuggestions, setFilteredSuggestions] = useState({}); // e.g. { 0: {location: [...], sensation: [...]}, 1: ... }
+
 
   const allOptions = Array.from({ length: 36 }, (_, i) => `Option ${i + 1}`);
   const currentOptions = allOptions.slice(
@@ -892,6 +945,7 @@ const Chiefcomplaintstart = ({ patient }) => {
         : [...prevOptions, option];
       return newOptions;
     });
+    // Logic for automatically moving to next page in modal
     if (!selectedOptions.includes(option)) {
       const nextPage = Math.min(
         currentPage + 1,
@@ -901,17 +955,9 @@ const Chiefcomplaintstart = ({ patient }) => {
     }
   };
 
-  const handleNext = () => {
-    if ((currentPage + 1) * itemsPerPage < allOptions.length) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  // handleNext and handlePrevious are for the modal pagination (not used in UI currently, but kept)
+  // const handleNext = () => { ... };
+  // const handlePrevious = () => { ... };
 
   const toggleDropdown = (index, section) => {
     setDropdownOpen((prevState) => ({
@@ -932,23 +978,13 @@ const Chiefcomplaintstart = ({ patient }) => {
       setRows(rows.filter((_, index) => index !== rowToDelete));
     }
     setIsDeleteModalVisible(false);
+    setRowToDelete(null);
   };
+
   const formatText = (value) => {
-    if (value === "1") {
-      return {
-        textTransform: "lowercase",
-        fontStyle: "normal",
-        fontWeight: "normal",
-      };
-    } else if (value === "2") {
-      return {
-        textTransform: "capitalize",
-        fontStyle: "italic",
-        fontWeight: "normal",
-      };
-    } else if (value === "3") {
-      return { fontStyle: "normal", fontWeight: "bold" };
-    }
+    if (value === "1") return { textTransform: "lowercase", fontStyle: "normal", fontWeight: "normal" };
+    if (value === "2") return { textTransform: "capitalize", fontStyle: "italic", fontWeight: "normal" };
+    if (value === "3") return { fontStyle: "normal", fontWeight: "bold" };
     return {};
   };
 
@@ -956,69 +992,32 @@ const Chiefcomplaintstart = ({ patient }) => {
     setRows([
       ...rows,
       {
-        location: "",
-        sensation: "",
-        modalities: "",
-        concomitant: "",
-        locationValue: "1",
-        sensationValue: "1",
-        modalitiesValue: "1",
-        concomitantValue: "1",
-        locationChecked: false,
-        sensationChecked: false,
-        modalitiesChecked: false,
-        concomitantChecked: false,
+        location: "", sensation: "", modalities: "", concomitant: "",
+        locationValue: "1", sensationValue: "1", modalitiesValue: "1", concomitantValue: "1",
+        locationChecked: false, sensationChecked: false, modalitiesChecked: false, concomitantChecked: false,
         selectedOptions: [],
       },
     ]);
   };
 
-  const startListening = (inputField, index) => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.lang = language;
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
+  // startListening function removed as mic button is not in UI, can be added back if needed
 
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        setRows(
-          rows.map((row, i) =>
-            i === index ? { ...row, [inputField]: transcript } : row
-          )
-        );
-      };
+  // handleCheckboxChange function removed as checkboxes are not in UI
 
-      recognition.start();
-    } else {
-      alert("Speech Recognition API is not supported in this browser.");
-    }
+  // const navigate = useNavigate(); // Not used
+
+  const toggleRecording = () => { // This function name is misleading, it's for the "Add Row" button style
+    setIsRecording(!isRecording); // Toggles style for Add Row, but doesn't actually record
   };
 
-  const handleCheckboxChange = (index, key) => {
-    setRows(
-      rows.map((row, i) => (i === index ? { ...row, [key]: !row[key] } : row))
+  const handleKeyPressModalOpen = (index) => { // Renamed to be more specific
+    setSelectedOptions([]); // Clear options for the modal
+    setFocusedIndex(index);
+    setModalContent(
+      `Location: ${rows[index].location}, Sensation: ${rows[index].sensation}, Modalities: ${rows[index].modalities}, Concomitant: ${rows[index].concomitant}`
     );
-  };
-
-  const navigate = useNavigate();
-
-  const toggleRecording = () => {
-    setIsRecording(!isRecording);
-  };
-
-  const handleKeyPress = (event, index) => {
-    setSelectedOptions([]);
-    if (event.key === "Enter") {
-      setFocusedIndex(index);
-      setModalContent(
-        `Location: ${rows[index].location}, Sensation: ${rows[index].sensation}, Modalities: ${rows[index].modalities}, Concomitant: ${rows[index].concomitant}`
-      );
-      setShowOptions(true);
-      setIsModalVisible(true);
-    }
+    // setShowOptions(true); // This state seems for the modal itself, not input suggestions
+    setIsModalVisible(true);
   };
 
   const handleInputChange = (e, index, fieldKey) => {
@@ -1027,63 +1026,74 @@ const Chiefcomplaintstart = ({ patient }) => {
     updatedRows[index][fieldKey] = value;
     setRows(updatedRows);
 
-    let newFilteredSuggestions = { ...filteredSuggestions };
-    let newShowSuggestions = { ...showSuggestions };
+    const currentRowSuggestions = filteredSuggestions[index] || {};
+    const currentRowShowSuggestions = showSuggestions[index] || {};
 
-    if (fieldKey === "location" && value.length >= 2) {
-      const filtered = locationSuggestions.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase())
-      );
-      newFilteredSuggestions[index] = { location: filtered };
-      newShowSuggestions[index] = { location: true };
-    } else if (fieldKey === "sensation" && value.length >= 2) {
-      const selectedLocation = locationSuggestions.find(
-        (item) => item.name === updatedRows[index].location
-      );
-      const selectedId = selectedLocation ? selectedLocation.id : null;
-      const filteredSensation = selectedId
-        ? sensationAndPathology[selectedId] || []
-        : [];
-      const matchedSensations = filteredSensation.filter((sensation) =>
-        sensation.toLowerCase().includes(value.toLowerCase())
-      );
+    // Reset suggestions for the current field before re-evaluating
+    currentRowSuggestions[fieldKey] = [];
+    currentRowShowSuggestions[fieldKey] = false;
 
-      newFilteredSuggestions[index] = {
-        sensation: matchedSensations.map((name) => ({ name })),
-      };
-      newShowSuggestions[index] = { sensation: true };
-    } else {
-      newShowSuggestions[index] = { location: false, sensation: false };
+    if (value.length >= 1) { // Show suggestions if 1 or more characters
+        if (fieldKey === "location") {
+            const filtered = locationSuggestions.filter((item) =>
+            item.name.toLowerCase().includes(value.toLowerCase())
+            );
+            currentRowSuggestions.location = filtered;
+            currentRowShowSuggestions.location = true;
+        } else if (fieldKey === "sensation") {
+            const selectedLocation = locationSuggestions.find(
+            (item) => item.name === updatedRows[index].location
+            );
+            const selectedId = selectedLocation ? selectedLocation.id : null;
+            const allSensationsForLocation = selectedId
+            ? sensationAndPathology[selectedId] || []
+            : [];
+            const matchedSensations = allSensationsForLocation.filter((sensation) =>
+            sensation.toLowerCase().includes(value.toLowerCase())
+            );
+            currentRowSuggestions.sensation = matchedSensations.map((name) => ({ name }));
+            currentRowShowSuggestions.sensation = true;
+        } else if (fieldKey === "modalities") {
+            const filtered = modalitiesSuggestions.filter((item) =>
+            item.toLowerCase().includes(value.toLowerCase())
+            );
+            currentRowSuggestions.modalities = filtered.map(name => ({ name })); // Keep structure {name: ...}
+            currentRowShowSuggestions.modalities = true;
+        } else if (fieldKey === "concomitant") { // Added this block
+            const filtered = concomitantSuggestions.filter((item) =>
+            item.toLowerCase().includes(value.toLowerCase())
+            );
+            currentRowSuggestions.concomitant = filtered.map(name => ({ name }));
+            currentRowShowSuggestions.concomitant = true;
+        }
     }
 
-    setFilteredSuggestions(newFilteredSuggestions);
-    setShowSuggestions(newShowSuggestions);
+    setFilteredSuggestions(prev => ({ ...prev, [index]: currentRowSuggestions }));
+    setShowSuggestions(prev => ({ ...prev, [index]: currentRowShowSuggestions }));
   };
+
   const selectSuggestion = (index, suggestion, field) => {
     const updatedRows = [...rows];
     updatedRows[index][field] = suggestion.name;
     setRows(updatedRows);
 
-    let newShowSuggestions = { ...showSuggestions };
-    newShowSuggestions[index] = { location: false, sensation: false };
-    setShowSuggestions(newShowSuggestions);
+    // Hide all suggestions for that row's specific field after selection
+    setShowSuggestions(prev => ({
+        ...prev,
+        [index]: { ...prev[index], [field]: false }
+    }));
   };
 
   const renderInput = (row, index, field, dropdownField, placeholder) => {
     const isLocationField = field === "location";
     const isSensationField = field === "sensation";
+    const isModalitiesField = field === "modalities";
+    const isConcomitantField = field === "concomitant"; // Added this flag
 
-    const selectedLocation = locationSuggestions.find(
-      (loc) => loc.name === row.location
-    );
-    const selectedId = selectedLocation ? selectedLocation.id : null;
-    const filteredSensations = selectedId
-      ? sensationAndPathology[selectedId] || []
-      : [];
     return (
       <div
         className={`d-flex p-1 align-items-center ${
-          row[field] ? "bg-highlight" : "bg-default"
+          row[field] ? "bg-highlight" : "bg-default" // This class logic needs CSS
         }`}
       >
         <div className="flex-grow-1 position-relative">
@@ -1093,89 +1103,104 @@ const Chiefcomplaintstart = ({ patient }) => {
             value={row[field]}
             style={formatText(row[dropdownField])}
             onChange={(e) => handleInputChange(e, index, field)}
+            onFocus={(e) => handleInputChange(e, index, field)} // Show suggestions on focus if text exists
+            onBlur={() => {
+                setTimeout(() => { // Timeout to allow click on suggestion
+                    if (showSuggestions[index]) {
+                        setShowSuggestions(prev => ({
+                            ...prev,
+                            [index]: { ...prev[index], [field]: false }
+                        }));
+                    }
+                }, 150);
+            }}
             onKeyDown={(e) => {
-              handleKeyPress(e, index);
-              setCurrentPage(0);
-              setselectedoptionvalue(row[field]);
-              setselectedtype(field);
+                let currentFieldSuggestionsVisible = false;
+                if (showSuggestions[index]) {
+                    if (isLocationField && showSuggestions[index].location) currentFieldSuggestionsVisible = true;
+                    if (isSensationField && showSuggestions[index].sensation) currentFieldSuggestionsVisible = true;
+                    if (isModalitiesField && showSuggestions[index].modalities) currentFieldSuggestionsVisible = true;
+                    if (isConcomitantField && showSuggestions[index].concomitant) currentFieldSuggestionsVisible = true; // Added this check
+                }
+
+                if (e.key === "Enter" && !currentFieldSuggestionsVisible) {
+                    handleKeyPressModalOpen(index);
+                    setCurrentPage(0); // Reset modal page
+                    setselectedoptionvalue(row[field]); // For modal context
+                    setselectedtype(field); // For modal context
+                } else if (e.key === "Escape") {
+                     if (showSuggestions[index]) {
+                        setShowSuggestions(prev => ({
+                            ...prev,
+                            [index]: { ...prev[index], [field]: false }
+                        }));
+                    }
+                }
             }}
             placeholder={placeholder}
           />
 
-          {/* Show Location Suggestions */}
-          {isLocationField && showSuggestions[index]?.location && (
-            <ul
-              className="list-group position-absolute w-100 mt-1 shadow bg-white"
-              style={{ zIndex: 1000 }}
-            >
-              {filteredSuggestions[index]?.location?.map((suggestion) => (
-                <li
-                  key={suggestion.id}
-                  className="list-group-item list-group-item-action"
-                  onClick={() =>
-                    selectSuggestion(index, suggestion, "location")
-                  }
-                  style={{ cursor: "pointer" }}
-                >
+          {/* Suggestions Lists */}
+          {(isLocationField && showSuggestions[index]?.location && filteredSuggestions[index]?.location?.length > 0) && (
+            <ul className="list-group position-absolute w-100 mt-1 shadow bg-white" style={{ zIndex: 1000, maxHeight: '200px', overflowY: 'auto' }}>
+              {filteredSuggestions[index].location.map((suggestion, suggIdx) => (
+                <li key={`loc-${index}-${suggIdx}`} className="list-group-item list-group-item-action"
+                    onMouseDown={() => selectSuggestion(index, suggestion, "location")} style={{ cursor: "pointer" }}>
+                  {suggestion.name}
+                </li>
+              ))}
+            </ul>
+          )}
+          {(isSensationField && showSuggestions[index]?.sensation && filteredSuggestions[index]?.sensation?.length > 0) && (
+            <ul className="list-group position-absolute w-100 mt-1 shadow bg-white" style={{ zIndex: 1000, maxHeight: '200px', overflowY: 'auto' }}>
+              {filteredSuggestions[index].sensation.map((suggestion, suggIdx) => (
+                <li key={`sen-${index}-${suggIdx}`} className="list-group-item list-group-item-action"
+                    onMouseDown={() => selectSuggestion(index, suggestion, "sensation")} style={{ cursor: "pointer" }}>
+                  {suggestion.name}
+                </li>
+              ))}
+            </ul>
+          )}
+          {(isModalitiesField && showSuggestions[index]?.modalities && filteredSuggestions[index]?.modalities?.length > 0) && (
+            <ul className="list-group position-absolute w-100 mt-1 shadow bg-white" style={{ zIndex: 1000, maxHeight: '200px', overflowY: 'auto' }}>
+              {filteredSuggestions[index].modalities.map((suggestion, suggIdx) => (
+                <li key={`mod-${index}-${suggIdx}`} className="list-group-item list-group-item-action"
+                    onMouseDown={() => selectSuggestion(index, suggestion, "modalities")} style={{ cursor: "pointer" }}>
+                  {suggestion.name}
+                </li>
+              ))}
+            </ul>
+          )}
+          {/* Added Suggestions for Concomitant */}
+          {(isConcomitantField && showSuggestions[index]?.concomitant && filteredSuggestions[index]?.concomitant?.length > 0) && (
+            <ul className="list-group position-absolute w-100 mt-1 shadow bg-white" style={{ zIndex: 1000, maxHeight: '200px', overflowY: 'auto' }}>
+              {filteredSuggestions[index].concomitant.map((suggestion, suggIdx) => (
+                <li key={`con-${index}-${suggIdx}`} className="list-group-item list-group-item-action"
+                    onMouseDown={() => selectSuggestion(index, suggestion, "concomitant")} style={{ cursor: "pointer" }}>
                   {suggestion.name}
                 </li>
               ))}
             </ul>
           )}
 
-          {/* Show Sensation Suggestions */}
-          {isSensationField && showSuggestions[index]?.sensation && (
-            <ul
-              className="list-group position-absolute w-100 mt-1 shadow bg-white"
-              style={{ zIndex: 1000 }}
-            >
-              {filteredSuggestions[index]?.sensation?.map((sensation, idx) => (
-                <li
-                  key={idx}
-                  className="list-group-item list-group-item-action"
-                  onClick={() =>
-                    selectSuggestion(
-                      index,
-                      { name: sensation.name },
-                      "sensation"
-                    )
-                  }
-                  style={{ cursor: "pointer" }}
-                >
-                  {sensation.name}
-                </li>
-              ))}
-            </ul>
-          )}
 
+          {/* Dropdown Button */}
           <button
             type="button"
             className="btn position-absolute top-50 me-3 end-0 translate-middle-y p-0 border-0"
             onClick={() => toggleDropdown(index, dropdownField)}
-            aria-label="Dropdown"
+            aria-label="Format Dropdown"
           >
             {row[dropdownField] || <MdArrowDropDown size={24} />}
           </button>
           {dropdownOpen[index] === dropdownField && (
-            <div className="custom-dropdown-menu position-absolute end-0 mt-2">
-              <button
-                className="custom-dropdown-item"
-                onClick={() => handleDropdownSelect(index, dropdownField, "1")}
-              >
-                1
-              </button>
-              <button
-                className="custom-dropdown-item"
-                onClick={() => handleDropdownSelect(index, dropdownField, "2")}
-              >
-                2
-              </button>
-              <button
-                className="custom-dropdown-item"
-                onClick={() => handleDropdownSelect(index, dropdownField, "3")}
-              >
-                3
-              </button>
+            <div className="custom-dropdown-menu position-absolute end-0 mt-2 p-1 bg-white border rounded shadow-sm" style={{zIndex: 1001}}>
+              {["1", "2", "3"].map(val => (
+                 <button key={val} className="btn btn-sm btn-light d-block w-100 text-start mb-1"
+                         onClick={() => handleDropdownSelect(index, dropdownField, val)}>
+                    {val}
+                 </button>
+              ))}
             </div>
           )}
         </div>
@@ -1185,137 +1210,96 @@ const Chiefcomplaintstart = ({ patient }) => {
 
   return (
     <div>
-      <div className="row">
+      <div className="row"> {/* Added mb-3 for spacing */}
         <div className="col-sm-7 col-6">
           <ul className="breadcrumb">
             <li className="breadcrumb-item">
-              <div href="chief_complaint.html">Chief Complaint</div>
+              {/* Link component can be used if react-router-dom is active */}
+              <a href="#!">Chief Complaint</a>
             </li>
             <li className="breadcrumb-item">
-              <i className="feather-chevron-right"></i>
+              <i className="feather-chevron-right"></i> {/* This class might need feather icons library */}
             </li>
-            <li className="breadcrumb-item active">Chief Complaint</li>
+            <li className="breadcrumb-item active">Input</li>
           </ul>
         </div>
-        <div className="col-sm-5 col-6 text-end m-b-30">
+          <div className="col-sm-5 col-6 text-end m-b-30">
           <a
             className={`btn btn-${
-              isRecording ? "danger" : "primary-StartRecording"
+              isRecording ? "danger" : "primary-StartRecording" // This class "primary-StartRecording" seems custom
             }`}
             onClick={addRow}
+            href="#!" // Added href for <a> tag or change to <button>
           >
-            <BsPlus size={30} style={{ marginHorizontal: 10 }} />
+            <BsPlus size={30} style={{ marginHorizontal: 10 }} /> {/* marginHorizontal is not a valid CSS property for React style object, use marginRight/marginLeft or padding */}
             Add Row
           </a>
         </div>
       </div>
-      <div className="card card-table show-entire">
-        <table className="table mt-2 mb-5">
-          <thead>
-            <tr>
-              <th>Location</th>
-              <th>Sensation & Pathology</th>
-              <th>Modalities AF</th>
-              <th>Concomitant</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          {rows.map((row, index) => (
-            <tr key={index}>
-              <td>
-                {renderInput(
-                  row,
-                  index,
-                  "location",
-                  "locationValue",
-                  "Enter Location"
-                )}
-              </td>
-              <td>
-                {renderInput(
-                  row,
-                  index,
-                  "sensation",
-                  "sensationValue",
-                  "Enter Sensation"
-                )}
-              </td>
-              <td>
-                {renderInput(
-                  row,
-                  index,
-                  "modalities",
-                  "modalitiesValue",
-                  "Enter Modalities"
-                )}
-              </td>
-              <td>
-                {renderInput(
-                  row,
-                  index,
-                  "concomitant",
-                  "concomitantValue",
-                  "Enter Concomitant"
-                )}
-              </td>
-              <td>
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => {
-                    setRowToDelete(index);
-                    setIsDeleteModalVisible(true);
-                  }}
-                  style={{ backgroundColor: "rgb(240, 43, 79)" }}
-                >
-                  <BsTrash />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </table>
+      <div className="card card-table show-entire"> {/* These classes might be custom */}
+       
+            <table className="table mt-2 mb-5">
+            <thead>
+                <tr>
+                <th>Location</th>
+                <th>Sensation & Pathology</th>
+                <th>Modalities AF</th>
+                <th>Concomitant</th>
+                <th>Action</th>
+                </tr>
+            </thead>
+            <tbody> {/* Added tbody */}
+                {rows.map((row, index) => (
+                <tr key={index}>
+                    <td>{renderInput(row,index,"location","locationValue","Enter Location")}</td>
+                    <td>{renderInput(row,index,"sensation","sensationValue","Enter Sensation")}</td>
+                    <td>{renderInput(row,index,"modalities","modalitiesValue","Enter Modalities AF")}</td>
+                    <td>{renderInput(row,index,"concomitant","concomitantValue","Enter Concomitant")}</td>
+                    <td>
+                    <button
+                        className="btn btn-sm btn-danger"
+                        onClick={() => { setRowToDelete(index); setIsDeleteModalVisible(true); }}
+                    >
+                        <BsTrash />
+                    </button>
+                    </td>
+                </tr>
+                ))}
+            </tbody>
+            </table>
+       
 
         {isModalVisible && (
-          <div className="modal" style={{ display: "block" }}>
-            <div className="modal-dialog">
+          <div className="modal fade show" style={{ display: "block" }} tabIndex="-1">
+            <div className="modal-dialog modal-dialog-centered"> {/* Added modal-dialog-centered */}
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Select Option</h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setIsModalVisible(false)}
-                  ></button>
+                  <h5 className="modal-title">Select Option for: {selectedtype} - "{selectedoptionvalue}"</h5>
+                  <button type="button" className="btn-close" onClick={() => setIsModalVisible(false)}></button>
                 </div>
                 <div className="modal-body">
+                  <p>Selected: {selectedOptions.join(", ")}</p> {/* Show selected options */}
                   <ul className="list-group">
                     {currentOptions.map((option) => (
-                      <li
-                        key={option}
-                        className={`list-group-item ${
-                          selectedOptions.includes(option) ? "active" : ""
-                        }`}
-                        onClick={() => handleOptionSelect(option)}
-                      >
+                      <li key={option}
+                          className={`list-group-item list-group-item-action ${selectedOptions.includes(option) ? "active" : ""}`}
+                          onClick={() => handleOptionSelect(option)} style={{cursor: "pointer"}}>
                         {option}
                       </li>
                     ))}
                   </ul>
                 </div>
                 <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setIsModalVisible(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => setIsModalVisible(false)}
-                  >
-                    Save
-                  </button>
+                  <button type="button" className="btn btn-secondary" onClick={() => setIsModalVisible(false)}>Close</button>
+                  <button type="button" className="btn btn-primary" onClick={() => {
+                      // Here you would typically save the selectedOptions to the row
+                      const updatedRows = rows.map((r, i) => 
+                        i === focusedIndex ? { ...r, selectedOptions: [...selectedOptions] } : r
+                      );
+                      setRows(updatedRows);
+                      console.log("Saving options for row:", focusedIndex, selectedOptions);
+                      setIsModalVisible(false);
+                  }}>Save Selections</button>
                 </div>
               </div>
             </div>
@@ -1323,88 +1307,21 @@ const Chiefcomplaintstart = ({ patient }) => {
         )}
 
         {isDeleteModalVisible && (
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 1050,
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: "#fff",
-                borderRadius: "12px",
-                boxShadow: "0px 5px 15px rgba(0,0,0,0.2)",
-                width: "400px",
-                maxWidth: "90%",
-                padding: "20px",
-                textAlign: "center",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginBottom: "15px",
-                }}
-              >
-                <BsExclamationTriangleFill size={50} color="red" />
-              </div>
-              <h5
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  marginBottom: "10px",
-                }}
-              >
-                Confirm Deletion
-              </h5>
-              <p style={{ fontSize: "16px", color: "#555" }}>
-                Are you sure you want to delete this row?
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginTop: "20px",
-                }}
-              >
-                <button
-                  style={{
-                    backgroundColor: "#6c757d",
-                    color: "#fff",
-                    border: "none",
-                    padding: "10px 15px",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    flex: 1,
-                    marginRight: "10px",
-                  }}
-                  onClick={() => setIsDeleteModalVisible(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  style={{
-                    backgroundColor: "#dc3545",
-                    color: "#fff",
-                    border: "none",
-                    padding: "10px 15px",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    flex: 1,
-                  }}
-                  onClick={confirmDeleteRow}
-                >
-                  Delete
-                </button>
+          <div className="modal fade show" style={{display: "block", backgroundColor: "rgba(0,0,0,0.5)"}} tabIndex="-1">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                 <div className="modal-header">
+                     <h5 className="modal-title">Confirm Deletion</h5>
+                      <button type="button" className="btn-close" onClick={() => setIsDeleteModalVisible(false)}></button>
+                 </div>
+                 <div className="modal-body text-center">
+                    <BsExclamationTriangleFill size={50} className="text-danger mb-3" />
+                    <p>Are you sure you want to delete this row?</p>
+                 </div>
+                 <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" onClick={() => setIsDeleteModalVisible(false)}>Cancel</button>
+                    <button type="button" className="btn btn-danger" onClick={confirmDeleteRow}>Delete</button>
+                 </div>
               </div>
             </div>
           </div>
