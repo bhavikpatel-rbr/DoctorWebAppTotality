@@ -4129,7 +4129,7 @@ addSectionDefinition(
   "CHARACTER",
   "CHARACTER"
 );
-addSectionDefinition("FERVER_TOTALITY", "CHILL&COLDNESS", "TIME", "TIME");
+addSectionDefinition("FERVER_TOTALITY", "CHILL&COLDNESS", "TIME:A.F.,<,>", "TIME:A.F.,<,>");
 addSectionDefinition(
   "FERVER_TOTALITY",
   "CHILL&COLDNESS",
@@ -4138,10 +4138,10 @@ addSectionDefinition(
 );
 addSectionDefinition("FERVER_TOTALITY", null, "FEVER&HEAT", "FEVER & HEAT");
 addSectionDefinition("FERVER_TOTALITY", "FEVER&HEAT", "CHARACTER", "CHARACTER");
-addSectionDefinition("FERVER_TOTALITY", "CHILL&HEAT", "TIME", "TIME");
+addSectionDefinition("FERVER_TOTALITY", "FEVER&HEAT", "TIME:A.F.,<,>", "TIME:A.F.,<,>");
 addSectionDefinition(
   "FERVER_TOTALITY",
-  "CHILL&HEAT",
+  "FEVER&HEAT",
   "CONCOMITANTS",
   "CONCOMITANTS"
 );
@@ -4152,7 +4152,7 @@ addSectionDefinition(
   "CHARACTER",
   "CHARACTER"
 );
-addSectionDefinition("FERVER_TOTALITY", "PERSPIRATION", "TIME", "TIME");
+addSectionDefinition("FERVER_TOTALITY", "PERSPIRATION", "TIME:A.F.,<,>", "TIME:A.F.,<,>");
 addSectionDefinition(
   "FERVER_TOTALITY",
   "PERSPIRATION",
