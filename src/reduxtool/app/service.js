@@ -74,7 +74,7 @@ export const allDoctorsUsersAsync = async () => {
 
 export const allDoctorsUsersWhenSignupAsync = async () => {
   try {
-    const response = await axiosInstance.get(`/alldoctorsuserslist`);
+    const response = await axiosInstance.get(`/allusers`);
     return response;
   } catch (err) {
     return isAxiosError(err);

@@ -7,14 +7,19 @@ import "./../../../assest/commoncss.css";
 import { useDispatch } from "react-redux";
 import { registerAdminByEmailAction } from "../../../reduxtool/auth/middleware";
 import { allDoctorsUsersAction, allDoctorsUsersWhenSignupAction } from "../../../reduxtool/app/middleware";
+import { appSelector } from "../../../reduxtool/app/appslice";
+import { useSelector } from "react-redux";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const users = useSelector(appSelector);
   useEffect(() => {
-      dispatch(allDoctorsUsersWhenSignupAction());
-    }, [dispatch]);
+    dispatch(allDoctorsUsersWhenSignupAction());
+  }, [dispatch]);
+
+  console.log("allDoctorsUsersWhenSignupAction", users?.doctorListWhenSignup?.Doctor);
+
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .trim()
@@ -22,11 +27,11 @@ const SignUp = () => {
       .max(50, "Full Name cannot exceed 50 characters")
       .matches(/^[a-zA-Z\s]+$/, "Full Name can only contain letters and spaces")
       .required("Full Name is required"),
-    
+
     email: Yup.string()
       .email("Please enter a valid email address")
       .required("Email is required"),
-    
+
     password: Yup.string()
       .min(8, "Password must be at least 8 characters long")
       .max(20, "Password cannot exceed 20 characters")
@@ -35,16 +40,16 @@ const SignUp = () => {
       .matches(/[0-9]/, "Password must contain at least one number")
       .matches(/[@$!%*?&]/, "Password must contain at least one special character (@$!%*?&)")
       .required("Password is required"),
-      
+
 
     phone: Yup.string()
-    .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
-    .required("Phone number is required"),
+      .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
+      .required("Phone number is required"),
 
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords do not match")
       .required("Confirm Password is required"),
-    
+
     agreeToTerms: Yup.bool()
       .oneOf([true], "You must accept the Terms and Privacy Policy")
       .required("You must accept the Terms and Privacy Policy"),
@@ -55,10 +60,10 @@ const SignUp = () => {
         username: values.username,
         email: values.email,
         phone: values.phone,
-        password: values.password,    
+        password: values.password,
         group_id: 6,
       })
-    );        
+    );
   };
   const doctors = [
     { id: "doctor1", name: "Dr. John Doe" },
@@ -103,11 +108,10 @@ const SignUp = () => {
                             <Field
                               id="username"
                               name="username"
-                              className={`form-control ${
-                                errors.username && touched.username
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
+                              className={`form-control ${errors.username && touched.username
+                                ? "is-invalid"
+                                : ""
+                                }`}
                               type="text"
                             />
                             <ErrorMessage
@@ -124,11 +128,10 @@ const SignUp = () => {
                             <Field
                               id="email"
                               name="email"
-                              className={`form-control ${
-                                errors.email && touched.email
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
+                              className={`form-control ${errors.email && touched.email
+                                ? "is-invalid"
+                                : ""
+                                }`}
                               type="text"
                             />
                             <ErrorMessage
@@ -139,17 +142,17 @@ const SignUp = () => {
                           </div>
 
                           <div className="input-block">
-  <label htmlFor="phone">
-    Phone <span className="login-danger">*</span>
-  </label>
-  <Field
-    id="phone"
-    name="phone"
-    className={`form-control ${errors.phone && touched.phone ? "is-invalid" : ""}`}
-    type="text"
-  />
-  <ErrorMessage name="phone" component="div" className="invalid-feedback" />
-</div>
+                            <label htmlFor="phone">
+                              Phone <span className="login-danger">*</span>
+                            </label>
+                            <Field
+                              id="phone"
+                              name="phone"
+                              className={`form-control ${errors.phone && touched.phone ? "is-invalid" : ""}`}
+                              type="text"
+                            />
+                            <ErrorMessage name="phone" component="div" className="invalid-feedback" />
+                          </div>
 
                           <div className="input-block">
                             <label htmlFor="password">
@@ -158,11 +161,10 @@ const SignUp = () => {
                             <Field
                               id="password"
                               name="password"
-                              className={`form-control ${
-                                errors.password && touched.password
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
+                              className={`form-control ${errors.password && touched.password
+                                ? "is-invalid"
+                                : ""
+                                }`}
                               type="password"
                             />
                             <ErrorMessage
@@ -180,12 +182,11 @@ const SignUp = () => {
                             <Field
                               id="confirmPassword"
                               name="confirmPassword"
-                              className={`form-control ${
-                                errors.confirmPassword &&
+                              className={`form-control ${errors.confirmPassword &&
                                 touched.confirmPassword
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
+                                ? "is-invalid"
+                                : ""
+                                }`}
                               type="password"
                             />
                             <ErrorMessage
@@ -195,41 +196,41 @@ const SignUp = () => {
                             />
                           </div>
 
-                        
+
                           <div className="input-block">
-  <label htmlFor="doctor">
-    Doctors <span className="login-danger">*</span>
-  </label>
-  <Field
-  as="select"
-  id="doctor"
-  name="doctor"
-  className={`form-control ${errors.doctor && touched.doctor ? "is-invalid" : ""}`}
->
-  <option value="" disabled>Select a doctor</option>
-  {doctors.map((doctor) => (
-    <option key={doctor.id} value={doctor.id}>
-      {doctor.name}
-    </option>
-  ))}
-</Field>
-<ErrorMessage name="doctor" component="div" className="invalid-feedback" />
-</div>
+                            <label htmlFor="doctor">
+                              Doctors <span className="login-danger">*</span>
+                            </label>
+                            <Field
+                              as="select"
+                              id="doctor"
+                              name="doctor"
+                              className={`form-control ${errors.doctor && touched.doctor ? "is-invalid" : ""}`}
+                            >
+                              <option value="" disabled>Select a doctor</option>
+                              {users?.doctorListWhenSignup?.Doctor.map((doctor) => (
+                                <option key={doctor.id} value={doctor.id}>
+                                  {doctor.firstname}
+                                </option>
+                              ))}
+                            </Field>
+                            <ErrorMessage name="doctor" component="div" className="invalid-feedback" />
+                          </div>
 
                           <div className="forgotpass">
-  <div className="remember-me">
-    <label className="custom_check mr-2 mb-0 d-inline-flex remember-me">
-      I agree to the &nbsp;terms of service&nbsp;and&nbsp;privacy policy&nbsp;
-      <Field
-        type="checkbox"
-        name="agreeToTerms"
-        className={errors.agreeToTerms && touched.agreeToTerms ? "is-invalid" : ""}
-      />
-      <span className="checkmark"></span>
-    </label>
-    <ErrorMessage name="agreeToTerms" component="div" className="invalid-feedback" />
-  </div>
-</div>
+                            <div className="remember-me">
+                              <label className="custom_check mr-2 mb-0 d-inline-flex remember-me">
+                                I agree to the &nbsp;terms of service&nbsp;and&nbsp;privacy policy&nbsp;
+                                <Field
+                                  type="checkbox"
+                                  name="agreeToTerms"
+                                  className={errors.agreeToTerms && touched.agreeToTerms ? "is-invalid" : ""}
+                                />
+                                <span className="checkmark"></span>
+                              </label>
+                              <ErrorMessage name="agreeToTerms" component="div" className="invalid-feedback" />
+                            </div>
+                          </div>
 
                           <div className="input-block login-btn">
                             <button

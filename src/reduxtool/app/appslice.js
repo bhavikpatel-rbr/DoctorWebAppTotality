@@ -51,7 +51,7 @@ const INITIAL_STATE = {
   users: null,
   patientList: null,
   adminProfile: null,
-  sheduleList:null,
+  sheduleList: null,
   doctorList: [],
 };
 
@@ -85,9 +85,9 @@ const appSlice = createSlice({
     }));
     builder.addCase(allDoctorsUsersWhenSignupAction.fulfilled, (state, { payload }) => ({
       ...state,
-      doctorList: payload?.data
+      doctorListWhenSignup: payload?.users
     }));
-    
+
     builder.addCase(getschedulelistAction.fulfilled, (state, { payload }) => ({
       ...state,
       scheduleList: payload?.data
@@ -104,7 +104,7 @@ const appSlice = createSlice({
       ...state,
       Medicallist: payload?.data
     }));
-    
+
     builder.addCase(allStaffUsersAction.fulfilled, (state, { payload }) => ({
       ...state,
       Stafflist: payload?.data
@@ -241,8 +241,8 @@ const appSlice = createSlice({
       (state, { payload }) => ({
         ...state,
         AppointmentList: payload?.data
-        
-        
+
+
       })
     );
     builder.addCase(insertScheduleAction.fulfilled, (state, { payload }) => ({
